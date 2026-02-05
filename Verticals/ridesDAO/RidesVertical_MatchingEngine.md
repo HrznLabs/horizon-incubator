@@ -6,6 +6,53 @@
 
 ---
 
+## Table of Contents
+
+- [1. OVERVIEW](#1-overview)
+  - [1.1 Key Differences from Feed Engine](#11-key-differences-from-feed-engine)
+  - [1.2 Design Goals](#12-design-goals)
+- [2. ARCHITECTURE](#2-architecture)
+- [3. DRIVER STATE MANAGEMENT](#3-driver-state-management)
+  - [3.1 Driver Status States](#31-driver-status-states)
+  - [3.2 Driver State Object (Redis)](#32-driver-state-object-redis)
+  - [3.3 Driver Pool Index (Redis Geo)](#33-driver-pool-index-redis-geo)
+- [4. MATCHING MODES](#4-matching-modes)
+  - [4.1 Standard Match (Rider-Initiated)](#41-standard-match-rider-initiated)
+  - [4.2 Driver-Initiated (Occasional Rides)](#42-driver-initiated-occasional-rides)
+  - [4.3 Scheduled Match](#43-scheduled-match)
+  - [4.4 Shared Ride Match](#44-shared-ride-match)
+- [5. MATCHING ALGORITHM](#5-matching-algorithm)
+  - [5.1 Candidate Filtering (Phase 1)](#51-candidate-filtering-phase-1)
+  - [5.2 Match Scoring (Phase 2)](#52-match-scoring-phase-2)
+  - [5.3 Factor Calculations](#53-factor-calculations)
+  - [5.4 Match Selection (Phase 3)](#54-match-selection-phase-3)
+- [6. OFFER MANAGEMENT](#6-offer-management)
+  - [6.1 Offer Flow](#61-offer-flow)
+  - [6.2 Offer Object](#62-offer-object)
+  - [6.3 Acceptance Criteria](#63-acceptance-criteria)
+- [7. ETA CALCULATION](#7-eta-calculation)
+  - [7.1 ETA Service Architecture](#71-eta-service-architecture)
+  - [7.2 ETA Caching Strategy](#72-eta-caching-strategy)
+- [8. SHARED RIDES MATCHING](#8-shared-rides-matching)
+  - [8.1 Route Compatibility Check](#81-route-compatibility-check)
+  - [8.2 Shared Ride Pricing (Hybrid Distance + Time)](#82-shared-ride-pricing-hybrid-distance--time)
+- [9. SURGE PRICING INTEGRATION](#9-surge-pricing-integration)
+  - [9.1 Demand Analysis](#91-demand-analysis)
+  - [9.2 Guild Surge Configuration](#92-guild-surge-configuration)
+- [10. DRIVER-INITIATED MATCHING](#10-driver-initiated-matching)
+  - [10.1 Driver Route Posting](#101-driver-route-posting)
+  - [10.2 Rider Matching to Posted Routes](#102-rider-matching-to-posted-routes)
+- [11. GUILD ACTIVITY REQUIREMENTS](#11-guild-activity-requirements)
+  - [11.1 Activity Tracking](#111-activity-tracking)
+  - [11.2 Multi-Guild Activity Distribution](#112-multi-guild-activity-distribution)
+- [12. API SPECIFICATION](#12-api-specification)
+  - [12.1 Ride Request Endpoints](#121-ride-request-endpoints)
+  - [12.2 WebSocket Events](#122-websocket-events)
+- [13. PERFORMANCE REQUIREMENTS](#13-performance-requirements)
+- [14. MONITORING & METRICS](#14-monitoring--metrics)
+
+---
+
 ## 1. OVERVIEW
 
 The Rides Matching Engine is a specialized, real-time system that pairs riders with drivers. Unlike the general Feed Engine (which presents ranked options for users to browse), the Matching Engine must make **instant decisions** under time pressure while balancing fairness, efficiency, and quality.
@@ -33,7 +80,7 @@ The Rides Matching Engine is a specialized, real-time system that pairs riders w
 
 ## 2. ARCHITECTURE
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                         RIDES MATCHING ENGINE                            │
 ├─────────────────────────────────────────────────────────────────────────┤
@@ -168,7 +215,7 @@ interface DriverState {
 
 The primary flow where rider requests and algorithm finds best driver.
 
-```
+```text
 Rider Request → Filter Candidates → Score → Select → Offer → Accept/Decline
 ```
 
@@ -176,7 +223,7 @@ Rider Request → Filter Candidates → Score → Select → Offer → Accept/De
 
 Driver posts availability, riders can request to join.
 
-```
+```text
 Driver Posts Route → Visible to Riders → Rider Requests → Driver Accepts
 ```
 
@@ -184,7 +231,7 @@ Driver Posts Route → Visible to Riders → Rider Requests → Driver Accepts
 
 Pre-booked rides matched closer to pickup time.
 
-```
+```text
 Rider Schedules → Queue for Later → T-30min: Begin Matching → Confirm
 ```
 
@@ -192,7 +239,7 @@ Rider Schedules → Queue for Later → T-30min: Begin Matching → Confirm
 
 Multiple riders matched to same driver's route.
 
-```
+```text
 Rider 1 Matched → Route Active → Rider 2 Request → 
 Check Route Compatibility → Add to Ride
 ```
@@ -424,7 +471,7 @@ async function selectMatch(
 
 ### 6.1 Offer Flow
 
-```
+```text
 ┌──────────────────────────────────────────────────────────────────┐
 │                        OFFER LIFECYCLE                            │
 ├──────────────────────────────────────────────────────────────────┤
