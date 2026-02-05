@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horizon Rides Vertical — Complete Specification</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eee;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 60px; }
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(90deg, #00d9ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .subtitle { color: #888; font-size: 1.2rem; }
+        .section-header {
+            font-size: 2rem;
+            color: #00d9ff;
+            margin: 60px 0 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0,217,255,0.3);
+        }
+        .diagram-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .diagram-title {
+            font-size: 1.5rem;
+            color: #00d9ff;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .diagram-description {
+            color: #aaa;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .mermaid {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            overflow-x: auto;
+        }
+        .toc {
+            background: rgba(0,217,255,0.1);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        .toc h3 { color: #00d9ff; margin-bottom: 15px; }
+        .toc ul { list-style: none; columns: 2; }
+        .toc li { margin: 10px 0; }
+        .toc a { color: #00ff88; text-decoration: none; }
+        .toc a:hover { color: #00d9ff; }
+        .badge {
+            display: inline-block;
+            background: rgba(0,255,136,0.2);
+            color: #00ff88;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        .badge.critical {
+            background: rgba(231,76,60,0.2);
+            color: #e74c3c;
+        }
+        .decisions {
+            background: rgba(0,255,136,0.1);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        .decisions h3 { color: #00ff88; margin-bottom: 20px; }
+        .decisions table { width: 100%; border-collapse: collapse; }
+        .decisions th, .decisions td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .decisions th { color: #00d9ff; }
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚗 Horizon Rides Vertical</h1>
+            <p class="subtitle">Complete Technical Specification — v1.0</p>
+        </header>
+
+        <nav class="toc">
+            <h3>📑 Table of Contents</h3>
+            <ul>
+                <li><a href="#decisions">✅ Confirmed Decisions</a></li>
+                <li><a href="#d30">D30 — Standard Ride Flow</a></li>
+                <li><a href="#d31">D31 — Guild Hierarchy</a></li>
+                <li><a href="#d32">D32 — Equipment Progression</a></li>
+                <li><a href="#d33">D33 — Bidirectional Reputation</a></li>
+                <li><a href="#d34">D34 — Real-Time Tracking</a></li>
+                <li><a href="#d35">D35 — Hybrid Pricing</a></li>
+                <li><a href="#d36">D36 — Cancellation Logic</a></li>
+                <li><a href="#d37">D37 — Matching Engine Architecture</a></li>
+                <li><a href="#d38">D38 — Match Score Formula</a></li>
+                <li><a href="#d39">D39 — Shared Ride Matching</a></li>
+                <li><a href="#d40">D40 — Driver State Machine</a></li>
+                <li><a href="#d41">D41 — Offer Lifecycle</a></li>
+                <li><a href="#d42">D42 — Surge Pricing Flow</a></li>
+            </ul>
+        </nav>
+
+        <section id="decisions" class="decisions">
+            <h3>✅ Confirmed Design Decisions</h3>
+            <table>
+                <tr><th>Area</th><th>Decision</th></tr>
+                <tr><td>Mission Pattern</td><td>Both Rider-as-Poster (primary) AND Driver-as-Poster (occasional rides)</td></tr>
+                <tr><td>Surge Pricing</td><td>Guild-controlled + Market algorithm</td></tr>
+                <tr><td>XP System</td><td>Hybrid (Global XP + Rides-specific XP)</td></tr>
+                <tr><td>Fee Reduction</td><td>Streak-based temporary discounts (up to -10% at 60+ days)</td></tr>
+                <tr><td>Guild Curation</td><td>Bidirectional (drivers AND riders curated)</td></tr>
+                <tr><td>Geographic Guilds</td><td>Drivers can be in multiple; activity requirements per guild</td></tr>
+                <tr><td>Real-time Tracking</td><td>Opt-in but RECOMMENDED; rider always sees driver</td></tr>
+                <tr><td>Route Recording</td><td>Full route, shareable for safety</td></tr>
+                <tr><td>Equipment Funding</td><td>All 5 paths: self-purchase, guild, brand, auto-save, onboarding</td></tr>
+                <tr><td>Compliance Tier 0</td><td>Exists for P2P/friends/family rides</td></tr>
+                <tr><td>Multi-Rider Pricing</td><td>Hybrid: Distance (60%) + Time (40%)</td></tr>
+                <tr><td>Platform Liability</td><td>Infrastructure only — guilds handle compliance</td></tr>
+            </table>
+        </section>
+
+        <h2 class="section-header">🚕 Core Ride Flows</h2>
+
+        <section id="d30" class="diagram-section">
+            <h2 class="diagram-title">📍 D30 — Standard Ride Mission Flow <span class="badge">Core</span></h2>
+            <p class="diagram-description">Complete lifecycle from request to settlement.</p>
+            <div class="mermaid">
+sequenceDiagram
+    participant R as Rider
+    participant ME as Matching Engine
+    participant D as Driver
+    participant BC as Blockchain
+
+    rect rgb(230, 245, 255)
+        Note over R,BC: REQUEST & MATCH
+        R->>ME: Request ride
+        ME->>ME: Filter candidates
+        ME->>ME: Score & select
+        ME->>D: Offer (15s timeout)
+        D->>ME: Accept
+        ME->>BC: Create mission (escrow)
+        ME->>R: Driver matched!
+    end
+
+    rect rgb(255, 245, 230)
+        Note over R,BC: RIDE
+        D->>R: En route (live tracking)
+        D->>R: Arrived at pickup
+        R->>ME: Confirm pickup
+        D->>R: Ride in progress
+        D->>ME: Arrive at dropoff
+    end
+
+    rect rgb(230, 255, 230)
+        Note over R,BC: SETTLEMENT
+        ME->>BC: Complete mission
+        BC->>D: USDC transferred
+        BC->>R: DDR refunded
+        R->>ME: Rate driver ⭐
+        D->>ME: Rate rider ⭐
+    end
+            </div>
+        </section>
+
+        <h2 class="section-header">🏛️ Guild & Reputation</h2>
+
+        <section id="d31" class="diagram-section">
+            <h2 class="diagram-title">🏛️ D31 — Rides Guild Hierarchy</h2>
+            <p class="diagram-description">MetaGuild umbrella with geographic, specialty, and quality tier sub-guilds.</p>
+            <div class="mermaid">
+flowchart TB
+    META["🚗 RidesMetaGuild"]
+    
+    subgraph Geo["Geographic"]
+        G1["🇵🇹 Lisbon"]
+        G2["🇵🇹 Porto"]
+        G3["🇬🇧 London"]
+    end
+    
+    subgraph Spec["Specialty"]
+        S1["🌱 EcoRides"]
+        S2["♿ Access"]
+        S3["🌙 NightOwl"]
+    end
+    
+    subgraph Qual["Quality"]
+        Q1["⭐ Premium"]
+        Q2["👑 Luxury"]
+        Q3["💰 Budget"]
+    end
+    
+    META --> Geo
+    META --> Spec
+    META --> Qual
+            </div>
+        </section>
+
+        <section id="d33" class="diagram-section">
+            <h2 class="diagram-title">⭐ D33 — Bidirectional Reputation Flow</h2>
+            <p class="diagram-description">Both drivers AND riders are rated and can be curated by guilds.</p>
+            <div class="mermaid">
+flowchart LR
+    RIDE["✅ Ride<br/>Complete"] --> DR["Driver rates<br/>Rider ⭐"]
+    RIDE --> RR["Rider rates<br/>Driver ⭐"]
+    
+    DR --> RP["Rider Profile<br/>━━━━━━━━━━<br/>Rating given: 4.2<br/>Cancel rate: 3%"]
+    RR --> DP["Driver Profile<br/>━━━━━━━━━━<br/>Rating: 4.87<br/>Rides: 847"]
+    
+    RP --> GCR["Guild can<br/>curate RIDERS"]
+    DP --> GCD["Guild can<br/>curate DRIVERS"]
+            </div>
+        </section>
+
+        <h2 class="section-header">🎯 Matching Engine <span class="badge critical">CRITICAL</span></h2>
+
+        <section id="d37" class="diagram-section">
+            <h2 class="diagram-title">🎯 D37 — Matching Engine Architecture</h2>
+            <p class="diagram-description">Real-time matching with 4-phase pipeline: Filter → Score → Select → Offer.</p>
+            <div class="mermaid">
+flowchart TB
+    REQ["🚕 Ride Request"] --> F["FILTER<br/>━━━━━━━━<br/>Distance<br/>Status<br/>Capacity<br/>Eligibility"]
+    
+    F --> S["SCORE<br/>━━━━━━━━<br/>ETA 30%<br/>Rating 25%<br/>Fairness 15%<br/>Guild 10%<br/>Other 20%"]
+    
+    S --> SEL["SELECT<br/>━━━━━━━━<br/>Best match<br/>or weighted<br/>random"]
+    
+    SEL --> OFF["OFFER<br/>━━━━━━━━<br/>15s timeout"]
+    
+    OFF -->|"Accept"| MATCH["🎉 MATCHED"]
+    OFF -->|"Decline/Timeout"| RETRY["🔄 RETRY"]
+    RETRY -->|"< 5"| SEL
+    RETRY -->|">= 5"| FAIL["❌ NO MATCH"]
+            </div>
+        </section>
+
+        <section id="d38" class="diagram-section">
+            <h2 class="diagram-title">📊 D38 — Match Score Formula</h2>
+            <p class="diagram-description">Weighted scoring across 8 factors including bidirectional ratings.</p>
+            <div class="mermaid">
+flowchart LR
+    subgraph Factors["Scoring Factors (Total: 100%)"]
+        E["📍 ETA<br/>30%"]
+        D["⭐ Driver<br/>15%"]
+        R["👤 Rider<br/>10%"]
+        F["⚖️ Fair<br/>15%"]
+        G["🏛️ Guild<br/>10%"]
+        P["💰 Price<br/>10%"]
+        PR["🎯 Pref<br/>5%"]
+        ST["🔥 Streak<br/>5%"]
+    end
+    
+    Factors --> CALC["Calculate<br/>Weighted Sum"]
+    CALC --> RANK["Rank<br/>Candidates"]
+            </div>
+        </section>
+
+        <section id="d39" class="diagram-section">
+            <h2 class="diagram-title">👥 D39 — Shared Ride Matching</h2>
+            <p class="diagram-description">Adding riders to active routes with detour checking and fair price splitting.</p>
+            <div class="mermaid">
+flowchart TB
+    R1["Rider 1<br/>On ride A→B"] --> CHECK["Check New<br/>Request C→D"]
+    
+    CHECK --> COMPAT{"Route<br/>Compatible?<br/>Detour<30%?"}
+    
+    COMPAT -->|"Yes"| ADD["Add to Ride"]
+    COMPAT -->|"No"| NEW["New Driver"]
+    
+    ADD --> PRICE["Hybrid Pricing<br/>━━━━━━━━━━━━<br/>Distance: 60%<br/>Time: 40%"]
+    
+    PRICE --> R1D["Rider 1: -25%"]
+    PRICE --> R2D["Rider 2: $12"]
+            </div>
+        </section>
+
+        <section id="d40" class="diagram-section">
+            <h2 class="diagram-title">🔄 D40 — Driver State Machine</h2>
+            <p class="diagram-description">Driver availability states and transitions.</p>
+            <div class="mermaid">
+stateDiagram-v2
+    [*] --> OFFLINE
+    OFFLINE --> ONLINE: Go Online
+    ONLINE --> EN_ROUTE: Accept Ride
+    ONLINE --> OFFLINE: Go Offline
+    EN_ROUTE --> WAITING: Arrive
+    WAITING --> ON_RIDE: Pickup
+    ON_RIDE --> COMPLETING: Dropoff
+    ON_RIDE --> ON_RIDE: Add Shared Rider
+    COMPLETING --> ONLINE: Rate & Continue
+    COMPLETING --> OFFLINE: Rate & Stop
+            </div>
+        </section>
+
+        <section id="d41" class="diagram-section">
+            <h2 class="diagram-title">📨 D41 — Offer Lifecycle</h2>
+            <p class="diagram-description">15-second offer window with retry logic.</p>
+            <div class="mermaid">
+flowchart LR
+    SEL["Select<br/>Driver"] --> OFF["Send<br/>Offer"]
+    OFF --> WAIT["15s<br/>Timer"]
+    
+    WAIT --> ACC["✅ Accept"] --> MATCH["🎉 Match!"]
+    WAIT --> DEC["❌ Decline"] --> NEXT
+    WAIT --> TO["⏰ Timeout"] --> NEXT
+    
+    NEXT["Next<br/>Driver"] -->|"<5"| SEL
+    NEXT -->|">=5"| FAIL["❌ Fail"]
+            </div>
+        </section>
+
+        <h2 class="section-header">💰 Pricing & Economics</h2>
+
+        <section id="d35" class="diagram-section">
+            <h2 class="diagram-title">💰 D35 — Hybrid Pricing Model</h2>
+            <p class="diagram-description">5-layer pricing: Distance → Guild → Surge → Rider Choice → Driver Accept.</p>
+            <div class="mermaid">
+flowchart LR
+    L1["Distance<br/>$19.50"] --> L2["Guild Min<br/>$22"]
+    L2 --> L3["Surge 1.3x<br/>$28.60"]
+    L3 --> L4["Rider<br/>Accepts"]
+    L4 --> L5["Driver<br/>Accepts"]
+    L5 --> FINAL["✅ $28.60"]
+            </div>
+        </section>
+
+        <section id="d42" class="diagram-section">
+            <h2 class="diagram-title">📈 D42 — Surge Pricing Flow</h2>
+            <p class="diagram-description">Demand-based multipliers with guild-configured limits.</p>
+            <div class="mermaid">
+flowchart TB
+    DEM["Demand: 12 requests"] --> RATIO
+    SUP["Supply: 3 drivers"] --> RATIO
+    RATIO["Ratio: 0.25"] --> MULT["Surge: 2.2x"]
+    GMAX["Guild Max: 2.5x"] --> MULT
+    
+    MULT --> PRICE["$20 → $44"]
+    PRICE --> SPLIT["Driver: +$19<br/>Guild: +$5"]
+            </div>
+        </section>
+
+        <h2 class="section-header">📦 Progression & Equipment</h2>
+
+        <section id="d32" class="diagram-section">
+            <h2 class="diagram-title">📦 D32 — Equipment Progression</h2>
+            <p class="diagram-description">6 tiers with 5 funding paths available.</p>
+            <div class="mermaid">
+flowchart LR
+    R25["25 rides"] --> E1["📱 Starter<br/>$25-40"]
+    R100["100 rides"] --> E2["💡 Bronze<br/>$15-30"]
+    R300["300 rides"] --> E3["📹 Silver<br/>$150-250"]
+    R750["750 rides"] --> E4["🎁 Gold<br/>$100-150"]
+    R1500["1500 rides"] --> E5["📷 Platinum<br/>$300-400"]
+    R3000["3000 rides"] --> E6["💎 Diamond<br/>+ NFT"]
+    
+    subgraph Funding["5 Funding Paths"]
+        F1["💳 Self"]
+        F2["🏛️ Guild"]
+        F3["🏢 Brand"]
+        F4["💰 Auto-save"]
+        F5["🎯 Onboarding"]
+    end
+            </div>
+        </section>
+
+        <h2 class="section-header">🛡️ Safety & Compliance</h2>
+
+        <section id="d34" class="diagram-section">
+            <h2 class="diagram-title">📡 D34 — Real-Time Tracking</h2>
+            <p class="diagram-description">WebSocket-based tracking with privacy controls.</p>
+            <div class="mermaid">
+flowchart TB
+    D["Driver App"] -->|"location"| WS["WebSocket"]
+    WS --> REDIS["Redis Pub/Sub"]
+    REDIS --> R["Rider App"]
+    REDIS --> S["Shared Link<br/>(Friends)"]
+    
+    subgraph Privacy["Privacy Controls"]
+        P1["~1km before accept"]
+        P2["Exact after accept"]
+        P3["30-day retention"]
+        P4["Opt-in tracking"]
+    end
+            </div>
+        </section>
+
+        <section id="d36" class="diagram-section">
+            <h2 class="diagram-title">🚫 D36 — Cancellation Logic</h2>
+            <p class="diagram-description">Fair policies for both riders and drivers.</p>
+            <div class="mermaid">
+flowchart TB
+    subgraph Rider["Rider Cancels"]
+        RC1["Before match: $0"]
+        RC2["After accept: $1-2"]
+        RC3["En route: $3-5"]
+        RC4["Arrived: $5-8"]
+    end
+    
+    subgraph Driver["Driver Cancels"]
+        DC1["Before pickup: -3 rep"]
+        DC2["After accept: -5 rep"]
+        DC3["No-show: DDR penalty"]
+    end
+    
+    subgraph Wait["Wait Time"]
+        W1["Driver waits: $0.25/min"]
+        W2["Rider waits: $0.15/min"]
+    end
+            </div>
+        </section>
+
+        <footer>
+            <p>Horizon Protocol — Rides Vertical Specification v1.0</p>
+            <p>Created December 2025 • 13 Diagrams • Ready for Implementation</p>
+        </footer>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+    </script>
+</body>
+</html>
