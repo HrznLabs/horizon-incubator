@@ -1026,4 +1026,20 @@ interface MatchingMetrics {
 
 ---
 
+## 15. SECURITY CONSIDERATIONS
+
+### 15.1 Location Privacy
+- **Approximate Locations**: As specified in the Offer Object, drivers should only receive approximate locations (e.g., fuzzing by 500m) until the ride is accepted to prevent stalking or targeted harassment.
+- **Data Retention**: Historical location data in Redis/PostgreSQL must be anonymized or deleted after a configurable retention period (e.g., 90 days) to comply with privacy regulations.
+
+### 15.2 Anti-Gaming & Collusion
+- **Repeated Matching**: The matching algorithm must penalize or block repeated matches between the same driver and rider pairs within a short timeframe to prevent XP farming or reputation manipulation.
+- **Sybil Resistance**: The `Eligibility Svc` must strictly enforce verification levels (e.g., uniqueness proofs) before allowing entry into the matching pool.
+
+### 15.3 Denial of Service (DoS) Prevention
+- **Rate Limiting**: The `Request Queue` must implement per-user rate limiting to prevent flooding the matching engine with fake requests.
+- **Stake Requirements**: To increase the cost of attacks, a minimum token stake or reputation score should be required to initiate a ride request during high-load periods.
+
+---
+
 *Matching Engine Specification v1.0 — Ready for implementation review*
