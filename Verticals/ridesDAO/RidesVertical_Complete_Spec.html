@@ -9,13 +9,13 @@
         Moving script to head with 'defer' allows parallel download while HTML parses.
         Initialization is wrapped in DOMContentLoaded to ensure the library is ready.
     -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" referrerpolicy="no-referrer" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             mermaid.initialize({
                 startOnLoad: true,
                 theme: 'default',
-                securityLevel: 'loose'
+                securityLevel: 'antiscript'
             });
         });
     </script>
@@ -456,6 +456,5 @@ flowchart TB
             <p>Created December 2025 • 13 Diagrams • Ready for Implementation</p>
         </footer>
     </div>
-
 </body>
 </html>
