@@ -6,6 +6,25 @@
 
 ---
 
+## Table of Contents
+
+- [EXECUTIVE SUMMARY](#executive-summary)
+- [1. XP VALUE ANALYSIS](#1-xp-value-analysis)
+- [2. DRIVER RANKING TIERS ANALYSIS](#2-driver-ranking-tiers-analysis)
+- [3. FEE STRUCTURE ANALYSIS](#3-fee-structure-analysis)
+- [4. GEOFENCE SIZE RECOMMENDATIONS](#4-geofence-size-recommendations)
+- [5. EQUIPMENT PROGRESSION SYSTEM](#5-equipment-progression-system)
+- [6. VERIFICATION & COMPLIANCE](#6-verification--compliance)
+- [7. EMERGENCY FEATURES](#7-emergency-features)
+- [8. CANCELLATION POLICY ANALYSIS](#8-cancellation-policy-analysis)
+- [9. HYBRID PRICING MODEL](#9-hybrid-pricing-model)
+- [10. GUILD HIERARCHY STRUCTURE](#10-guild-hierarchy-structure)
+- [11. MISSION LIFECYCLE](#11-mission-lifecycle)
+- [12. NEXT STEPS](#12-next-steps)
+- [QUESTIONS REQUIRING YOUR INPUT](#questions-requiring-your-input)
+
+---
+
 ## EXECUTIVE SUMMARY
 
 This document provides thorough analysis for all design decisions required to build the Rides vertical on Horizon Protocol. Based on our debate, the following decisions are **CONFIRMED**:
@@ -28,6 +47,9 @@ This document provides thorough analysis for all design decisions required to bu
 | Cancellation | Fair for both parties, penalties for post-accept driver cancels |
 | Wait Time | Per-minute charge + minor reputation signal |
 | Multi-stop | Price recalculation, can be shared rides, multi-rider payouts |
+
+**Related Documentation:**
+- [Rides Matching Engine Specification](./RidesVertical_MatchingEngine.md)
 
 ---
 
@@ -145,7 +167,7 @@ Guilds can choose to subsidize member fees from their treasury:
 
 ### 3.1 Current Protocol Fee Model
 
-```
+```text
 F_proto = R × φ (protocol fee)
 F_guild = R × γ (guild fee, if applicable)
 DDR = R × δ (dispute reserve, refunded if no dispute)
@@ -239,7 +261,7 @@ Based on rideshare driver equipment research, here are realistic, affordable tie
 
 **Multi-Path Funding System:**
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    EQUIPMENT FUNDING PATHS                   │
 ├─────────────────────────────────────────────────────────────┤
@@ -327,7 +349,7 @@ struct EquipmentBadge {
 - Horizon does **NOT** operate rides (guilds coordinate, users transact)
 
 **Legal Language (for Terms of Service):**
-```
+```text
 Horizon Protocol provides decentralized coordination infrastructure.
 Guilds operate as independent organizations responsible for:
 - Member verification and compliance
@@ -403,7 +425,7 @@ Horizon Labs does not control, direct, or operate any rides.
 
 ### 9.1 Price Discovery Flow
 
-```
+```text
 ┌────────────────────────────────────────────────────────────────┐
 │                    HYBRID PRICING MODEL                         │
 ├────────────────────────────────────────────────────────────────┤
@@ -440,7 +462,7 @@ Horizon Labs does not control, direct, or operate any rides.
 
 **Scenario:** 10km ride, moderate demand, PremiumRidesGuild driver
 
-```
+```text
 Base estimate:
   Base fare: $2.50
   Distance: 10km × $1.20/km = $12.00
@@ -467,7 +489,7 @@ Final offer to driver: $28.60 (or rider's custom offer)
 
 **Price Splitting Logic:**
 
-```
+```text
 Total route cost: $30.00
 Rider A: Full route (pickup A → dropoff A)
 Rider B: Partial route (pickup B → dropoff B, during A's ride)
@@ -490,7 +512,7 @@ Driver receives: $30.00 (full fare)
 
 ### 10.1 Proposed Guild Architecture
 
-```
+```text
                     ┌─────────────────────────┐
                     │    RidesMetaGuild       │
                     │  (Vertical Umbrella)    │
@@ -525,7 +547,7 @@ Driver receives: $30.00 (full fare)
 ### 10.2 Guild Eligibility Examples
 
 **LisbonRidesGuild (Geographic):**
-```
+```json
 {
   "minGlobalXP": 100,
   "minRidesXP": 0,
@@ -540,7 +562,7 @@ Driver receives: $30.00 (full fare)
 ```
 
 **PremiumRidesGuild (Quality):**
-```
+```json
 {
   "minGlobalXP": 500,
   "minRidesXP": 300,
@@ -555,7 +577,7 @@ Driver receives: $30.00 (full fare)
 ```
 
 **Rider Eligibility for Premium Guild:**
-```
+```json
 {
   "minRidesCompleted": 20,
   "minRatingGiven": 4.5,
@@ -570,67 +592,63 @@ Driver receives: $30.00 (full fare)
 
 ### 11.1 State Machine
 
-```
-                                    ┌──────────────┐
-                                    │   CREATED    │
-                                    │ (Rider posts)│
-                                    └──────┬───────┘
-                                           │
-                                           ▼
-                    ┌──────────────────────────────────────────┐
-                    │               MATCHING                    │
-                    │  (Finding available drivers)              │
-                    └──────────────────┬───────────────────────┘
-                                       │
-               ┌───────────────────────┼───────────────────────┐
-               │                       │                       │
-               ▼                       ▼                       ▼
-        ┌──────────┐           ┌──────────────┐         ┌──────────┐
-        │ EXPIRED  │           │   ACCEPTED   │         │ CANCELLED│
-        │(No match)│           │(Driver takes)│         │(By rider)│
-        └──────────┘           └──────┬───────┘         └──────────┘
-                                      │
-                                      ▼
-                               ┌──────────────┐
-                               │   EN_ROUTE   │
-                               │(Driver moving│
-                               │  to pickup)  │
-                               └──────┬───────┘
-                                      │
-               ┌──────────────────────┼──────────────────────┐
-               │                      │                      │
-               ▼                      ▼                      ▼
-        ┌──────────┐          ┌──────────────┐        ┌──────────┐
-        │DRIVER_   │          │   ARRIVED    │        │ RIDER_   │
-        │CANCELLED │          │(At pickup)   │        │ CANCELLED│
-        └──────────┘          └──────┬───────┘        └──────────┘
-                                     │
-               ┌─────────────────────┼─────────────────────┐
-               │                     │                     │
-               ▼                     ▼                     ▼
-        ┌──────────┐         ┌──────────────┐       ┌──────────┐
-        │RIDER_    │         │  IN_PROGRESS │       │DRIVER_   │
-        │NO_SHOW   │         │ (Ride active)│       │NO_SHOW   │
-        └──────────┘         └──────┬───────┘       └──────────┘
-                                    │
-               ┌────────────────────┼────────────────────┐
-               │                    │                    │
-               ▼                    ▼                    ▼
-        ┌──────────┐        ┌──────────────┐      ┌──────────┐
-        │ DISPUTED │        │  COMPLETED   │      │EMERGENCY │
-        └──────────┘        └──────────────┘      └──────────┘
-               │                    │
-               │                    ▼
-               │            ┌──────────────┐
-               │            │   SETTLED    │
-               │            │(Payment done)│
-               │            └──────────────┘
-               │
-               ▼
-        ┌──────────────┐
-        │   RESOLVED   │
-        │(After ruling)│
-        └──────────────┘
+```mermaid
+stateDiagram-v2
+    direction TB
+
+    state "CREATED" as CREATED
+    state "MATCHING" as MATCHING
+    state "ACCEPTED" as ACCEPTED
+    state "EN_ROUTE" as EN_ROUTE
+    state "ARRIVED" as ARRIVED
+    state "IN_PROGRESS" as IN_PROGRESS
+    state "COMPLETED" as COMPLETED
+    state "SETTLED" as SETTLED
+
+    state "EXPIRED" as EXPIRED
+    state "CANCELLED" as CANCELLED
+    state "DRIVER_CANCELLED" as DRIVER_CANCELLED
+    state "RIDER_CANCELLED" as RIDER_CANCELLED
+    state "RIDER_NO_SHOW" as RIDER_NO_SHOW
+    state "DRIVER_NO_SHOW" as DRIVER_NO_SHOW
+    state "DISPUTED" as DISPUTED
+    state "RESOLVED" as RESOLVED
+    state "EMERGENCY" as EMERGENCY
+
+    [*] --> CREATED: Rider posts
+    CREATED --> MATCHING: Auto
+
+    MATCHING --> ACCEPTED: Driver accepts
+    MATCHING --> EXPIRED: Timeout (5min)
+    MATCHING --> CANCELLED: Rider cancels
+
+    ACCEPTED --> EN_ROUTE: Driver confirms
+    ACCEPTED --> DRIVER_CANCELLED: Driver cancels
+
+    EN_ROUTE --> ARRIVED: Geofence entry
+    EN_ROUTE --> RIDER_CANCELLED: Rider cancels
+
+    ARRIVED --> IN_PROGRESS: Rider confirms pickup
+    ARRIVED --> RIDER_NO_SHOW: 10min timeout
+
+    IN_PROGRESS --> COMPLETED: Dropoff geofence + confirm
+    IN_PROGRESS --> DISPUTED: Either party disputes
+    IN_PROGRESS --> EMERGENCY: Panic button
+    IN_PROGRESS --> DRIVER_NO_SHOW: Driver no-show
+
+    COMPLETED --> SETTLED: Auto after ratings
+
+    DISPUTED --> RESOLVED: Resolver decision
+
+    SETTLED --> [*]
+    RESOLVED --> [*]
+    EXPIRED --> [*]
+    CANCELLED --> [*]
+    DRIVER_CANCELLED --> [*]
+    RIDER_CANCELLED --> [*]
+    RIDER_NO_SHOW --> [*]
+    DRIVER_NO_SHOW --> [*]
+    EMERGENCY --> [*]
 ```
 
 ### 11.2 State Transition Rules
