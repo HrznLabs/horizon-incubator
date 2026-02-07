@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Horizon Rides Vertical — Complete Specification</title>
+    <!--
+        ⚡ Bolt Optimization: Deferred Mermaid.js loading to unblock initial render.
+        Moving script to head with 'defer' allows parallel download while HTML parses.
+        Initialization is wrapped in DOMContentLoaded to ensure the library is ready.
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'default',
+                securityLevel: 'loose'
+            });
+        });
+    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -442,13 +457,5 @@ flowchart TB
         </footer>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-    <script>
-        mermaid.initialize({
-            startOnLoad: true,
-            theme: 'default',
-            securityLevel: 'loose'
-        });
-    </script>
 </body>
 </html>
