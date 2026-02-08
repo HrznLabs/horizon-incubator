@@ -80,41 +80,44 @@ The Rides Matching Engine is a specialized, real-time system that pairs riders w
 
 ## 2. ARCHITECTURE
 
-```text
-┌─────────────────────────────────────────────────────────────────────────┐
-│                         RIDES MATCHING ENGINE                            │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐         │
-│  │  Request Queue  │  │  Driver Pool    │  │  Match Scorer   │         │
-│  │  (Redis)        │  │  (Real-time)    │  │  (Algorithm)    │         │
-│  └────────┬────────┘  └────────┬────────┘  └────────┬────────┘         │
-│           │                    │                    │                   │
-│           └────────────────────┼────────────────────┘                   │
-│                                │                                        │
-│                     ┌──────────▼──────────┐                            │
-│                     │   MATCH ORCHESTRATOR │                            │
-│                     │   ─────────────────  │                            │
-│                     │   • Candidate Filter │                            │
-│                     │   • Score Calculator │                            │
-│                     │   • Match Selector   │                            │
-│                     │   • Offer Manager    │                            │
-│                     └──────────┬──────────┘                            │
-│                                │                                        │
-│           ┌────────────────────┼────────────────────┐                   │
-│           │                    │                    │                   │
-│  ┌────────▼────────┐  ┌────────▼────────┐  ┌───────▼─────────┐         │
-│  │  ETA Calculator │  │ Eligibility Svc │  │ Reputation Svc  │         │
-│  │  (PostGIS+OSRM) │  │ (XP, Guild)     │  │ (Bidirectional) │         │
-│  └─────────────────┘  └─────────────────┘  └─────────────────┘         │
-│                                                                         │
-├─────────────────────────────────────────────────────────────────────────┤
-│                           DATA LAYER                                    │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                  │
-│  │ Driver State │  │ Rider State  │  │ Guild Config │                  │
-│  │ (Redis)      │  │ (Redis)      │  │ (PostgreSQL) │                  │
-│  └──────────────┘  └──────────────┘  └──────────────┘                  │
-└─────────────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph RME [RIDES MATCHING ENGINE]
+        direction TB
+
+        subgraph INPUTS [Inputs]
+            direction LR
+            RQ[Request Queue<br/>Redis]
+            DP[Driver Pool<br/>Real-time]
+            MS[Match Scorer<br/>Algorithm]
+        end
+
+        MO[MATCH ORCHESTRATOR<br/>• Candidate Filter<br/>• Score Calculator<br/>• Match Selector<br/>• Offer Manager]
+
+        subgraph SERVICES [Services]
+            direction LR
+            ETA[ETA Calculator<br/>PostGIS+OSRM]
+            ES[Eligibility Svc<br/>XP, Guild]
+            RS[Reputation Svc<br/>Bidirectional]
+        end
+
+        RQ --> MO
+        DP --> MO
+        MS --> MO
+
+        MO --> ETA
+        MO --> ES
+        MO --> RS
+    end
+
+    subgraph DL [DATA LAYER]
+        direction LR
+        DS[Driver State<br/>Redis]
+        RState[Rider State<br/>Redis]
+        GC[Guild Config<br/>PostgreSQL]
+    end
+
+    RME -.-> DL
 ```
 
 ---
@@ -471,27 +474,23 @@ async function selectMatch(
 
 ### 6.1 Offer Flow
 
-```text
-┌──────────────────────────────────────────────────────────────────┐
-│                        OFFER LIFECYCLE                            │
-├──────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│   SELECT        SEND           WAIT          RESULT              │
-│   DRIVER   →    OFFER    →    RESPONSE  →   OUTCOME             │
-│                                                                  │
-│   ┌─────┐      ┌─────┐       ┌─────┐       ┌─────────┐          │
-│   │Score│ ───► │Push │ ───► │Timer│ ───► │Accept   │ → MATCHED │
-│   │Top  │      │Notif│      │15sec│      │         │           │
-│   └─────┘      └─────┘      └─────┘      │Decline  │ → RETRY   │
-│                                          │         │           │
-│                                          │Timeout  │ → RETRY   │
-│                                          │         │           │
-│                                          │Offline  │ → RETRY   │
-│                                          └─────────┘           │
-│                                                                  │
-│   RETRY: Remove driver from pool, select next best               │
-│   MAX_RETRIES: 5 drivers before failing the match               │
-└──────────────────────────────────────────────────────────────────┘
+```mermaid
+graph LR
+    subgraph Lifecycle [OFFER LIFECYCLE]
+        direction LR
+        ST[Score Top] -->|Select Driver| PN[Push Notif]
+        PN -->|Send Offer| T{Timer<br/>15sec}
+
+        T -->|Accept| M[MATCHED]
+        T -->|Decline| R[RETRY]
+        T -->|Timeout| R
+        T -->|Offline| R
+
+        R -.->|Remove driver<br/>Select next| ST
+    end
+
+    note[RETRY: Remove driver from pool, select next best<br/>MAX_RETRIES: 5 drivers before failing match]
+    Lifecycle -.- note
 ```
 
 ### 6.2 Offer Object
