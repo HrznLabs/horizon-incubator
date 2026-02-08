@@ -5,6 +5,9 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Horizon Rides Vertical — Complete Specification</title>
+    <!-- ⚡ Bolt Optimization: Preconnect to CDN to speed up DNS and TLS handshake. -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <!--
         ⚡ Bolt Optimization: Deferred Mermaid.js loading to unblock initial render.
         Moving script to head with 'defer' allows parallel download while HTML parses.
