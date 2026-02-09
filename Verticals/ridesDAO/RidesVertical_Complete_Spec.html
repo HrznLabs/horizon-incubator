@@ -34,7 +34,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             mermaid.initialize({
                 startOnLoad: true,
-                theme: 'default',
+                theme: 'dark',
                 securityLevel: 'antiscript'
             });
         });
@@ -86,7 +86,7 @@
             line-height: 1.6;
         }
         .mermaid {
-            background: #fff;
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 12px;
             padding: 30px;
             overflow-x: auto;
@@ -233,7 +233,7 @@ sequenceDiagram
     participant D as Driver
     participant BC as Blockchain
 
-    rect rgb(230, 245, 255)
+    rect rgb(30, 58, 95)
         Note over R,BC: REQUEST & MATCH
         R->>ME: Request ride
         ME->>ME: Filter candidates
@@ -244,7 +244,7 @@ sequenceDiagram
         ME->>R: Driver matched!
     end
 
-    rect rgb(255, 245, 230)
+    rect rgb(95, 58, 30)
         Note over R,BC: RIDE
         D->>R: En route (live tracking)
         D->>R: Arrived at pickup
@@ -253,7 +253,7 @@ sequenceDiagram
         D->>ME: Arrive at dropoff
     end
 
-    rect rgb(230, 255, 230)
+    rect rgb(30, 95, 58)
         Note over R,BC: SETTLEMENT
         ME->>BC: Complete mission
         BC->>D: USDC transferred
