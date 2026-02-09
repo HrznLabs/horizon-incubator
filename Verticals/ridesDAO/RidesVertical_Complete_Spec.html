@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--
+        ⚡ Bolt Optimization: Resource Hints
+        Why: Preconnect/DNS-prefetch to CDN reduces connection latency for critical external resources.
+        Impact: Improves time-to-first-byte (TTFB) for external scripts.
+    -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+    <!--
+        ⚡ Bolt Optimization: Content Security Policy
+        Why: Restricts resource loading to trusted sources (Self + CDN).
+        Impact: Mitigates XSS risks while allowing necessary external libraries.
+    -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!-- ⚡ Bolt Optimization: Preconnect to CDN to speed up DNS and TLS handshake. -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
