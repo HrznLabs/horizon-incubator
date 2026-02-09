@@ -2,28 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!--
-        ⚡ Bolt Optimization: Resource Hints
-        Why: Preconnect/DNS-prefetch to CDN reduces connection latency for critical external resources.
-        Impact: Improves time-to-first-byte (TTFB) for external scripts.
-    -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-
-    <!--
-        ⚡ Bolt Optimization: Content Security Policy
-        Why: Restricts resource loading to trusted sources (Self + CDN).
-        Impact: Mitigates XSS risks while allowing necessary external libraries.
-    -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
-
     <title>Horizon Rides Vertical — Complete Specification</title>
-    <!-- ⚡ Bolt Optimization: Preconnect to CDN to speed up DNS and TLS handshake. -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <!--
         ⚡ Bolt Optimization: Deferred Mermaid.js loading to unblock initial render.
         Moving script to head with 'defer' allows parallel download while HTML parses.
@@ -34,7 +15,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             mermaid.initialize({
                 startOnLoad: true,
-                theme: 'dark',
+                theme: 'default',
                 securityLevel: 'antiscript'
             });
         });
@@ -86,7 +67,7 @@
             line-height: 1.6;
         }
         .mermaid {
-            background: rgba(0, 0, 0, 0.2);
+            background: #fff;
             border-radius: 12px;
             padding: 30px;
             overflow-x: auto;
@@ -134,45 +115,6 @@
             margin-top: 60px;
             color: #666;
         }
-
-        /* Smooth scrolling for anchor links */
-        html { scroll-behavior: smooth; }
-
-        /* Back to Top Button */
-        .back-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #00d9ff, #00ff88);
-            border: none;
-            color: #1a1a2e;
-            font-size: 24px;
-            cursor: pointer;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .back-to-top.visible {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateY(0);
-        }
-        .back-to-top:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0, 255, 136, 0.5);
-        }
-        .back-to-top:focus-visible {
-            outline: 2px solid #00ff88;
-            outline-offset: 4px;
-        }
     </style>
 </head>
 <body>
@@ -182,8 +124,8 @@
             <p class="subtitle">Complete Technical Specification — v1.0</p>
         </header>
 
-        <nav class="toc" aria-labelledby="toc-heading">
-            <h3 id="toc-heading">📑 Table of Contents</h3>
+        <nav class="toc">
+            <h3>📑 Table of Contents</h3>
             <ul>
                 <li><a href="#decisions">✅ Confirmed Decisions</a></li>
                 <li><a href="#d30">D30 — Standard Ride Flow</a></li>
@@ -233,7 +175,7 @@ sequenceDiagram
     participant D as Driver
     participant BC as Blockchain
 
-    rect rgb(30, 58, 95)
+    rect rgb(230, 245, 255)
         Note over R,BC: REQUEST & MATCH
         R->>ME: Request ride
         ME->>ME: Filter candidates
@@ -244,7 +186,7 @@ sequenceDiagram
         ME->>R: Driver matched!
     end
 
-    rect rgb(95, 58, 30)
+    rect rgb(255, 245, 230)
         Note over R,BC: RIDE
         D->>R: En route (live tracking)
         D->>R: Arrived at pickup
@@ -253,7 +195,7 @@ sequenceDiagram
         D->>ME: Arrive at dropoff
     end
 
-    rect rgb(30, 95, 58)
+    rect rgb(230, 255, 230)
         Note over R,BC: SETTLEMENT
         ME->>BC: Complete mission
         BC->>D: USDC transferred
@@ -515,35 +457,5 @@ flowchart TB
             <p>Created December 2025 • 13 Diagrams • Ready for Implementation</p>
         </footer>
     </div>
-
-    <!-- Back to Top Button -->
-    <button id="backToTop" class="back-to-top" aria-label="Back to top">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 19V5M5 12l7-7 7 7"/>
-        </svg>
-    </button>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const backToTopButton = document.getElementById('backToTop');
-
-            // Show/hide button based on scroll position
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 300) {
-                    backToTopButton.classList.add('visible');
-                } else {
-                    backToTopButton.classList.remove('visible');
-                }
-            });
-
-            // Scroll to top when clicked
-            backToTopButton.addEventListener('click', () => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-        });
-    </script>
 </body>
 </html>
