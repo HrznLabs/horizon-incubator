@@ -134,6 +134,45 @@
             margin-top: 60px;
             color: #666;
         }
+
+        /* Smooth scrolling for anchor links */
+        html { scroll-behavior: smooth; }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00d9ff, #00ff88);
+            border: none;
+            color: #1a1a2e;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 255, 136, 0.5);
+        }
+        .back-to-top:focus-visible {
+            outline: 2px solid #00ff88;
+            outline-offset: 4px;
+        }
     </style>
 </head>
 <body>
@@ -143,8 +182,8 @@
             <p class="subtitle">Complete Technical Specification — v1.0</p>
         </header>
 
-        <nav class="toc">
-            <h3>📑 Table of Contents</h3>
+        <nav class="toc" aria-labelledby="toc-heading">
+            <h3 id="toc-heading">📑 Table of Contents</h3>
             <ul>
                 <li><a href="#decisions">✅ Confirmed Decisions</a></li>
                 <li><a href="#d30">D30 — Standard Ride Flow</a></li>
@@ -476,5 +515,35 @@ flowchart TB
             <p>Created December 2025 • 13 Diagrams • Ready for Implementation</p>
         </footer>
     </div>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+    </button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const backToTopButton = document.getElementById('backToTop');
+
+            // Show/hide button based on scroll position
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backToTopButton.classList.add('visible');
+                } else {
+                    backToTopButton.classList.remove('visible');
+                }
+            });
+
+            // Scroll to top when clicked
+            backToTopButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
