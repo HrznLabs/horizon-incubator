@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none';">
     <title>Horizon Rides Vertical — Complete Specification</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <!--
-        ⚡ Bolt Optimization: Deferred Mermaid.js loading to unblock initial render.
+        ⚡ Bolt Optimization: Preconnect to CDN & Pinned Mermaid version for faster FCP.
         Moving script to head with 'defer' allows parallel download while HTML parses.
         Initialization is wrapped in DOMContentLoaded to ensure the library is ready.
     -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" referrerpolicy="no-referrer" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.5/dist/mermaid.min.js" referrerpolicy="no-referrer" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             mermaid.initialize({
@@ -21,6 +23,9 @@
         });
     </script>
     <style>
+        @media (prefers-reduced-motion: no-preference) {
+            html { scroll-behavior: smooth; }
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
