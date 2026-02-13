@@ -143,10 +143,17 @@
             visibility: visible;
         }
 
-        .back-to-top:hover {
+        .back-to-top:hover,
+        .back-to-top:focus-visible {
             transform: translateY(-5px);
             background: #00ff88;
             box-shadow: 0 6px 16px rgba(0, 255, 136, 0.4);
+            outline: none;
+        }
+
+        .back-to-top:focus-visible {
+            outline: 2px solid #00d9ff;
+            outline-offset: 4px;
         }
 
         @media (prefers-reduced-motion: no-preference) {
@@ -497,16 +504,23 @@ flowchart TB
         </footer>
     </div>
 
-    <button id="back-to-top" class="back-to-top" aria-label="Back to top">↑</button>
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top" title="Back to top">↑</button>
 
     <script>
         const backToTopButton = document.getElementById('back-to-top');
+        let ticking = false;
 
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTopButton.classList.add('visible');
-            } else {
-                backToTopButton.classList.remove('visible');
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    if (window.scrollY > 300) {
+                        backToTopButton.classList.add('visible');
+                    } else {
+                        backToTopButton.classList.remove('visible');
+                    }
+                    ticking = false;
+                });
+                ticking = true;
             }
         });
 
