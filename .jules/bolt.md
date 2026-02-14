@@ -5,3 +5,7 @@
 ## 2026-02-10 - Resource Hints for Documentation Assets
 **Learning:** Large external libraries (like Mermaid.js via CDN) can block the critical rendering path. Adding preconnect and dns-prefetch hints improves perceived performance by paralleling connection setup.
 **Action:** Audit all HTML specs for external script tags and ensure corresponding resource hints are present.
+
+## 2026-02-12 - Scroll Performance in Static Docs
+**Learning:** Simple UI interactions like "Back to Top" buttons in static HTML documentation can degrade performance if scroll event listeners are not throttled, especially on mobile devices where `scroll` fires frequently.
+**Action:** Always throttle scroll event listeners using `requestAnimationFrame` in standalone HTML specifications.
