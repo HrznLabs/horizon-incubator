@@ -5,3 +5,7 @@
 ## 2025-05-22 - [Respecting Reduced Motion in JS Animations]
 **Learning:** Pure CSS `scroll-behavior: smooth` isn't enough when triggering scrolls via JavaScript (e.g., Back to Top buttons). JS `window.scrollTo` defaults to instant or the passed behavior, ignoring the CSS preference unless explicitly checked.
 **Action:** Always check `window.matchMedia('(prefers-reduced-motion: reduce)').matches` before applying `{ behavior: 'smooth' }` in JS.
+
+## 2025-05-23 - Performance as UX in Specs
+**Learning:** Performance optimizations (e.g., `<link rel="preconnect">`, throttled scroll listeners) in standalone HTML specifications are critical UX improvements, especially when heavy libraries like Mermaid.js are involved.
+**Action:** When auditing static documentation, check for and implement resource hints and event throttling to improve perceived responsiveness.
