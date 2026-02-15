@@ -3,18 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <title>Horizon Rides Vertical — Complete Specification</title>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <!--
         ⚡ Bolt Optimization: Deferred Mermaid.js loading to unblock initial render.
         Moving script to head with 'defer' allows parallel download while HTML parses.
         Initialization is wrapped in DOMContentLoaded to ensure the library is ready.
+        ⚡ Bolt Optimization: Consolidated resource hints and added crossorigin attribute for faster connection setup.
         🛡️ Sentinel: Added SRI hash to prevent CDN tampering and ensure script integrity.
     -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.5/dist/mermaid.min.js" integrity="sha384-enVdc7lTHDGtpROV85t9+VqPC2EyyB0hsRD0MrvQnHUsHmTHIz2D8SPP4EnBkstH" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
@@ -156,16 +153,6 @@
             background: #00ff88;
             box-shadow: 0 6px 16px rgba(0, 255, 136, 0.4);
             outline: none;
-        }
-
-        .back-to-top:focus-visible {
-            outline: 2px solid #00d9ff;
-            outline-offset: 4px;
-        }
-
-        .back-to-top:focus-visible {
-            outline: 3px solid #00ff88;
-            outline-offset: 4px;
         }
 
         .back-to-top:focus-visible {
