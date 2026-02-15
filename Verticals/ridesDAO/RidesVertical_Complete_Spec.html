@@ -145,10 +145,17 @@
             visibility: visible;
         }
 
-        .back-to-top:hover {
+        .back-to-top:hover,
+        .back-to-top:focus-visible {
             transform: translateY(-5px);
             background: #00ff88;
             box-shadow: 0 6px 16px rgba(0, 255, 136, 0.4);
+            outline: none;
+        }
+
+        .back-to-top:focus-visible {
+            outline: 2px solid #00d9ff;
+            outline-offset: 4px;
         }
 
         @media (prefers-reduced-motion: no-preference) {
@@ -503,6 +510,7 @@ flowchart TB
 
     <script>
         const backToTopButton = document.getElementById('back-to-top');
+        let ticking = false;
 
         let ticking = false;
         window.addEventListener('scroll', () => {
