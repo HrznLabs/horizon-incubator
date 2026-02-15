@@ -107,7 +107,7 @@
             padding: 30px;
             margin-bottom: 40px;
         }
-        .decisions h3 { color: #00ff88; margin-bottom: 20px; }
+        .decisions h3 { color: #00ff88; margin-bottom: 20px; display: flex; align-items: center; }
         .decisions table { width: 100%; border-collapse: collapse; }
         .decisions th, .decisions td {
             padding: 12px;
@@ -165,6 +165,33 @@
             html {
                 scroll-behavior: smooth;
             }
+        }
+
+        .anchor-link {
+            opacity: 0;
+            margin-left: 0.5em;
+            color: #666;
+            text-decoration: none;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.8em;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .section-header:hover .anchor-link,
+        .diagram-title:hover .anchor-link,
+        .decisions h3:hover .anchor-link,
+        .anchor-link:focus-visible {
+            opacity: 1;
+        }
+
+        .anchor-link:hover {
+            color: #00d9ff;
+            background: rgba(0, 217, 255, 0.1);
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -534,6 +561,36 @@ flowchart TB
             window.scrollTo({
                 top: 0,
                 behavior: prefersReducedMotion ? 'auto' : 'smooth'
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('section[id]').forEach(section => {
+                const heading = section.querySelector('h1, h2, h3');
+                if (!heading) return;
+
+                const btn = document.createElement('button');
+                btn.className = 'anchor-link';
+                btn.innerHTML = '🔗';
+                btn.setAttribute('aria-label', 'Copy link to section');
+                btn.title = 'Copy link to section';
+
+                btn.addEventListener('click', async () => {
+                    try {
+                        const url = window.location.origin + window.location.pathname + '#' + section.id;
+                        await navigator.clipboard.writeText(url);
+
+                        const originalText = btn.innerHTML;
+                        btn.innerHTML = '✅';
+                        setTimeout(() => btn.innerHTML = originalText, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy:', err);
+                    }
+                });
+
+                heading.appendChild(btn);
             });
         });
     </script>
