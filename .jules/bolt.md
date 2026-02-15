@@ -9,3 +9,7 @@
 ## 2026-02-12 - Scroll Event Throttling in Single-Page Specs
 **Learning:** Single-page HTML specifications with "Back to Top" functionality often use unthrottled scroll event listeners, which can degrade scrolling performance on lower-end devices.
 **Action:** Always wrap scroll event listeners in `requestAnimationFrame` to decouple the handler execution from the scroll event rate.
+
+## 2026-02-14 - Preconnect Crossorigin Attribute
+**Learning:** For resources fetched via CORS (like scripts from CDNs), the `<link rel="preconnect">` tag must include the `crossorigin` attribute to be effective. Without it, the browser opens a connection without credentials, which cannot be reused for the CORS request.
+**Action:** Always verify that `preconnect` tags for external scripts/fonts include `crossorigin` (or `crossorigin="anonymous"`).
