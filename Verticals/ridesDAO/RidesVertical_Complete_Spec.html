@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
         ⚡ Bolt Optimization: Deferred Mermaid.js loading to unblock initial render.
@@ -144,10 +148,22 @@
             visibility: visible;
         }
 
-        .back-to-top:hover {
+        .back-to-top:hover,
+        .back-to-top:focus-visible {
             transform: translateY(-5px);
             background: #00ff88;
             box-shadow: 0 6px 16px rgba(0, 255, 136, 0.4);
+            outline: none;
+        }
+
+        .back-to-top:focus-visible {
+            outline: 2px solid #00d9ff;
+            outline-offset: 4px;
+        }
+
+        .back-to-top:focus-visible {
+            outline: 3px solid #00ff88;
+            outline-offset: 4px;
         }
 
         .back-to-top:focus-visible {
@@ -507,22 +523,21 @@ flowchart TB
 
     <script>
         const backToTopButton = document.getElementById('back-to-top');
-        let isTicking = false;
+        let ticking = false;
 
-        // 🛡️ Sentinel: Throttled scroll listener using requestAnimationFrame for performance.
         window.addEventListener('scroll', () => {
-            if (!isTicking) {
+            if (!ticking) {
                 window.requestAnimationFrame(() => {
                     if (window.scrollY > 300) {
                         backToTopButton.classList.add('visible');
                     } else {
                         backToTopButton.classList.remove('visible');
                     }
-                    isTicking = false;
+                    ticking = false;
                 });
-                isTicking = true;
+                ticking = true;
             }
-        });
+        }, { passive: true });
 
         backToTopButton.addEventListener('click', () => {
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
