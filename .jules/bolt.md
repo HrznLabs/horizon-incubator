@@ -6,6 +6,6 @@
 **Learning:** Large external libraries (like Mermaid.js via CDN) can block the critical rendering path. Adding preconnect and dns-prefetch hints improves perceived performance by paralleling connection setup.
 **Action:** Audit all HTML specs for external script tags and ensure corresponding resource hints are present.
 
-## 2026-03-01 - Scroll Event Throttling in Single-Page Specs
+## 2026-02-12 - Scroll Event Throttling in Single-Page Specs
 **Learning:** Single-page HTML specifications with "Back to Top" functionality often use unthrottled scroll event listeners, which can degrade scrolling performance on lower-end devices.
 **Action:** Always wrap scroll event listeners in `requestAnimationFrame` to decouple the handler execution from the scroll event rate.
