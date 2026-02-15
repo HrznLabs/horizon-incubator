@@ -15,6 +15,7 @@
         ⚡ Bolt Optimization: Deferred Mermaid.js loading to unblock initial render.
         Moving script to head with 'defer' allows parallel download while HTML parses.
         Initialization is wrapped in DOMContentLoaded to ensure the library is ready.
+        🛡️ Sentinel: Added SRI hash to prevent CDN tampering and ensure script integrity.
     -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.5/dist/mermaid.min.js" integrity="sha384-enVdc7lTHDGtpROV85t9+VqPC2EyyB0hsRD0MrvQnHUsHmTHIz2D8SPP4EnBkstH" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
     <script>
@@ -165,6 +166,11 @@
         .back-to-top:focus-visible {
             outline: 3px solid #00ff88;
             outline-offset: 4px;
+        }
+
+        .back-to-top:focus-visible {
+            outline: 3px solid #00d9ff;
+            outline-offset: 2px;
         }
 
         @media (prefers-reduced-motion: no-preference) {
@@ -521,7 +527,6 @@ flowchart TB
         const backToTopButton = document.getElementById('back-to-top');
         let ticking = false;
 
-        let ticking = false;
         window.addEventListener('scroll', () => {
             if (!ticking) {
                 window.requestAnimationFrame(() => {
