@@ -9,3 +9,7 @@
 ## 2025-05-23 - Performance as UX in Specs
 **Learning:** Performance optimizations (e.g., `<link rel="preconnect">`, throttled scroll listeners) in standalone HTML specifications are critical UX improvements, especially when heavy libraries like Mermaid.js are involved.
 **Action:** When auditing static documentation, check for and implement resource hints and event throttling to improve perceived responsiveness.
+
+## 2025-05-24 - [Visual Consistency in Dark Mode Docs]
+**Learning:** Hardcoded white backgrounds in diagrams (like Mermaid) create jarring "flashbang" effects in dark-themed documentation, breaking immersion and causing eye strain.
+**Action:** Always check diagram configurations (`theme: 'dark'`) and container styles when auditing dark-mode documentation.
