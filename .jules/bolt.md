@@ -13,3 +13,7 @@
 ## 2026-02-14 - Preconnect Crossorigin Attribute
 **Learning:** For resources fetched via CORS (like scripts from CDNs), the `<link rel="preconnect">` tag must include the `crossorigin` attribute to be effective. Without it, the browser opens a connection without credentials, which cannot be reused for the CORS request.
 **Action:** Always verify that `preconnect` tags for external scripts/fonts include `crossorigin` (or `crossorigin="anonymous"`).
+
+## 2026-03-05 - Lazy Loading Mermaid Diagrams
+**Learning:** Initializing all Mermaid diagrams on load can cause significant main thread blocking and delay interactivity, especially in long documents. Using `IntersectionObserver` to render diagrams only when they approach the viewport drastically reduces Total Blocking Time (TBT).
+**Action:** Implement lazy loading for Mermaid diagrams using `IntersectionObserver` and `mermaid.run({ nodes: [...] })`.
