@@ -76,6 +76,9 @@
             padding: 40px;
             margin-bottom: 40px;
             border: 1px solid rgba(255,255,255,0.1);
+            /* ⚡ Bolt Optimization: Skips rendering off-screen content */
+            content-visibility: auto;
+            contain-intrinsic-size: 500px;
         }
         .diagram-title {
             font-size: 1.5rem;
