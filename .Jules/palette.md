@@ -13,3 +13,7 @@
 ## 2025-05-24 - [Visual Consistency in Dark Mode Docs]
 **Learning:** Hardcoded white backgrounds in diagrams (like Mermaid) create jarring "flashbang" effects in dark-themed documentation, breaking immersion and causing eye strain.
 **Action:** Always check diagram configurations (`theme: 'dark'`) and container styles when auditing dark-mode documentation.
+
+## 2025-05-25 - [Print-Friendly Documentation]
+**Learning:** Standalone HTML specs often prioritize dark mode for screen reading but neglect printability. This creates poor UX when users need to save as PDF or print.
+**Action:** Always verify `@media print` styles in standalone HTML docs to ensure high contrast (black on white) and remove interactive elements.
