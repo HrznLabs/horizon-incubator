@@ -13,3 +13,7 @@
 ## 2025-05-24 - [Visual Consistency in Dark Mode Docs]
 **Learning:** Hardcoded white backgrounds in diagrams (like Mermaid) create jarring "flashbang" effects in dark-themed documentation, breaking immersion and causing eye strain.
 **Action:** Always check diagram configurations (`theme: 'dark'`) and container styles when auditing dark-mode documentation.
+
+## 2025-05-24 - [Print Styles as Accessibility]
+**Learning:** Documentation is often "printed" (Print-to-PDF) for offline reading or archival. Dark mode interfaces fail catastrophically here, wasting ink and reducing readability.
+**Action:** When creating standalone documentation, always include a `@media print` block that forces high-contrast (black-on-white), hides interactive elements, and expands collapsibles.
