@@ -18,6 +18,6 @@
 **Learning:** Initializing all Mermaid diagrams on load can cause significant main thread blocking and delay interactivity, especially in long documents. Using `IntersectionObserver` to render diagrams only when they approach the viewport drastically reduces Total Blocking Time (TBT).
 **Action:** Implement lazy loading for Mermaid diagrams using `IntersectionObserver` and `mermaid.run({ nodes: [...] })`.
 
-## 2026-03-06 - Content Visibility for Documentation
-**Learning:** Large HTML specifications with complex diagrams benefit significantly from `content-visibility: auto` to skip rendering off-screen content. However, `contain-intrinsic-size` is mandatory to prevent layout shifts and scroll jumping.
-**Action:** Apply `content-visibility: auto` with an estimated `contain-intrinsic-size` to repeated documentation sections to improve initial paint and scroll performance.
+## 2026-03-05 - Lazy Loading Heavy Libraries in Static HTML
+**Learning:** While `defer` helps with parse blocking, large libraries like Mermaid.js (~1MB) still consume bandwidth and parsing time on load. Lazy loading the script itself via `IntersectionObserver` avoids this cost entirely for users who don't scroll to the diagrams.
+**Action:** Dynamically inject heavy library scripts only when their dependent elements enter the viewport.

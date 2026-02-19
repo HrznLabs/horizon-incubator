@@ -5,33 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-Ab5Rg9Ip1gdqK3h12+iTD15mcteWBVqosM4uhTOjA1k=' 'sha256-mpLMTyPh3hMJQLiKwz3UCTFgZKT72s5MokrPJqUh8y0=' 'sha256-aA98STCoHRUcjrQN6HBBZRrcKlW/WqxsCAr51KxocDw=' 'sha256-QKBmoVHs2AHhDHQ5OFUIauTLTMoRKR6s6Um5HLBoLLY=' https://cdn.jsdelivr.net/npm/mermaid@10.9.5/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-ljLC+o3+JOqgxBjVbK5Ho3sSbEXHLgwDiLW2CfNmvTE=' 'sha256-mpLMTyPh3hMJQLiKwz3UCTFgZKT72s5MokrPJqUh8y0=' 'sha256-aA98STCoHRUcjrQN6HBBZRrcKlW/WqxsCAr51KxocDw=' https://cdn.jsdelivr.net/npm/mermaid@10.9.5/; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
-        ⚡ Bolt Optimization: Deferred Mermaid.js loading to unblock initial render.
-        Moving script to head with 'defer' allows parallel download while HTML parses.
-        Initialization is wrapped in DOMContentLoaded to ensure the library is ready.
-        ⚡ Bolt Optimization: Consolidated resource hints and added crossorigin attribute for faster connection setup.
+        ⚡ Bolt Optimization: Lazy loaded Mermaid.js to improve initial load performance.
+        The script is injected dynamically only when diagrams are scrolled into view.
         🛡️ Sentinel: Added SRI hash to prevent CDN tampering and ensure script integrity.
         🛡️ Sentinel: Enforced strict CSP by replacing 'unsafe-inline' with SHA-256 hashes for inline scripts.
     -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.5/dist/mermaid.min.js" integrity="sha384-enVdc7lTHDGtpROV85t9+VqPC2EyyB0hsRD0MrvQnHUsHmTHIz2D8SPP4EnBkstH" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // ⚡ Bolt Optimization: Lazy load Mermaid diagrams to improve initial load performance.
-            // Diagrams are rendered only when they approach the viewport using IntersectionObserver.
-            mermaid.initialize({
-                startOnLoad: false,
-                theme: 'dark',
-                securityLevel: 'antiscript'
-            });
+            const mermaidSrc = "https://cdn.jsdelivr.net/npm/mermaid@10.9.5/dist/mermaid.min.js";
+            const mermaidIntegrity = "sha384-enVdc7lTHDGtpROV85t9+VqPC2EyyB0hsRD0MrvQnHUsHmTHIz2D8SPP4EnBkstH";
+
+            let loadingPromise = null;
+
+            function loadMermaid() {
+                if (loadingPromise) return loadingPromise;
+
+                return loadingPromise = new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = mermaidSrc;
+                    script.integrity = mermaidIntegrity;
+                    script.crossOrigin = "anonymous";
+                    script.referrerPolicy = "no-referrer";
+                    script.onload = () => {
+                        mermaid.initialize({
+                            startOnLoad: false,
+                            theme: 'dark',
+                            securityLevel: 'antiscript'
+                        });
+                        resolve();
+                    };
+                    script.onerror = reject;
+                    document.head.appendChild(script);
+                });
+            }
 
             if ('IntersectionObserver' in window) {
                 const observer = new IntersectionObserver((entries, observer) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
-                            mermaid.run({ nodes: [entry.target] });
+                            loadMermaid().then(() => {
+                                mermaid.run({ nodes: [entry.target] });
+                            });
                             observer.unobserve(entry.target);
                         }
                     });
@@ -40,7 +58,9 @@
                 document.querySelectorAll('.mermaid').forEach(el => observer.observe(el));
             } else {
                 // Fallback for browsers without IntersectionObserver
-                mermaid.run({ nodes: document.querySelectorAll('.mermaid') });
+                loadMermaid().then(() => {
+                     mermaid.run({ nodes: document.querySelectorAll('.mermaid') });
+                });
             }
         });
     </script>
@@ -212,47 +232,6 @@
             color: #00d9ff;
             background: rgba(0, 217, 255, 0.1);
             transform: scale(1.1);
-        }
-
-        @media print {
-            body {
-                background: white !important;
-                color: black !important;
-                padding: 0 !important;
-            }
-            .container {
-                max-width: 100% !important;
-                margin: 0 !important;
-            }
-            h1, h2, h3, .section-header, .diagram-title, .toc h3, .decisions th, .subtitle, .diagram-description {
-                background: none !important;
-                -webkit-text-fill-color: black !important;
-                color: black !important;
-                border-color: #ccc !important;
-            }
-            .diagram-section, .toc, .decisions, .mermaid {
-                background: none !important;
-                border: 1px solid #ddd !important;
-                color: black !important;
-            }
-            .mermaid {
-                background-color: white !important;
-            }
-            .badge {
-                border: 1px solid #000;
-                color: black !important;
-            }
-            .back-to-top, .anchor-link {
-                display: none !important;
-            }
-            a {
-                text-decoration: underline;
-                color: #000 !important;
-            }
-            footer {
-                margin-top: 20px !important;
-                color: #000 !important;
-            }
         }
     </style>
 </head>
