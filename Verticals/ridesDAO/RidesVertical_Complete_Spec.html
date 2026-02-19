@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-Ab5Rg9Ip1gdqK3h12+iTD15mcteWBVqosM4uhTOjA1k=' 'sha256-mpLMTyPh3hMJQLiKwz3UCTFgZKT72s5MokrPJqUh8y0=' 'sha256-aA98STCoHRUcjrQN6HBBZRrcKlW/WqxsCAr51KxocDw=' https://cdn.jsdelivr.net/npm/mermaid@10.9.5/; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-u4vUt7rIgdQSqC6FIL18rB6icyPsJnq1De4UqDPi+iw=' 'sha256-4ad8a72q/AYjLp3SE913Y170dxLB6x5rn/WbwXxM3F0=' 'sha256-Y+ncWR8phQrnbDSYTcIuRWIFu5p8Gc7v8zBEZLf2JyA=' https://cdn.jsdelivr.net/npm/mermaid@10.9.5/; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
@@ -14,7 +14,7 @@
         Initialization is wrapped in DOMContentLoaded to ensure the library is ready.
         ⚡ Bolt Optimization: Consolidated resource hints and added crossorigin attribute for faster connection setup.
         🛡️ Sentinel: Added SRI hash to prevent CDN tampering and ensure script integrity.
-        🛡️ Sentinel: Enforced strict CSP by replacing 'unsafe-inline' with SHA-256 hashes for inline scripts.
+        🛡️ Sentinel: Enforced strict CSP by replacing 'unsafe-inline' with SHA-256 hashes for inline scripts. Note: 'unsafe-inline' remains for styles due to Mermaid.js requirements.
     -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.5/dist/mermaid.min.js" integrity="sha384-enVdc7lTHDGtpROV85t9+VqPC2EyyB0hsRD0MrvQnHUsHmTHIz2D8SPP4EnBkstH" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
     <script>
