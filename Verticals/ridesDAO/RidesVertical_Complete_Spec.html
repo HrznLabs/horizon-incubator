@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-u4vUt7rIgdQSqC6FIL18rB6icyPsJnq1De4UqDPi+iw=' 'sha256-4ad8a72q/AYjLp3SE913Y170dxLB6x5rn/WbwXxM3F0=' 'sha256-Y+ncWR8phQrnbDSYTcIuRWIFu5p8Gc7v8zBEZLf2JyA=' https://cdn.jsdelivr.net/npm/mermaid@10.9.5/; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-QKBmoVHs2AHhDHQ5OFUIauTLTMoRKR6s6Um5HLBoLLY=' 'sha256-mpLMTyPh3hMJQLiKwz3UCTFgZKT72s5MokrPJqUh8y0=' 'sha256-aA98STCoHRUcjrQN6HBBZRrcKlW/WqxsCAr51KxocDw=' https://cdn.jsdelivr.net/npm/mermaid@10.9.5/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
@@ -14,7 +14,8 @@
         Initialization is wrapped in DOMContentLoaded to ensure the library is ready.
         ⚡ Bolt Optimization: Consolidated resource hints and added crossorigin attribute for faster connection setup.
         🛡️ Sentinel: Added SRI hash to prevent CDN tampering and ensure script integrity.
-        🛡️ Sentinel: Enforced strict CSP by replacing 'unsafe-inline' with SHA-256 hashes for inline scripts. Note: 'unsafe-inline' remains for styles due to Mermaid.js requirements.
+        🛡️ Sentinel: Enforced strict CSP by replacing 'unsafe-inline' with SHA-256 hashes for inline scripts.
+        🛡️ Sentinel: Updated CSP hash for initialization script and restricted CDN path to specific file.
     -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.5/dist/mermaid.min.js" integrity="sha384-enVdc7lTHDGtpROV85t9+VqPC2EyyB0hsRD0MrvQnHUsHmTHIz2D8SPP4EnBkstH" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
     <script>
@@ -69,9 +70,6 @@
             margin: 60px 0 30px;
             padding-bottom: 10px;
             border-bottom: 2px solid rgba(0,217,255,0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
         .diagram-section {
             background: rgba(255,255,255,0.05);
@@ -79,9 +77,6 @@
             padding: 40px;
             margin-bottom: 40px;
             border: 1px solid rgba(255,255,255,0.1);
-            /* ⚡ Bolt Optimization: Skips rendering off-screen content */
-            content-visibility: auto;
-            contain-intrinsic-size: 500px;
         }
         .diagram-title {
             font-size: 1.5rem;
@@ -222,43 +217,72 @@
 
         @media print {
             body {
-                background: white !important;
-                color: black !important;
+                background: #fff !important;
+                color: #000 !important;
+                padding: 0 !important;
             }
-            nav, .toc, .back-to-top, .anchor-link, button, script {
-                display: none !important;
+            .container {
+                max-width: 100% !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 20px !important;
             }
-            h1, h2, h3, .section-header, .diagram-title, .subtitle {
-                color: black !important;
+            header {
+                margin-bottom: 30px;
+                text-align: left;
+            }
+            h1 {
                 background: none !important;
-                -webkit-text-fill-color: initial !important;
-                border-bottom-color: black !important;
-                text-shadow: none !important;
+                -webkit-text-fill-color: #000 !important;
+                color: #000 !important;
+                font-size: 2.5rem;
             }
-            .diagram-section, .decisions {
+            .subtitle {
+                color: #444 !important;
+            }
+            .section-header {
+                color: #000 !important;
+                border-bottom: 2px solid #000 !important;
+                margin-top: 40px;
+            }
+            .diagram-section {
                 background: none !important;
                 border: 1px solid #ccc !important;
-                box-shadow: none !important;
+                padding: 20px !important;
                 page-break-inside: avoid;
+            }
+            .diagram-title {
+                color: #000 !important;
+            }
+            .diagram-description {
+                color: #333 !important;
             }
             .mermaid {
                 background: none !important;
-                border: 1px solid #ccc !important;
-                box-shadow: none !important;
+                border: none !important;
+                padding: 10px 0 !important;
+                /* Invert dark-themed diagrams for print readability */
                 filter: invert(1) hue-rotate(180deg) !important;
             }
-            a {
-                text-decoration: underline !important;
-                color: black !important;
+            .decisions {
+                background: none !important;
+                border: 1px solid #ccc !important;
+                color: #000 !important;
             }
-            table, th, td {
-                color: black !important;
-                border-color: #ccc !important;
+            .decisions h3, .decisions th {
+                color: #000 !important;
+                border-bottom-color: #ccc !important;
+            }
+            .decisions td {
+                border-bottom-color: #eee !important;
             }
             .badge {
-                border: 1px solid #000 !important;
+                border: 1px solid #000;
                 color: #000 !important;
                 background: none !important;
+            }
+            .toc, .back-to-top, .anchor-link {
+                display: none !important;
             }
         }
     </style>

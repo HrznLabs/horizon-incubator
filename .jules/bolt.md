@@ -18,6 +18,6 @@
 **Learning:** Initializing all Mermaid diagrams on load can cause significant main thread blocking and delay interactivity, especially in long documents. Using `IntersectionObserver` to render diagrams only when they approach the viewport drastically reduces Total Blocking Time (TBT).
 **Action:** Implement lazy loading for Mermaid diagrams using `IntersectionObserver` and `mermaid.run({ nodes: [...] })`.
 
-## 2026-03-06 - Content Visibility for Documentation
-**Learning:** Large HTML specifications with complex diagrams benefit significantly from `content-visibility: auto` to skip rendering off-screen content. However, `contain-intrinsic-size` is mandatory to prevent layout shifts and scroll jumping.
-**Action:** Apply `content-visibility: auto` with an estimated `contain-intrinsic-size` to repeated documentation sections to improve initial paint and scroll performance.
+## 2026-03-07 - Printing Dark-Themed Diagrams
+**Learning:** Dark-themed Mermaid.js diagrams (common in specs) render with heavy black backgrounds in print media, wasting ink and reducing legibility on paper.
+**Action:** Use CSS filters (`invert(1) hue-rotate(180deg)`) inside `@media print` blocks to force diagrams into a light/high-contrast mode without requiring JavaScript theme switching.
