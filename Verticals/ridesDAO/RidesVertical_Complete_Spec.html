@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-u4vUt7rIgdQSqC6FIL18rB6icyPsJnq1De4UqDPi+iw=' 'sha256-4ad8a72q/AYjLp3SE913Y170dxLB6x5rn/WbwXxM3F0=' 'sha256-Y+ncWR8phQrnbDSYTcIuRWIFu5p8Gc7v8zBEZLf2JyA=' https://cdn.jsdelivr.net/npm/mermaid@10.9.5/; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-Ab5Rg9Ip1gdqK3h12+iTD15mcteWBVqosM4uhTOjA1k=' 'sha256-mpLMTyPh3hMJQLiKwz3UCTFgZKT72s5MokrPJqUh8y0=' 'sha256-aA98STCoHRUcjrQN6HBBZRrcKlW/WqxsCAr51KxocDw=' https://cdn.jsdelivr.net/npm/mermaid@10.9.5/; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
@@ -14,7 +14,7 @@
         Initialization is wrapped in DOMContentLoaded to ensure the library is ready.
         ⚡ Bolt Optimization: Consolidated resource hints and added crossorigin attribute for faster connection setup.
         🛡️ Sentinel: Added SRI hash to prevent CDN tampering and ensure script integrity.
-        🛡️ Sentinel: Enforced strict CSP by replacing 'unsafe-inline' with SHA-256 hashes for inline scripts. Note: 'unsafe-inline' remains for styles due to Mermaid.js requirements.
+        🛡️ Sentinel: Enforced strict CSP by replacing 'unsafe-inline' with SHA-256 hashes for inline scripts.
     -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.5/dist/mermaid.min.js" integrity="sha384-enVdc7lTHDGtpROV85t9+VqPC2EyyB0hsRD0MrvQnHUsHmTHIz2D8SPP4EnBkstH" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
     <script>
@@ -69,9 +69,6 @@
             margin: 60px 0 30px;
             padding-bottom: 10px;
             border-bottom: 2px solid rgba(0,217,255,0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
         .diagram-section {
             background: rgba(255,255,255,0.05);
@@ -79,9 +76,6 @@
             padding: 40px;
             margin-bottom: 40px;
             border: 1px solid rgba(255,255,255,0.1);
-            /* ⚡ Bolt Optimization: Skips rendering off-screen content */
-            content-visibility: auto;
-            contain-intrinsic-size: 500px;
         }
         .diagram-title {
             font-size: 1.5rem;
@@ -224,41 +218,40 @@
             body {
                 background: white !important;
                 color: black !important;
+                padding: 0 !important;
             }
-            nav, .toc, .back-to-top, .anchor-link, button, script {
-                display: none !important;
+            .container {
+                max-width: 100% !important;
+                margin: 0 !important;
             }
-            h1, h2, h3, .section-header, .diagram-title, .subtitle {
-                color: black !important;
+            h1, h2, h3, .section-header, .diagram-title, .toc h3, .decisions th, .subtitle, .diagram-description {
                 background: none !important;
-                -webkit-text-fill-color: initial !important;
-                border-bottom-color: black !important;
-                text-shadow: none !important;
-            }
-            .diagram-section, .decisions {
-                background: none !important;
-                border: 1px solid #ccc !important;
-                box-shadow: none !important;
-                page-break-inside: avoid;
-            }
-            .mermaid {
-                background: none !important;
-                border: 1px solid #ccc !important;
-                box-shadow: none !important;
-                filter: invert(1) hue-rotate(180deg) !important;
-            }
-            a {
-                text-decoration: underline !important;
-                color: black !important;
-            }
-            table, th, td {
+                -webkit-text-fill-color: black !important;
                 color: black !important;
                 border-color: #ccc !important;
             }
-            .badge {
-                border: 1px solid #000 !important;
-                color: #000 !important;
+            .diagram-section, .toc, .decisions, .mermaid {
                 background: none !important;
+                border: 1px solid #ddd !important;
+                color: black !important;
+            }
+            .mermaid {
+                background-color: white !important;
+            }
+            .badge {
+                border: 1px solid #000;
+                color: black !important;
+            }
+            .back-to-top, .anchor-link {
+                display: none !important;
+            }
+            a {
+                text-decoration: underline;
+                color: #000 !important;
+            }
+            footer {
+                margin-top: 20px !important;
+                color: #000 !important;
             }
         }
     </style>
