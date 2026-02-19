@@ -18,6 +18,6 @@
 **Learning:** Initializing all Mermaid diagrams on load can cause significant main thread blocking and delay interactivity, especially in long documents. Using `IntersectionObserver` to render diagrams only when they approach the viewport drastically reduces Total Blocking Time (TBT).
 **Action:** Implement lazy loading for Mermaid diagrams using `IntersectionObserver` and `mermaid.run({ nodes: [...] })`.
 
-## 2026-03-05 - Lazy Loading Heavy Libraries in Static HTML
-**Learning:** While `defer` helps with parse blocking, large libraries like Mermaid.js (~1MB) still consume bandwidth and parsing time on load. Lazy loading the script itself via `IntersectionObserver` avoids this cost entirely for users who don't scroll to the diagrams.
-**Action:** Dynamically inject heavy library scripts only when their dependent elements enter the viewport.
+## 2026-03-07 - Printing Dark-Themed Diagrams
+**Learning:** Dark-themed Mermaid.js diagrams (common in specs) render with heavy black backgrounds in print media, wasting ink and reducing legibility on paper.
+**Action:** Use CSS filters (`invert(1) hue-rotate(180deg)`) inside `@media print` blocks to force diagrams into a light/high-contrast mode without requiring JavaScript theme switching.
