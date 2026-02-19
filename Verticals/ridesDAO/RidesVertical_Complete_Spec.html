@@ -213,6 +213,77 @@
             background: rgba(0, 217, 255, 0.1);
             transform: scale(1.1);
         }
+
+        @media print {
+            body {
+                background: #fff !important;
+                color: #000 !important;
+                padding: 0 !important;
+            }
+            .container {
+                max-width: 100% !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 20px !important;
+            }
+            header {
+                margin-bottom: 30px;
+                text-align: left;
+            }
+            h1 {
+                background: none !important;
+                -webkit-text-fill-color: #000 !important;
+                color: #000 !important;
+                font-size: 2.5rem;
+            }
+            .subtitle {
+                color: #444 !important;
+            }
+            .section-header {
+                color: #000 !important;
+                border-bottom: 2px solid #000 !important;
+                margin-top: 40px;
+            }
+            .diagram-section {
+                background: none !important;
+                border: 1px solid #ccc !important;
+                padding: 20px !important;
+                page-break-inside: avoid;
+            }
+            .diagram-title {
+                color: #000 !important;
+            }
+            .diagram-description {
+                color: #333 !important;
+            }
+            .mermaid {
+                background: none !important;
+                border: none !important;
+                padding: 10px 0 !important;
+                /* Invert dark-themed diagrams for print readability */
+                filter: invert(1) hue-rotate(180deg) !important;
+            }
+            .decisions {
+                background: none !important;
+                border: 1px solid #ccc !important;
+                color: #000 !important;
+            }
+            .decisions h3, .decisions th {
+                color: #000 !important;
+                border-bottom-color: #ccc !important;
+            }
+            .decisions td {
+                border-bottom-color: #eee !important;
+            }
+            .badge {
+                border: 1px solid #000;
+                color: #000 !important;
+                background: none !important;
+            }
+            .toc, .back-to-top, .anchor-link {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body>
