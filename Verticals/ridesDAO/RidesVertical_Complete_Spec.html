@@ -5,51 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-ljLC+o3+JOqgxBjVbK5Ho3sSbEXHLgwDiLW2CfNmvTE=' 'sha256-mpLMTyPh3hMJQLiKwz3UCTFgZKT72s5MokrPJqUh8y0=' 'sha256-aA98STCoHRUcjrQN6HBBZRrcKlW/WqxsCAr51KxocDw=' https://cdn.jsdelivr.net/npm/mermaid@10.9.5/; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-QKBmoVHs2AHhDHQ5OFUIauTLTMoRKR6s6Um5HLBoLLY=' 'sha256-mpLMTyPh3hMJQLiKwz3UCTFgZKT72s5MokrPJqUh8y0=' 'sha256-aA98STCoHRUcjrQN6HBBZRrcKlW/WqxsCAr51KxocDw=' https://cdn.jsdelivr.net/npm/mermaid@10.9.5/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
-        ⚡ Bolt Optimization: Lazy loaded Mermaid.js to improve initial load performance.
-        The script is injected dynamically only when diagrams are scrolled into view.
+        ⚡ Bolt Optimization: Deferred Mermaid.js loading to unblock initial render.
+        Moving script to head with 'defer' allows parallel download while HTML parses.
+        Initialization is wrapped in DOMContentLoaded to ensure the library is ready.
+        ⚡ Bolt Optimization: Consolidated resource hints and added crossorigin attribute for faster connection setup.
         🛡️ Sentinel: Added SRI hash to prevent CDN tampering and ensure script integrity.
         🛡️ Sentinel: Enforced strict CSP by replacing 'unsafe-inline' with SHA-256 hashes for inline scripts.
+        🛡️ Sentinel: Updated CSP hash for initialization script and restricted CDN path to specific file.
     -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.5/dist/mermaid.min.js" integrity="sha384-enVdc7lTHDGtpROV85t9+VqPC2EyyB0hsRD0MrvQnHUsHmTHIz2D8SPP4EnBkstH" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const mermaidSrc = "https://cdn.jsdelivr.net/npm/mermaid@10.9.5/dist/mermaid.min.js";
-            const mermaidIntegrity = "sha384-enVdc7lTHDGtpROV85t9+VqPC2EyyB0hsRD0MrvQnHUsHmTHIz2D8SPP4EnBkstH";
-
-            let loadingPromise = null;
-
-            function loadMermaid() {
-                if (loadingPromise) return loadingPromise;
-
-                return loadingPromise = new Promise((resolve, reject) => {
-                    const script = document.createElement('script');
-                    script.src = mermaidSrc;
-                    script.integrity = mermaidIntegrity;
-                    script.crossOrigin = "anonymous";
-                    script.referrerPolicy = "no-referrer";
-                    script.onload = () => {
-                        mermaid.initialize({
-                            startOnLoad: false,
-                            theme: 'dark',
-                            securityLevel: 'antiscript'
-                        });
-                        resolve();
-                    };
-                    script.onerror = reject;
-                    document.head.appendChild(script);
-                });
-            }
+            // ⚡ Bolt Optimization: Lazy load Mermaid diagrams to improve initial load performance.
+            // Diagrams are rendered only when they approach the viewport using IntersectionObserver.
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: 'dark',
+                securityLevel: 'antiscript'
+            });
 
             if ('IntersectionObserver' in window) {
                 const observer = new IntersectionObserver((entries, observer) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
-                            loadMermaid().then(() => {
-                                mermaid.run({ nodes: [entry.target] });
-                            });
+                            mermaid.run({ nodes: [entry.target] });
                             observer.unobserve(entry.target);
                         }
                     });
@@ -58,9 +41,7 @@
                 document.querySelectorAll('.mermaid').forEach(el => observer.observe(el));
             } else {
                 // Fallback for browsers without IntersectionObserver
-                loadMermaid().then(() => {
-                     mermaid.run({ nodes: document.querySelectorAll('.mermaid') });
-                });
+                mermaid.run({ nodes: document.querySelectorAll('.mermaid') });
             }
         });
     </script>
