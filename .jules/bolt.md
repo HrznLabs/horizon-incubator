@@ -21,3 +21,7 @@
 ## 2026-03-07 - Printing Dark-Themed Diagrams
 **Learning:** Dark-themed Mermaid.js diagrams (common in specs) render with heavy black backgrounds in print media, wasting ink and reducing legibility on paper.
 **Action:** Use CSS filters (`invert(1) hue-rotate(180deg)`) inside `@media print` blocks to force diagrams into a light/high-contrast mode without requiring JavaScript theme switching.
+
+## 2026-03-15 - Deferred Progressive Enhancement in Static Specs
+**Learning:** For static documentation with client-side enhancements (like anchor links), delaying execution until idle time (`requestIdleCallback`) significantly improves initial paint metrics without user-visible degradation.
+**Action:** Identify non-critical DOM manipulation scripts in HTML specs and wrap them in `requestIdleCallback` or `setTimeout` to unblock the main thread.

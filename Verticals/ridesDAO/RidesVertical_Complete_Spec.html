@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-QKBmoVHs2AHhDHQ5OFUIauTLTMoRKR6s6Um5HLBoLLY=' 'sha256-mpLMTyPh3hMJQLiKwz3UCTFgZKT72s5MokrPJqUh8y0=' 'sha256-aA98STCoHRUcjrQN6HBBZRrcKlW/WqxsCAr51KxocDw=' https://cdn.jsdelivr.net/npm/mermaid@10.9.5/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-QKBmoVHs2AHhDHQ5OFUIauTLTMoRKR6s6Um5HLBoLLY=' 'sha256-mpLMTyPh3hMJQLiKwz3UCTFgZKT72s5MokrPJqUh8y0=' 'sha256-e2TZX5MR+XQ9lL17bvEK/9mkBE6kOheW7gGDHJ5Oaxw=' https://cdn.jsdelivr.net/npm/mermaid@10.9.5/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
@@ -13,6 +13,7 @@
         Moving script to head with 'defer' allows parallel download while HTML parses.
         Initialization is wrapped in DOMContentLoaded to ensure the library is ready.
         ⚡ Bolt Optimization: Consolidated resource hints and added crossorigin attribute for faster connection setup.
+        ⚡ Bolt Optimization: Deferred anchor link generation via requestIdleCallback to unblock initial paint and used event delegation.
         🛡️ Sentinel: Added SRI hash to prevent CDN tampering and ensure script integrity.
         🛡️ Sentinel: Enforced strict CSP by replacing 'unsafe-inline' with SHA-256 hashes for inline scripts.
         🛡️ Sentinel: Updated CSP hash for initialization script and restricted CDN path to specific file.
@@ -658,8 +659,11 @@ flowchart TB
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('section[id]').forEach(section => {
+        // ⚡ Bolt Optimization: Deferred execution via requestIdleCallback to unblock initial paint.
+        // Event delegation reduces memory usage by using a single listener for all 14+ sections.
+        (window.requestIdleCallback || window.setTimeout)(() => {
+            const sections = document.querySelectorAll('section[id]');
+            sections.forEach(section => {
                 const heading = section.querySelector('h1, h2, h3');
                 if (!heading) return;
 
@@ -668,21 +672,26 @@ flowchart TB
                 btn.innerHTML = '🔗';
                 btn.setAttribute('aria-label', 'Copy link to section');
                 btn.title = 'Copy link to section';
-
-                btn.addEventListener('click', async () => {
-                    try {
-                        const url = window.location.origin + window.location.pathname + '#' + section.id;
-                        await navigator.clipboard.writeText(url);
-
-                        const originalText = btn.innerHTML;
-                        btn.innerHTML = '✅';
-                        setTimeout(() => btn.innerHTML = originalText, 2000);
-                    } catch (err) {
-                        console.error('Failed to copy:', err);
-                    }
-                });
-
                 heading.appendChild(btn);
+            });
+
+            document.body.addEventListener('click', async (e) => {
+                const btn = e.target.closest('.anchor-link');
+                if (!btn) return;
+
+                const section = btn.closest('section');
+                if (!section || !section.id) return;
+
+                try {
+                    const url = window.location.origin + window.location.pathname + '#' + section.id;
+                    await navigator.clipboard.writeText(url);
+
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '✅';
+                    setTimeout(() => btn.innerHTML = originalText, 2000);
+                } catch (err) {
+                    console.error('Failed to copy:', err);
+                }
             });
         });
     </script>
