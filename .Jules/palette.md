@@ -17,3 +17,7 @@
 ## 2025-05-24 - [Print Styles as Accessibility]
 **Learning:** Documentation is often "printed" (Print-to-PDF) for offline reading or archival. Dark mode interfaces fail catastrophically here, wasting ink and reducing readability.
 **Action:** When creating standalone documentation, always include a `@media print` block that forces high-contrast (black-on-white), hides interactive elements, and expands collapsibles.
+
+## 2026-02-22 - [Active Section Highlighting]
+**Learning:** For lengthy single-page specification documents, providing visual feedback in the Table of Contents via active section highlighting significantly improves user orientation and reduces cognitive load during navigation.
+**Action:** Implement IntersectionObserver-based highlighting as a standard pattern for all static HTML specifications in this repository, ensuring strict CSP compliance by updating inline script hashes.
