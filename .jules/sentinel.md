@@ -17,3 +17,8 @@
 **Vulnerability:** Static HTML documentation relied on an older version of Mermaid.js (v10.9.5) which had known security vulnerabilities (e.g., XSS sinks in diagram rendering).
 **Learning:** Static files are often overlooked in dependency audits. Even documentation files can be vectors for XSS if they load vulnerable libraries and are viewed in a trusted context.
 **Prevention:** Regularly audit and upgrade dependencies in static HTML files, ensuring SRI hashes and CSP directives are updated to match the new versions.
+
+## 2026-02-23 - [Global Scope Pollution in Standalone HTML]
+**Vulnerability:** Inline scripts in standalone HTML files often leak variables into the global scope, increasing the risk of variable collision and prototype pollution gadgets.
+**Learning:** Even in simple documentation files, global variables (like `backToTopButton`) persist across the page lifecycle and can be manipulated by other scripts.
+**Prevention:** Wrap all inline script logic in Immediately Invoked Function Expressions (IIFE) or use `type="module"` to create a private scope.
