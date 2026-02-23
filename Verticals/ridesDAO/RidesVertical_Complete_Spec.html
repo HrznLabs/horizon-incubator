@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-QKBmoVHs2AHhDHQ5OFUIauTLTMoRKR6s6Um5HLBoLLY=' 'sha256-mpLMTyPh3hMJQLiKwz3UCTFgZKT72s5MokrPJqUh8y0=' 'sha256-6J4mH6/lxAmBhk8IJqG0joSfry7wRi4jm8HdyUBM0+g=' https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-QKBmoVHs2AHhDHQ5OFUIauTLTMoRKR6s6Um5HLBoLLY=' 'sha256-mpLMTyPh3hMJQLiKwz3UCTFgZKT72s5MokrPJqUh8y0=' 'sha256-Qzl0VfPwrbbNmfKu5TJU5GJBNRgELgRb1yfbmd1Ga/M=' https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
@@ -660,19 +660,29 @@ flowchart TB
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('section[id]').forEach(section => {
-                const heading = section.querySelector('h1, h2, h3');
-                if (!heading) return;
+            const initAnchorLinks = () => {
+                // ⚡ Bolt Optimization: Deferred execution for FCP
+                document.querySelectorAll('section[id]').forEach(section => {
+                    const heading = section.querySelector('h1, h2, h3');
+                    if (!heading) return;
 
-                const btn = document.createElement('button');
-                btn.className = 'anchor-link';
-                btn.textContent = '🔗';
-                btn.setAttribute('aria-label', 'Copy link to section');
-                btn.title = 'Copy link to section';
+                    const btn = document.createElement('button');
+                    btn.className = 'anchor-link';
+                    btn.textContent = '🔗';
+                    btn.setAttribute('aria-label', 'Copy link to section');
+                    btn.title = 'Copy link to section';
+                    btn.dataset.targetId = section.id;
 
-                btn.addEventListener('click', async () => {
+                    heading.appendChild(btn);
+                });
+
+                // ⚡ Bolt Optimization: Event delegation for memory efficiency
+                document.body.addEventListener('click', async (e) => {
+                    const btn = e.target.closest('.anchor-link');
+                    if (!btn) return;
+
                     try {
-                        const url = window.location.origin + window.location.pathname + '#' + section.id;
+                        const url = window.location.origin + window.location.pathname + '#' + btn.dataset.targetId;
                         await navigator.clipboard.writeText(url);
 
                         const originalText = btn.textContent;
@@ -682,9 +692,13 @@ flowchart TB
                         console.error('Failed to copy:', err);
                     }
                 });
+            };
 
-                heading.appendChild(btn);
-            });
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(initAnchorLinks);
+            } else {
+                setTimeout(initAnchorLinks, 100);
+            }
         });
     </script>
 </body>
