@@ -17,3 +17,7 @@
 ## 2025-05-24 - [Print Styles as Accessibility]
 **Learning:** Documentation is often "printed" (Print-to-PDF) for offline reading or archival. Dark mode interfaces fail catastrophically here, wasting ink and reducing readability.
 **Action:** When creating standalone documentation, always include a `@media print` block that forces high-contrast (black-on-white), hides interactive elements, and expands collapsibles.
+
+## 2025-05-24 - [Reading Progress Indicators]
+**Learning:** For long, single-page specifications, users often lose context of their position. A simple visual progress bar provides immediate orientation without clutter.
+**Action:** Add a scroll-linked progress bar to any documentation page exceeding 3 viewport heights.
