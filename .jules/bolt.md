@@ -25,3 +25,7 @@
 ## 2026-03-15 - Deferred Progressive Enhancement in Static Specs
 **Learning:** For static documentation with client-side enhancements (like anchor links), delaying execution until idle time (`requestIdleCallback`) significantly improves initial paint metrics without user-visible degradation.
 **Action:** Identify non-critical DOM manipulation scripts in HTML specs and wrap them in `requestIdleCallback` or `setTimeout` to unblock the main thread.
+
+## 2026-03-20 - Event Delegation for Interactive Elements
+**Learning:** Attaching event listeners to individual elements in a large list (like anchor links for every section) increases memory usage and initialization time. Event delegation on a common parent (or `document.body`) scales better and simplifies dynamic content handling.
+**Action:** Refactor multiple similar event listeners into a single listener on a parent element using `event.target.closest()`.
