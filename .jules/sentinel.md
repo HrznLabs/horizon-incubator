@@ -17,3 +17,8 @@
 **Vulnerability:** Static HTML documentation relied on an older version of Mermaid.js (v10.9.5) which had known security vulnerabilities (e.g., XSS sinks in diagram rendering).
 **Learning:** Static files are often overlooked in dependency audits. Even documentation files can be vectors for XSS if they load vulnerable libraries and are viewed in a trusted context.
 **Prevention:** Regularly audit and upgrade dependencies in static HTML files, ensuring SRI hashes and CSP directives are updated to match the new versions.
+
+## 2026-02-24 - [CSP Maintenance for Performance Refactors]
+**Vulnerability:** Inline scripts modified for performance optimization (e.g., deferring execution via `requestIdleCallback`) were blocked by the strict Content Security Policy (CSP) due to hash mismatch.
+**Learning:** Performance enhancements that alter script content invalidate existing CSP hashes, causing silent failures. Security and performance refactors are coupled in CSP-protected files.
+**Prevention:** Always recalculate and update the SHA-256 hash in the CSP `script-src` directive whenever inline script content changes, ensuring functionality is preserved alongside security.
