@@ -17,3 +17,8 @@
 **Vulnerability:** Static HTML documentation relied on an older version of Mermaid.js (v10.9.5) which had known security vulnerabilities (e.g., XSS sinks in diagram rendering).
 **Learning:** Static files are often overlooked in dependency audits. Even documentation files can be vectors for XSS if they load vulnerable libraries and are viewed in a trusted context.
 **Prevention:** Regularly audit and upgrade dependencies in static HTML files, ensuring SRI hashes and CSP directives are updated to match the new versions.
+
+## 2026-02-24 - [Dependency Upgrade & CSP Maintenance]
+**Vulnerability:** Static HTML documentation relied on `mermaid@11.12.2`, preventing access to latest security patches in `v11.12.3`.
+**Learning:** Upgrading dependencies in static files requires a synchronized update of the `<script>` tag, the `integrity` attribute (SRI), and the Content Security Policy (CSP) `script-src` directive.
+**Prevention:** Establish a process to check for dependency updates in static files and automate the recalculation of SRI and CSP hashes.
