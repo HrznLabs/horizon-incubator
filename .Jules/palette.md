@@ -17,3 +17,7 @@
 ## 2025-05-24 - [Print Styles as Accessibility]
 **Learning:** Documentation is often "printed" (Print-to-PDF) for offline reading or archival. Dark mode interfaces fail catastrophically here, wasting ink and reducing readability.
 **Action:** When creating standalone documentation, always include a `@media print` block that forces high-contrast (black-on-white), hides interactive elements, and expands collapsibles.
+
+## 2025-05-25 - [High-Performance Reading Indicators]
+**Learning:** For long single-page documentation, a reading progress bar significantly aids orientation. Animating `transform: scaleX` (instead of `width`) on a fixed-position element ensures 60fps performance by avoiding layout thrashing.
+**Action:** Implement scroll-based progress indicators using `transform` on the compositor thread for smooth feedback without jank.
