@@ -17,3 +17,8 @@
 **Vulnerability:** Static HTML documentation relied on an older version of Mermaid.js (v10.9.5) which had known security vulnerabilities (e.g., XSS sinks in diagram rendering).
 **Learning:** Static files are often overlooked in dependency audits. Even documentation files can be vectors for XSS if they load vulnerable libraries and are viewed in a trusted context.
 **Prevention:** Regularly audit and upgrade dependencies in static HTML files, ensuring SRI hashes and CSP directives are updated to match the new versions.
+
+## 2026-10-24 - [CSP Tightening for Static Specs]
+**Vulnerability:** Static HTML specifications often use `base-uri 'self'` and `form-action 'self'` by default, which can be overly permissive if the document is compromised via XSS (e.g., `<base>` injection).
+**Learning:** Even without backend processing, static files benefit from "least privilege" CSP directives. `base-uri 'none'` prevents hijacking relative links, and `form-action 'none'` prevents exfiltration via form submission.
+**Prevention:** For standalone documentation files, restrict `base-uri` and `form-action` to `'none'` unless explicitly needed.
