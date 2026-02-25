@@ -25,7 +25,3 @@
 ## 2026-03-15 - Deferred Progressive Enhancement in Static Specs
 **Learning:** For static documentation with client-side enhancements (like anchor links), delaying execution until idle time (`requestIdleCallback`) significantly improves initial paint metrics without user-visible degradation.
 **Action:** Identify non-critical DOM manipulation scripts in HTML specs and wrap them in `requestIdleCallback` or `setTimeout` to unblock the main thread.
-
-## 2026-03-20 - CSP Hash Maintenance for Inline Scripts
-**Learning:** When modifying inline scripts for performance (e.g., deferring execution), manually updating CSP hashes is error-prone due to whitespace sensitivity. Using a script to generate both the code block and the hash ensures consistency and prevents broken features.
-**Action:** Automate CSP hash calculation when modifying inline scripts in static HTML files.
