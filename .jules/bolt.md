@@ -25,3 +25,7 @@
 ## 2026-03-15 - Deferred Progressive Enhancement in Static Specs
 **Learning:** For static documentation with client-side enhancements (like anchor links), delaying execution until idle time (`requestIdleCallback`) significantly improves initial paint metrics without user-visible degradation.
 **Action:** Identify non-critical DOM manipulation scripts in HTML specs and wrap them in `requestIdleCallback` or `setTimeout` to unblock the main thread.
+
+## 2026-03-20 - Batching Heavy Rendering in IntersectionObserver
+**Learning:** Triggering heavy rendering logic (like `mermaid.run`) individually for every intersecting element can cause multiple layout recalculations per frame. Batching these requests within the `IntersectionObserver` callback significantly reduces main thread work.
+**Action:** Accumulate targets in `IntersectionObserver` callbacks and process them in a single batch whenever possible.
