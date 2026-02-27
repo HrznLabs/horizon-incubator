@@ -22,3 +22,8 @@
 **Vulnerability:** Static HTML documentation relied on `mermaid@11.12.2`, preventing access to latest security patches in `v11.12.3`.
 **Learning:** Upgrading dependencies in static files requires a synchronized update of the `<script>` tag, the `integrity` attribute (SRI), and the Content Security Policy (CSP) `script-src` directive.
 **Prevention:** Establish a process to check for dependency updates in static files and automate the recalculation of SRI and CSP hashes.
+
+## 2026-02-27 - [CSP Tightening for Static HTML]
+**Vulnerability:** Standalone HTML specifications, even without forms, often default to `form-action 'self'` or similar permissive CSP directives, which is unnecessary and potentially risky if forms are introduced later.
+**Learning:** When a static page has no interactive forms, the principle of least privilege dictates explicitly disabling form submissions.
+**Prevention:** Set `form-action 'none'` in the Content Security Policy for all static HTML files that do not require form submission capabilities.
