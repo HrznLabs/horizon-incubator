@@ -27,3 +27,8 @@
 **Vulnerability:** Standalone HTML specifications, even without forms, often default to `form-action 'self'` or similar permissive CSP directives, which is unnecessary and potentially risky if forms are introduced later.
 **Learning:** When a static page has no interactive forms, the principle of least privilege dictates explicitly disabling form submissions.
 **Prevention:** Set `form-action 'none'` in the Content Security Policy for all static HTML files that do not require form submission capabilities.
+
+## 2026-03-05 - [Detecting CSP violations in Playwright]
+**Vulnerability:** Not a direct vulnerability, but a testing blind spot where CSP violations were missed during automated verification because they don't throw standard JS errors.
+**Learning:** CSP violations in headless browsers (like Chromium via Playwright) often surface exclusively as `console` events with type `error` containing the text "Content-Security-Policy", rather than causing the page to crash or throwing catchable exceptions.
+**Prevention:** To detect Content Security Policy (CSP) violations in Playwright tests, explicitly listen to `page.on('console')` events and check if the message text (lowercased) contains 'content security policy' or 'csp', as these violations surface as console messages rather than standard page errors.
