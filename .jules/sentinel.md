@@ -28,7 +28,7 @@
 **Learning:** When a static page has no interactive forms, the principle of least privilege dictates explicitly disabling form submissions.
 **Prevention:** Set `form-action 'none'` in the Content Security Policy for all static HTML files that do not require form submission capabilities.
 
-## 2025-05-20 - Fragment Injection and Information Leakage Prevention in Clipboard URLs
-**Vulnerability:** URL fragments constructed directly from DOM IDs (`'#' + section.id`) are susceptible to fragment injection attacks if DOM IDs are un-sanitized. Additionally, exposing raw error objects in `catch (err) { console.error(err) }` blocks can leak sensitive information or application state in production environments.
-**Learning:** Even internal documentation tools and specifications need strict validation and encoding. A seemingly innocuous string concatenation for generating anchor links can be an attack vector, and client-side error handling must gracefully degrade without spilling stack traces or internal logic.
-**Prevention:** Always use `encodeURIComponent()` when incorporating dynamic or user-influenced data into URLs (like fragment identifiers). Implement generic error messages (e.g., `console.error('Failed to copy link')`) in global `catch` blocks instead of logging raw error objects.
+## 2026-03-05 - [Detecting CSP violations in Playwright]
+**Vulnerability:** Not a direct vulnerability, but a testing blind spot where CSP violations were missed during automated verification because they don't throw standard JS errors.
+**Learning:** CSP violations in headless browsers (like Chromium via Playwright) often surface exclusively as `console` events with type `error` containing the text "Content-Security-Policy", rather than causing the page to crash or throwing catchable exceptions.
+**Prevention:** To detect Content Security Policy (CSP) violations in Playwright tests, explicitly listen to `page.on('console')` events and check if the message text (lowercased) contains 'content security policy' or 'csp', as these violations surface as console messages rather than standard page errors.
