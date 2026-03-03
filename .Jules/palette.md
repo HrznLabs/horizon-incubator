@@ -21,3 +21,11 @@
 ## 2025-06-15 - [Dynamic Scroll Progress]
 **Learning:** In specs with lazy-loaded content (e.g., diagrams), `document.scrollHeight` increases as elements render, causing reading progress bars to shrink unexpectedly, which can confuse users about their true progress.
 **Action:** When implementing progress bars for dynamic pages, consider binding the max value to a stable metric (like section count) or use a `ResizeObserver` to smoothly animate the change in total height, signaling to the user that new content has appeared.
+
+## 2025-06-16 - [Contextual Navigation in Long Specs]
+**Learning:** In long documentation with a fixed Table of Contents, users lose context of their current position as they scroll, reducing the utility of the TOC as a mental map.
+**Action:** Use `IntersectionObserver` with an asymmetric `rootMargin` (e.g., `-10% 0px -70% 0px`) to efficiently highlight the currently active section in the TOC and apply `aria-current="true"`, providing both visual orientation and accessibility benefits without the performance cost of scroll listeners.
+
+## 2025-06-16 - [Complex Diagram Accessibility]
+**Learning:** Complex diagrams in HTML (e.g., Mermaid.js outputs) often lack accessibility features, leaving screen reader users without context about the diagram's content and purpose. Adding scripts to modify DOM for UX improvements can conflict with strict Content Security Policies (CSP) and be hard to maintain if they require inline script hashing.
+**Action:** Use native HTML accessibility attributes (`role="region"`, `aria-labelledby`, `aria-describedby`) on diagram containers to associate them with their visible headings and descriptions. Additionally, wrap decorative emojis in headings with `<span aria-hidden="true">` to prevent assistive tech from reading them out loud, providing a better screen reader UX using pure HTML without introducing JS/CSP complexities.
