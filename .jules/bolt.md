@@ -33,3 +33,7 @@
 ## 2026-03-22 - Batch Rendering Mermaid Race Conditions
 **Learning:** When batching calls to `mermaid.run({ nodes: batch })` using an array accumulated in an `IntersectionObserver` callback, passing the raw array reference can lead to race conditions where the array is mutated or cleared before asynchronous rendering completes, causing diagrams to fail to render.
 **Action:** Always pass a shallow copy of the batch array (e.g., `mermaid.run({ nodes: [...batch] })`) to decouple the rendering process from the observer's mutable state.
+
+## 2025-01-28 - Optimizing scroll listeners with IntersectionObserver
+**Learning:** In static HTML specifications, scroll event listeners (even with passive: true and requestAnimationFrame) still cause main thread execution and can impact performance, especially when multiple scroll listeners are present (e.g., progress bar, back-to-top button).
+**Action:** Use `IntersectionObserver` on elements (like the `<header>`) to natively detect scroll position and trigger visibility changes, falling back to scroll listeners only for browsers that don't support `IntersectionObserver`.
