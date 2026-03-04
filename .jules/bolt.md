@@ -29,3 +29,7 @@
 ## 2026-03-20 - Batching Heavy Rendering in IntersectionObserver
 **Learning:** Triggering heavy rendering logic (like `mermaid.run`) individually for every intersecting element can cause multiple layout recalculations per frame. Batching these requests within the `IntersectionObserver` callback significantly reduces main thread work.
 **Action:** Accumulate targets in `IntersectionObserver` callbacks and process them in a single batch whenever possible.
+
+## 2026-03-22 - Batch Rendering Mermaid Race Conditions
+**Learning:** When batching calls to `mermaid.run({ nodes: batch })` using an array accumulated in an `IntersectionObserver` callback, passing the raw array reference can lead to race conditions where the array is mutated or cleared before asynchronous rendering completes, causing diagrams to fail to render.
+**Action:** Always pass a shallow copy of the batch array (e.g., `mermaid.run({ nodes: [...batch] })`) to decouple the rendering process from the observer's mutable state.
