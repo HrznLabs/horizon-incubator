@@ -37,7 +37,8 @@
 **Vulnerability:** Mermaid.js diagrams embedded in HTML specifications configured with `securityLevel: 'antiscript'` are susceptible to DOM-based XSS if the diagram definitions are ever manipulated or supplied by untrusted sources, as it still allows certain HTML tags.
 **Learning:** While `antiscript` is a step above default settings, it does not fully mitigate HTML injection risks. When integrating third-party diagramming libraries that generate complex SVGs and allow DOM manipulation, the strictest possible security level should be enforced unless dynamic HTML/click events are explicitly required and rigorously sanitized.
 **Prevention:** Always configure `mermaid.initialize` with `securityLevel: 'strict'` to completely disable HTML rendering and click events within diagram nodes. Any changes to the initialization block must also ensure the Content Security Policy (CSP) inline script hashes are correctly recalculated and updated to prevent the script from being blocked.
-## 2025-02-23 - DOM XSS Prevention in Mermaid Diagrams
-**Vulnerability:** Mermaid diagrams embedded in HTML were using `securityLevel: 'antiscript'`, which is insufficiently secure and could allow Cross-Site Scripting (XSS) if malicious payload is introduced via diagram syntax.
-**Learning:** `antiscript` level restricts certain obvious scripts but fails to mitigate sophisticated DOM XSS payloads in newer Mermaid versions. Strict initialization should always be used.
-**Prevention:** Always initialize Mermaid.js with `securityLevel: 'strict'`. In static HTML using Content Security Policy (CSP), remember that updating inline scripts (like Mermaid initialization) requires recalculating and updating the SHA-256 hash in the `script-src` directive of the CSP.
+
+## 2025-03-06 - Enforce Strict Security Level in Mermaid.js
+**Vulnerability:** Mermaid diagrams instantiated with `securityLevel: 'antiscript'` or weaker are susceptible to DOM XSS, especially when rendering user-controlled or dynamically generated markdown.
+**Learning:** `antiscript` attempts to sanitize specific scripts but has known bypasses in older or complex diagram versions. Only `securityLevel: 'strict'` securely strips all potentially malicious HTML tags and scripts from Mermaid diagrams before rendering.
+**Prevention:** To prevent DOM XSS vulnerabilities when using Mermaid.js, always initialize it with `securityLevel: 'strict'`. Ensure any resulting changes to inline scripts are accurately reflected in CSP `script-src` hashes.

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-WhB4iyq/xywdId5070xxKZbpwUURnIG/Ov8iodoQy8s=' 'sha256-mH8pjt4BJ4A1BKveOsbGC9dVzs8EYfFYo0Tr4EXxosU=' 'sha256-4pDnQ+DdcDZlDD+KmxGvZrgzgGioaETgwBr7CvEooos=' 'sha256-dghSVly1sw89FWqf/0gflPLJtTxJkAcUSTXQKsJGYs8=' https://cdn.jsdelivr.net/npm/mermaid@11.12.3/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-pj22REs5EQuOik8TgzAyp1XmTAJn0NCUuiao1whFKU4=' 'sha256-mH8pjt4BJ4A1BKveOsbGC9dVzs8EYfFYo0Tr4EXxosU=' 'sha256-4pDnQ+DdcDZlDD+KmxGvZrgzgGioaETgwBr7CvEooos=' 'sha256-ZiWFyiiJ+/KPbKjTB/JIKuQXrA2/kyroSB8diPkrT+k=' https://cdn.jsdelivr.net/npm/mermaid@11.12.3/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
@@ -25,7 +25,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // ⚡ Bolt Optimization: Lazy load Mermaid diagrams to improve initial load performance.
             // Diagrams are rendered only when they approach the viewport using IntersectionObserver.
-            // 🛡️ Sentinel: Enforced 'strict' securityLevel in Mermaid.js to prevent DOM XSS vulnerabilities
+            // 🛡️ Sentinel: Enforced strict securityLevel to prevent DOM XSS via Mermaid diagrams.
             mermaid.initialize({
                 startOnLoad: false,
                 theme: 'dark',
