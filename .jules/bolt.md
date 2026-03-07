@@ -41,3 +41,7 @@
 ## 2026-03-06 - Debouncing Async Tasks in IntersectionObserver
 **Learning:** When batching asynchronous tasks within `IntersectionObserver`, triggering execution immediately per callback defeats the purpose if multiple elements intersect simultaneously in quick succession. This leads to multiple un-batched executions, blocking the main thread.
 **Action:** Use a debounced timeout (e.g., `setTimeout`) outside the observer callback to accumulate all targets entering the viewport during a single scroll event, ensuring they are processed in a single batch to minimize main thread blocking.
+
+## 2026-03-23 - CSS Transitions with requestAnimationFrame
+**Learning:** Applying CSS `transition` (e.g., `transition: transform 0.1s ease-out`) to an element whose properties are being continuously updated via JavaScript `requestAnimationFrame` (like a scroll progress bar) causes severe compositor thrashing. The browser constantly interrupts and recalculates the animation curve every frame, leading to jank and wasted CPU/GPU cycles.
+**Action:** Always remove CSS transitions from elements that are updated continuously on scroll or mousemove events. Instead, use `will-change: transform` to hint for hardware acceleration and rely purely on the frame-by-frame JS updates for smoothness.
