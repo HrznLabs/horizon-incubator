@@ -37,3 +37,7 @@
 ## 2025-01-28 - Optimizing scroll listeners with IntersectionObserver
 **Learning:** In static HTML specifications, scroll event listeners (even with passive: true and requestAnimationFrame) still cause main thread execution and can impact performance, especially when multiple scroll listeners are present (e.g., progress bar, back-to-top button).
 **Action:** Use `IntersectionObserver` on elements (like the `<header>`) to natively detect scroll position and trigger visibility changes, falling back to scroll listeners only for browsers that don't support `IntersectionObserver`.
+
+## 2026-03-24 - Optimizing Layout Thrashing in Scroll Listeners
+**Learning:** Querying layout properties like `document.documentElement.scrollHeight` or `clientHeight` within a scroll event listener (even when throttled via `requestAnimationFrame`) forces the browser to synchronously calculate layout on every scroll frame, leading to layout thrashing and reduced scrolling performance.
+**Action:** Cache layout-dependent measurements in variables. Update these cached values only when necessary, such as during initialization and inside a `ResizeObserver` callback, to decouple layout calculation from scrolling.
