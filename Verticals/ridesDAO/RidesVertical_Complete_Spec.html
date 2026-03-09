@@ -123,8 +123,9 @@
         .toc h3 { color: #00d9ff; margin-bottom: 15px; }
         .toc ul { list-style: none; columns: 2; }
         .toc li { margin: 10px 0; }
-        .toc a { color: #00ff88; text-decoration: none; }
+        .toc a { color: #00ff88; text-decoration: none; transition: color 0.2s ease; border-radius: 4px; }
         .toc a:hover { color: #00d9ff; }
+        .toc a:focus-visible { outline: 2px solid #00d9ff; outline-offset: 2px; }
         .badge {
             display: inline-block;
             background: rgba(0,255,136,0.2);
@@ -155,7 +156,7 @@
         footer {
             text-align: center;
             margin-top: 60px;
-            color: #666;
+            color: #aaa;
         }
 
         .back-to-top {
@@ -207,7 +208,7 @@
         .anchor-link {
             opacity: 0;
             margin-left: 0.5em;
-            color: #666;
+            color: #aaa;
             text-decoration: none;
             border: none;
             background: none;
@@ -229,6 +230,11 @@
             color: #00d9ff;
             background: rgba(0, 217, 255, 0.1);
             transform: scale(1.1);
+        }
+
+        .anchor-link:focus-visible {
+            outline: 2px solid #00d9ff;
+            outline-offset: 2px;
         }
 
         @media print {
@@ -317,7 +323,7 @@
         <nav class="toc" aria-labelledby="toc-heading">
             <h3 id="toc-heading"><span aria-hidden="true">📑 </span> Table of Contents</h3>
             <ul>
-                <li><a href="#decisions">✅ Confirmed Decisions</a></li>
+                <li><a href="#decisions"><span aria-hidden="true">✅ </span> Confirmed Decisions</a></li>
                 <li><a href="#d30">D30 — Standard Ride Flow</a></li>
                 <li><a href="#d31">D31 — Guild Hierarchy</a></li>
                 <li><a href="#d32">D32 — Equipment Progression</a></li>
