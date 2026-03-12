@@ -52,3 +52,8 @@
 **Vulnerability:** Inline scripts were blocked by the browser because their SHA-256 hashes in the Content Security Policy `script-src` directive were padded with two equals signs (`==`) instead of one (`=`).
 **Learning:** A 32-byte SHA-256 base64-encoded hash must end with exactly one padding character (44 characters total). The browser will consider a hash with two equals signs as invalid and silently block the script.
 **Prevention:** Ensure correct padding when generating Base64-encoded SHA-256 hashes for CSP `script-src` directives.
+
+## 2024-05-24 - CSP Base64 Padding Requirement
+**Vulnerability:** Inline scripts were blocked despite being in the CSP `script-src` because their base64-encoded SHA-256 hashes were incorrectly padded with `==` instead of `=`.
+**Learning:** A 32-byte SHA-256 hash encodes to exactly 43 Base64 characters, requiring a single `=` padding character to reach a length of 44. Browsers enforce strict Base64 validation for CSP hashes and will silently reject improperly padded ones, blocking the scripts.
+**Prevention:** When generating or verifying SHA-256 hashes for CSP `script-src`, ensure correct Base64 padding. A 32-byte hash must end with exactly one `=`. Do not blindly append `==`.
