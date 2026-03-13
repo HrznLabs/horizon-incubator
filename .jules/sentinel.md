@@ -47,3 +47,8 @@
 **Vulnerability:** Content Security Policy (CSP) inline script hashes were improperly padded with `==` instead of `=`, rendering them invalid base64. The browser silently ignored these malformed hashes, causing the inline scripts (which were otherwise correct) to be blocked and failing to execute critical components (like Mermaid.js initialization).
 **Learning:** Base64 padding must strictly adhere to valid multiples. A SHA-256 hash output is 32 bytes (256 bits). When base64 encoded, this translates to 43 characters of data plus a single `=` padding character (44 characters total). Appending `==` creates an invalid 45-character string which browsers (like Chrome) will reject as a syntax error in the CSP header.
 **Prevention:** When generating or updating CSP hashes for inline scripts, strictly ensure the base64 encoding utilizes the correct padding length. A SHA-256 base64 hash will always end in exactly one `=` character.
+
+## 2025-03-01 - CSP script-src Hash Padding
+**Vulnerability:** Inline scripts were blocked by the browser because their SHA-256 hashes in the Content Security Policy `script-src` directive were padded with two equals signs (`==`) instead of one (`=`).
+**Learning:** A 32-byte SHA-256 base64-encoded hash must end with exactly one padding character (44 characters total). The browser will consider a hash with two equals signs as invalid and silently block the script.
+**Prevention:** Ensure correct padding when generating Base64-encoded SHA-256 hashes for CSP `script-src` directives.
