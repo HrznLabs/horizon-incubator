@@ -114,6 +114,10 @@
             overflow-x: auto;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
+        .mermaid:focus-visible {
+            outline: 2px solid #00d9ff;
+            outline-offset: 2px;
+        }
         .toc {
             background: rgba(0,217,255,0.1);
             border-radius: 12px;
@@ -654,7 +658,7 @@ flowchart TB
         </footer>
     </div>
 
-    <button id="back-to-top" class="back-to-top" aria-label="Back to top" title="Back to top">↑</button>
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top" title="Back to top"><span aria-hidden="true">↑</span></button>
 
     <script>
         const backToTopButton = document.getElementById('back-to-top');
