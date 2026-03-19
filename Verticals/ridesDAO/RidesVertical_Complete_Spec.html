@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-8zIDWhOWwBdIxIhuf0aRXCgJvQrDOlxgwY5Zk3+e7PQ=' 'sha256-mH8pjt4BJ4A1BKveOsbGC9dVzs8EYfFYo0Tr4EXxosU=' 'sha256-cON97lYSzOZ+Xck9wTGf6Kpn5sLQMeePef5rsqWQs04=' 'sha256-BUOgJdIG2LnDz9lSWVIlSfC2sXTa/ylVQwKxu+17vOg=' https://cdn.jsdelivr.net/npm/mermaid@11.12.3/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-luWYZGj1PPHwRcZhOU6lGvnePYDxS3s3Jiyae/ydNes=' 'sha256-Dn+U9vzLo27npQ1dwcdz5VFg5S6IoCuIoIqkGIQxteM=' 'sha256-JhkElAn3+piRSb2bTmq6GAh8fieaoMgISC/Cs/IvT78=' 'sha256-SazNZ9hB63bdLIvCgA6SAqBzc/Dzeq6vtOpERx02glA=' https://cdn.jsdelivr.net/npm/mermaid@11.12.3/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
@@ -740,9 +740,11 @@ flowchart TB
 
                     const originalHTML = btn.innerHTML;
                     const originalAriaLabel = btn.getAttribute('aria-label');
+                    const originalTitle = btn.getAttribute('title');
 
                     btn.innerHTML = '<span aria-hidden="true">✅</span>';
                     btn.setAttribute('aria-label', 'Copied!');
+                    btn.setAttribute('title', 'Copied!');
 
                     setTimeout(() => {
                         btn.innerHTML = originalHTML;
@@ -750,6 +752,11 @@ flowchart TB
                             btn.setAttribute('aria-label', originalAriaLabel);
                         } else {
                             btn.removeAttribute('aria-label');
+                        }
+                        if (originalTitle !== null) {
+                            btn.setAttribute('title', originalTitle);
+                        } else {
+                            btn.removeAttribute('title');
                         }
                     }, 2000);
                 } catch (err) {
