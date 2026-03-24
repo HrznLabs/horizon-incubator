@@ -36,3 +36,7 @@
 ## 2025-03-09 - Accessible Icon-Only Buttons
 **Learning:** Decorative emojis or symbols (like `↑`, `🔗`, or `✅`) inside interactive icon-only buttons that already have an `aria-label` must be explicitly wrapped in `<span aria-hidden="true">`. Otherwise, screen readers may read the symbol redundantly alongside the label, creating a confusing or cluttered experience. Additionally, when injecting these HTML elements dynamically via JavaScript, `innerHTML` must be used instead of `textContent` or `innerText` to ensure the wrappers are parsed as HTML.
 **Action:** When creating or modifying icon-only buttons or interactive elements containing raw symbols, always verify if they have an `aria-label`. If they do, wrap the decorative symbol in an `aria-hidden="true"` span. Use `innerHTML` when applying this pattern dynamically.
+
+## 2025-06-16 - Accessible Feedback for Copy-to-Clipboard Buttons
+**Learning:** Interactive copy-to-clipboard buttons in HTML specifications must provide audible feedback for screen readers (e.g., temporarily updating the `aria-label` to "Copied to clipboard") alongside visual feedback, which reverts after a short timeout.
+**Action:** Always check if interactive buttons temporarily change their visual state without corresponding `aria-label` updates. If they do, update the `aria-label` and properly revert it.
