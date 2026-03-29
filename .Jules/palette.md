@@ -36,3 +36,7 @@
 ## 2025-03-09 - Accessible Icon-Only Buttons
 **Learning:** Decorative emojis or symbols (like `↑`, `🔗`, or `✅`) inside interactive icon-only buttons that already have an `aria-label` must be explicitly wrapped in `<span aria-hidden="true">`. Otherwise, screen readers may read the symbol redundantly alongside the label, creating a confusing or cluttered experience. Additionally, when injecting these HTML elements dynamically via JavaScript, `innerHTML` must be used instead of `textContent` or `innerText` to ensure the wrappers are parsed as HTML.
 **Action:** When creating or modifying icon-only buttons or interactive elements containing raw symbols, always verify if they have an `aria-label`. If they do, wrap the decorative symbol in an `aria-hidden="true"` span. Use `innerHTML` when applying this pattern dynamically.
+
+## 2025-10-24 - Screen Reader Feedback on Interactive Elements
+**Learning:** Providing visual-only feedback (like changing an icon to a checkmark) during interactive states like "copy to clipboard" is insufficient for accessibility.
+**Action:** Always dynamically update the element's `aria-label` to narrate state changes (e.g., 'Copied!') for screen readers, and remember to revert it when the visual state reverts.
