@@ -45,3 +45,7 @@
 ## 2026-03-23 - CSS Transitions with requestAnimationFrame
 **Learning:** Applying CSS `transition` (e.g., `transition: transform 0.1s ease-out`) to an element whose properties are being continuously updated via JavaScript `requestAnimationFrame` (like a scroll progress bar) causes severe compositor thrashing. The browser constantly interrupts and recalculates the animation curve every frame, leading to jank and wasted CPU/GPU cycles.
 **Action:** Always remove CSS transitions from elements that are updated continuously on scroll or mousemove events. Instead, use `will-change: transform` to hint for hardware acceleration and rely purely on the frame-by-frame JS updates for smoothness.
+
+## 2026-03-24 - Avoid transition: all in UI Elements
+**Learning:** Using `transition: all` causes unnecessary style recalculations and layout thrashing during state changes (e.g., hover, focus), degrading performance, particularly when many properties could potentially animate.
+**Action:** Always specify explicit transition properties (e.g., `transition: opacity 0.3s ease, transform 0.3s ease`) to target only the properties that actually need animating.
