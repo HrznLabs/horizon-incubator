@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-8zIDWhOWwBdIxIhuf0aRXCgJvQrDOlxgwY5Zk3+e7PQ=' 'sha256-mH8pjt4BJ4A1BKveOsbGC9dVzs8EYfFYo0Tr4EXxosU=' 'sha256-PQrBWdTsRzq1ujY8ySH7Hh1NkNmJY5hF+I4QdMg50WU=' 'sha256-BUOgJdIG2LnDz9lSWVIlSfC2sXTa/ylVQwKxu+17vOg=' https://cdn.jsdelivr.net/npm/mermaid@11.12.3/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-8zIDWhOWwBdIxIhuf0aRXCgJvQrDOlxgwY5Zk3+e7PQ=' 'sha256-mH8pjt4BJ4A1BKveOsbGC9dVzs8EYfFYo0Tr4EXxosU=' 'sha256-+fjPO8g/sDUGCgJcinO/C75gF61c38uyLgOFKzHitjs=' 'sha256-BUOgJdIG2LnDz9lSWVIlSfC2sXTa/ylVQwKxu+17vOg=' https://cdn.jsdelivr.net/npm/mermaid@11.12.3/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
@@ -740,7 +740,25 @@ flowchart TB
 
                     const originalHTML = btn.innerHTML;
                     btn.innerHTML = '<span aria-hidden="true">✅</span>';
-                    setTimeout(() => btn.innerHTML = originalHTML, 2000);
+
+                    let announcer = document.getElementById('a11y-announcer');
+                    if (!announcer) {
+                        announcer = document.createElement('div');
+                        announcer.id = 'a11y-announcer';
+                        announcer.setAttribute('aria-live', 'polite');
+                        Object.assign(announcer.style, {
+                            position: 'absolute', width: '1px', height: '1px',
+                            padding: '0', margin: '-1px', overflow: 'hidden',
+                            clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', border: '0'
+                        });
+                        document.body.appendChild(announcer);
+                    }
+                    announcer.textContent = 'Link copied to clipboard';
+
+                    setTimeout(() => {
+                        btn.innerHTML = originalHTML;
+                        if (announcer) announcer.textContent = '';
+                    }, 2000);
                 } catch (err) {
                     // 🛡️ Sentinel: Removed raw error object to prevent info leakage
                     console.error('Failed to copy link to clipboard.');
