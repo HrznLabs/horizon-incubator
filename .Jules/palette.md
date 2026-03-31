@@ -36,3 +36,7 @@
 ## 2025-03-09 - Accessible Icon-Only Buttons
 **Learning:** Decorative emojis or symbols (like `↑`, `🔗`, or `✅`) inside interactive icon-only buttons that already have an `aria-label` must be explicitly wrapped in `<span aria-hidden="true">`. Otherwise, screen readers may read the symbol redundantly alongside the label, creating a confusing or cluttered experience. Additionally, when injecting these HTML elements dynamically via JavaScript, `innerHTML` must be used instead of `textContent` or `innerText` to ensure the wrappers are parsed as HTML.
 **Action:** When creating or modifying icon-only buttons or interactive elements containing raw symbols, always verify if they have an `aria-label`. If they do, wrap the decorative symbol in an `aria-hidden="true"` span. Use `innerHTML` when applying this pattern dynamically.
+
+## 2024-05-20 - ARIA-Live Announcers for Visual-Only Interactions
+**Learning:** In highly optimized, visual-only interactions (like emoji-swapping clipboard confirmations), screen reader users are left entirely unaware of success states.
+**Action:** When implementing visual confirmations (like checkmarks) for async actions, always dynamically inject and populate an `aria-live="polite"` visually-hidden announcer region to ensure equal access to feedback without disrupting visual design.
