@@ -40,3 +40,7 @@
 ## 2025-10-24 - Screen Reader Feedback on Interactive Elements
 **Learning:** Providing visual-only feedback (like changing an icon to a checkmark) during interactive states like "copy to clipboard" is insufficient for accessibility.
 **Action:** Always dynamically update the element's `aria-label` to narrate state changes (e.g., 'Copied!') for screen readers, and remember to revert it when the visual state reverts.
+
+## 2025-10-25 - [Hash Links and Keyboard Focus]
+**Learning:** Pure CSS `#target` anchoring and standard HTML `<a>` behavior updates the scroll position but frequently fails to move programmatic keyboard focus into the target element across all browsers (like WebKit) unless the target is natively focusable or explicitly given a tabindex.
+**Action:** When implementing Skip-to-content or Table of Contents (TOC) navigation, always ensure the destination container (e.g., `<section>`) has `tabindex="-1"` to guarantee the focus context moves seamlessly for keyboard users.
