@@ -130,6 +130,7 @@
         .toc a { color: #00ff88; text-decoration: none; transition: color 0.2s ease; border-radius: 4px; }
         .toc a:hover { color: #00d9ff; }
         .toc a:focus-visible { outline: 2px solid #00d9ff; outline-offset: 2px; }
+        section[tabindex="-1"]:focus { outline: none; }
         .badge {
             display: inline-block;
             background: rgba(0,255,136,0.2);
@@ -367,7 +368,7 @@
             </ul>
         </nav>
 
-        <section id="decisions" class="decisions">
+        <section id="decisions" class="decisions" tabindex="-1">
             <h3><span aria-hidden="true">✅ </span> Confirmed Design Decisions</h3>
             <table>
                 <tr><th>Area</th><th>Decision</th></tr>
@@ -388,7 +389,7 @@
 
         <h2 class="section-header"><span aria-hidden="true">🚕 </span> Core Ride Flows</h2>
 
-        <section id="d30" class="diagram-section">
+        <section id="d30" class="diagram-section" tabindex="-1">
             <h2 id="d30-title" class="diagram-title"><span aria-hidden="true">📍 </span> D30 — Standard Ride Mission Flow <span class="badge">Core</span></h2>
             <p id="d30-desc" class="diagram-description">Complete lifecycle from request to settlement.</p>
             <div class="mermaid" role="region" tabindex="0" aria-labelledby="d30-title" aria-describedby="d30-desc">
@@ -431,7 +432,7 @@ sequenceDiagram
 
         <h2 class="section-header"><span aria-hidden="true">🏛️</span>  Guild & Reputation</h2>
 
-        <section id="d31" class="diagram-section">
+        <section id="d31" class="diagram-section" tabindex="-1">
             <h2 id="d31-title" class="diagram-title"><span aria-hidden="true">🏛️</span>  D31 — Rides Guild Hierarchy</h2>
             <p id="d31-desc" class="diagram-description">MetaGuild umbrella with geographic, specialty, and quality tier sub-guilds.</p>
             <div class="mermaid" role="region" tabindex="0" aria-labelledby="d31-title" aria-describedby="d31-desc">
@@ -462,7 +463,7 @@ flowchart TB
             </div>
         </section>
 
-        <section id="d33" class="diagram-section">
+        <section id="d33" class="diagram-section" tabindex="-1">
             <h2 id="d33-title" class="diagram-title"><span aria-hidden="true">⭐ </span> D33 — Bidirectional Reputation Flow</h2>
             <p id="d33-desc" class="diagram-description">Both drivers AND riders are rated and can be curated by guilds.</p>
             <div class="mermaid" role="region" tabindex="0" aria-labelledby="d33-title" aria-describedby="d33-desc">
@@ -480,7 +481,7 @@ flowchart LR
 
         <h2 class="section-header"><span aria-hidden="true">🎯 </span> Matching Engine <span class="badge critical">CRITICAL</span></h2>
 
-        <section id="d37" class="diagram-section">
+        <section id="d37" class="diagram-section" tabindex="-1">
             <h2 id="d37-title" class="diagram-title"><span aria-hidden="true">🎯 </span> D37 — Matching Engine Architecture</h2>
             <p id="d37-desc" class="diagram-description">Real-time matching with 4-phase pipeline: Filter → Score → Select → Offer.</p>
             <div class="mermaid" role="region" tabindex="0" aria-labelledby="d37-title" aria-describedby="d37-desc">
@@ -500,7 +501,7 @@ flowchart TB
             </div>
         </section>
 
-        <section id="d38" class="diagram-section">
+        <section id="d38" class="diagram-section" tabindex="-1">
             <h2 id="d38-title" class="diagram-title"><span aria-hidden="true">📊 </span> D38 — Match Score Formula</h2>
             <p id="d38-desc" class="diagram-description">Weighted scoring across 8 factors including bidirectional ratings.</p>
             <div class="mermaid" role="region" tabindex="0" aria-labelledby="d38-title" aria-describedby="d38-desc">
@@ -521,7 +522,7 @@ flowchart LR
             </div>
         </section>
 
-        <section id="d39" class="diagram-section">
+        <section id="d39" class="diagram-section" tabindex="-1">
             <h2 id="d39-title" class="diagram-title"><span aria-hidden="true">👥 </span> D39 — Shared Ride Matching</h2>
             <p id="d39-desc" class="diagram-description">Adding riders to active routes with detour checking and fair price splitting.</p>
             <div class="mermaid" role="region" tabindex="0" aria-labelledby="d39-title" aria-describedby="d39-desc">
@@ -540,7 +541,7 @@ flowchart TB
             </div>
         </section>
 
-        <section id="d40" class="diagram-section">
+        <section id="d40" class="diagram-section" tabindex="-1">
             <h2 id="d40-title" class="diagram-title"><span aria-hidden="true">🔄 </span> D40 — Driver State Machine</h2>
             <p id="d40-desc" class="diagram-description">Driver availability states and transitions.</p>
             <div class="mermaid" role="region" tabindex="0" aria-labelledby="d40-title" aria-describedby="d40-desc">
@@ -558,7 +559,7 @@ stateDiagram-v2
             </div>
         </section>
 
-        <section id="d41" class="diagram-section">
+        <section id="d41" class="diagram-section" tabindex="-1">
             <h2 id="d41-title" class="diagram-title"><span aria-hidden="true">📨 </span> D41 — Offer Lifecycle</h2>
             <p id="d41-desc" class="diagram-description">15-second offer window with retry logic.</p>
             <div class="mermaid" role="region" tabindex="0" aria-labelledby="d41-title" aria-describedby="d41-desc">
@@ -577,7 +578,7 @@ flowchart LR
 
         <h2 class="section-header"><span aria-hidden="true">💰 </span> Pricing & Economics</h2>
 
-        <section id="d35" class="diagram-section">
+        <section id="d35" class="diagram-section" tabindex="-1">
             <h2 id="d35-title" class="diagram-title"><span aria-hidden="true">💰 </span> D35 — Hybrid Pricing Model</h2>
             <p id="d35-desc" class="diagram-description">5-layer pricing: Distance → Guild → Surge → Rider Choice → Driver Accept.</p>
             <div class="mermaid" role="region" tabindex="0" aria-labelledby="d35-title" aria-describedby="d35-desc">
@@ -590,7 +591,7 @@ flowchart LR
             </div>
         </section>
 
-        <section id="d42" class="diagram-section">
+        <section id="d42" class="diagram-section" tabindex="-1">
             <h2 id="d42-title" class="diagram-title"><span aria-hidden="true">📈 </span> D42 — Surge Pricing Flow</h2>
             <p id="d42-desc" class="diagram-description">Demand-based multipliers with guild-configured limits.</p>
             <div class="mermaid" role="region" tabindex="0" aria-labelledby="d42-title" aria-describedby="d42-desc">
@@ -607,7 +608,7 @@ flowchart TB
 
         <h2 class="section-header"><span aria-hidden="true">📦 </span> Progression & Equipment</h2>
 
-        <section id="d32" class="diagram-section">
+        <section id="d32" class="diagram-section" tabindex="-1">
             <h2 id="d32-title" class="diagram-title"><span aria-hidden="true">📦 </span> D32 — Equipment Progression</h2>
             <p id="d32-desc" class="diagram-description">6 tiers with 5 funding paths available.</p>
             <div class="mermaid" role="region" tabindex="0" aria-labelledby="d32-title" aria-describedby="d32-desc">
@@ -631,7 +632,7 @@ flowchart LR
 
         <h2 class="section-header"><span aria-hidden="true">🛡️</span>  Safety & Compliance</h2>
 
-        <section id="d34" class="diagram-section">
+        <section id="d34" class="diagram-section" tabindex="-1">
             <h2 id="d34-title" class="diagram-title"><span aria-hidden="true">📡 </span> D34 — Real-Time Tracking</h2>
             <p id="d34-desc" class="diagram-description">WebSocket-based tracking with privacy controls.</p>
             <div class="mermaid" role="region" tabindex="0" aria-labelledby="d34-title" aria-describedby="d34-desc">
@@ -650,7 +651,7 @@ flowchart TB
             </div>
         </section>
 
-        <section id="d36" class="diagram-section">
+        <section id="d36" class="diagram-section" tabindex="-1">
             <h2 id="d36-title" class="diagram-title"><span aria-hidden="true">🚫 </span> D36 — Cancellation Logic</h2>
             <p id="d36-desc" class="diagram-description">Fair policies for both riders and drivers.</p>
             <div class="mermaid" role="region" tabindex="0" aria-labelledby="d36-title" aria-describedby="d36-desc">
