@@ -57,3 +57,8 @@
 **Vulnerability:** Inline scripts were blocked despite being in the CSP `script-src` because their base64-encoded SHA-256 hashes were incorrectly padded with `==` instead of `=`.
 **Learning:** A 32-byte SHA-256 hash encodes to exactly 43 Base64 characters, requiring a single `=` padding character to reach a length of 44. Browsers enforce strict Base64 validation for CSP hashes and will silently reject improperly padded ones, blocking the scripts.
 **Prevention:** When generating or verifying SHA-256 hashes for CSP `script-src`, ensure correct Base64 padding. A 32-byte hash must end with exactly one `=`. Do not blindly append `==`.
+
+## 2026-03-10 - [CSP Hash Drift for Utility Scripts]
+**Vulnerability:** An inline script block providing utility functions (anchor links and clipboard copy) was silently blocked because its SHA-256 hash was omitted from the `script-src` directive in the Content Security Policy (CSP).
+**Learning:** When modifying inline scripts, or when refactoring/adding new inline script blocks in a document with a strict CSP, the corresponding hashes in the `script-src` directive often drift out of sync if not manually updated. This results in completely broken functionality for those specific scripts.
+**Prevention:** Always recount inline scripts and recalculate their base64-encoded SHA-256 hashes against the actual file content when making structural or logic changes to HTML specifications. Ensure every single inline `<script>` block has a corresponding hash in the CSP header.
