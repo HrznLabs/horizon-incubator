@@ -40,3 +40,7 @@
 ## 2025-10-24 - Screen Reader Feedback on Interactive Elements
 **Learning:** Providing visual-only feedback (like changing an icon to a checkmark) during interactive states like "copy to clipboard" is insufficient for accessibility.
 **Action:** Always dynamically update the element's `aria-label` to narrate state changes (e.g., 'Copied!') for screen readers, and remember to revert it when the visual state reverts.
+
+## 2025-10-25 - [Skip Links and Tabindex Reset]
+**Learning:** When using JS to scroll smoothly to the top of a document via a "Back to Top" button, keyboard focus remains at the bottom. Adding `tabindex="-1"` and calling `focus({ preventScroll: true })` on `document.body` correctly resets the logical keyboard focus without disrupting the smooth scroll animation. This enables the next Tab press to properly hit the first focusable element (e.g., skip-to-content links).
+**Action:** Always test the next `Tab` keystroke after implementing programmatic scroll jumps to verify logical focus has been restored. Ensure `preventScroll: true` is used when calling focus to avoid jarring visual jumps that override CSS smooth scrolling.
