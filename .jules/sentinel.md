@@ -57,3 +57,8 @@
 **Vulnerability:** Inline scripts were blocked despite being in the CSP `script-src` because their base64-encoded SHA-256 hashes were incorrectly padded with `==` instead of `=`.
 **Learning:** A 32-byte SHA-256 hash encodes to exactly 43 Base64 characters, requiring a single `=` padding character to reach a length of 44. Browsers enforce strict Base64 validation for CSP hashes and will silently reject improperly padded ones, blocking the scripts.
 **Prevention:** When generating or verifying SHA-256 hashes for CSP `script-src`, ensure correct Base64 padding. A 32-byte hash must end with exactly one `=`. Do not blindly append `==`.
+
+## 2026-04-02 - [Permissions-Policy Meta Tag Unsupported]
+**Vulnerability:** Adding `<meta http-equiv="Permissions-Policy" ...>` is security theater because browsers do not support applying the Permissions-Policy via meta tags. It must be an HTTP header.
+**Learning:** Security configurations must be strictly functional. Implementing unsupported directives gives a false sense of security and clutters the document without providing any actual protection.
+**Prevention:** Verify browser support for security headers before attempting to inject them via HTML `<meta>` tags. Focus exclusively on supported directives like `Content-Security-Policy`.
