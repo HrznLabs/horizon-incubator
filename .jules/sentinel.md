@@ -62,3 +62,8 @@
 **Vulnerability:** An inline script block providing utility functions (anchor links and clipboard copy) was silently blocked because its SHA-256 hash was omitted from the `script-src` directive in the Content Security Policy (CSP).
 **Learning:** When modifying inline scripts, or when refactoring/adding new inline script blocks in a document with a strict CSP, the corresponding hashes in the `script-src` directive often drift out of sync if not manually updated. This results in completely broken functionality for those specific scripts.
 **Prevention:** Always recount inline scripts and recalculate their base64-encoded SHA-256 hashes against the actual file content when making structural or logic changes to HTML specifications. Ensure every single inline `<script>` block has a corresponding hash in the CSP header.
+
+## 2026-04-03 - [DOM XSS via innerHTML]
+**Vulnerability:** The clipboard copy functionality for section anchor links used `btn.innerHTML` to update its state, which could lead to DOM Cross-Site Scripting (XSS) if the input to innerHTML was ever dynamically influenced by user content, even though it was currently hardcoded.
+**Learning:** Using `innerHTML` for simple text or state changes creates an unnecessary attack surface. Native DOM methods (`textContent` or `createElement`) are inherently safer and prevent the browser from parsing potentially malicious strings into executable code.
+**Prevention:** Avoid `innerHTML` entirely when updating element state or injecting plain text/simple icons. Use `document.createElement`, `setAttribute`, and `textContent` to construct elements dynamically and safely.
