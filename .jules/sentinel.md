@@ -62,3 +62,8 @@
 **Vulnerability:** An inline script block providing utility functions (anchor links and clipboard copy) was silently blocked because its SHA-256 hash was omitted from the `script-src` directive in the Content Security Policy (CSP).
 **Learning:** When modifying inline scripts, or when refactoring/adding new inline script blocks in a document with a strict CSP, the corresponding hashes in the `script-src` directive often drift out of sync if not manually updated. This results in completely broken functionality for those specific scripts.
 **Prevention:** Always recount inline scripts and recalculate their base64-encoded SHA-256 hashes against the actual file content when making structural or logic changes to HTML specifications. Ensure every single inline `<script>` block has a corresponding hash in the CSP header.
+
+## 2026-03-12 - [Orphaned CSP Hash Removal]
+**Vulnerability:** A static HTML specification retained an unused CSP inline script hash from a prior version or removed script. While not directly exploitable, it violates the principle of least privilege by artificially widening the `script-src` attack surface.
+**Learning:** When cleaning up or refactoring HTML, CSP tags must also be audited to remove hashes of scripts that no longer exist, preventing attackers from injecting those exact scripts if a bypass is found.
+**Prevention:** Periodically re-evaluate all CSP `script-src` hashes against the actual inline scripts present in the document. Automating the comparison can quickly identify orphaned hashes that need removal.
