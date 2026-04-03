@@ -62,3 +62,8 @@
 **Vulnerability:** An inline script block providing utility functions (anchor links and clipboard copy) was silently blocked because its SHA-256 hash was omitted from the `script-src` directive in the Content Security Policy (CSP).
 **Learning:** When modifying inline scripts, or when refactoring/adding new inline script blocks in a document with a strict CSP, the corresponding hashes in the `script-src` directive often drift out of sync if not manually updated. This results in completely broken functionality for those specific scripts.
 **Prevention:** Always recount inline scripts and recalculate their base64-encoded SHA-256 hashes against the actual file content when making structural or logic changes to HTML specifications. Ensure every single inline `<script>` block has a corresponding hash in the CSP header.
+
+## 2025-05-18 - [Mermaid.js Dependency Upgrade]
+**Vulnerability:** Static HTML documentation relied on `mermaid@11.13.0` which had known security vulnerabilities identified by `npm audit`, including prototype pollution and code injection risks from transitive `lodash-es` dependencies.
+**Learning:** Upgrading dependencies in static files requires a synchronized update of the `<script>` tag, the `integrity` attribute (SRI), and the Content Security Policy (CSP) `script-src` directive.
+**Prevention:** Regularly audit and upgrade dependencies in static HTML files, ensuring SRI hashes and CSP directives are updated to match the new versions.
