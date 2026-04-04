@@ -44,3 +44,7 @@
 ## 2025-10-25 - [Hash Links and Keyboard Focus]
 **Learning:** Pure CSS `#target` anchoring and standard HTML `<a>` behavior updates the scroll position but frequently fails to move programmatic keyboard focus into the target element across all browsers (like WebKit) unless the target is natively focusable or explicitly given a tabindex.
 **Action:** When implementing Skip-to-content or Table of Contents (TOC) navigation, always ensure the destination container (e.g., `<section>`) has `tabindex="-1"` to guarantee the focus context moves seamlessly for keyboard users.
+
+## 2025-04-04 - Programmatic Focus Management for Scroll-to-Top Actions
+**Learning:** When a user activates a "Back to Top" button, visual focus moves to the top of the page, but keyboard/screen reader focus remains at the bottom on the now-hidden button. This creates a confusing experience when they resume navigation.
+**Action:** Always programmatically manage focus by shifting it to a logical container at the top of the page (like `<header tabindex="-1">`) when scrolling to top, ensuring keyboard users can seamlessly resume reading.
