@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-8zIDWhOWwBdIxIhuf0aRXCgJvQrDOlxgwY5Zk3+e7PQ=' 'sha256-mH8pjt4BJ4A1BKveOsbGC9dVzs8EYfFYo0Tr4EXxosU=' 'sha256-VGDENERPvq+R03ez3ZrwVwfEIIT3jXq+26FnLnC44eo=' 'sha256-BUOgJdIG2LnDz9lSWVIlSfC2sXTa/ylVQwKxu+17vOg=' https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-8zIDWhOWwBdIxIhuf0aRXCgJvQrDOlxgwY5Zk3+e7PQ=' 'sha256-mH8pjt4BJ4A1BKveOsbGC9dVzs8EYfFYo0Tr4EXxosU=' 'sha256-rB7aLbqhCwuQ/unJP2W6oD2fG62oMER4QnWAxjnBJfw=' 'sha256-BUOgJdIG2LnDz9lSWVIlSfC2sXTa/ylVQwKxu+17vOg=' https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
@@ -736,7 +736,10 @@ flowchart TB
 
                     const btn = document.createElement('button');
                     btn.className = 'anchor-link';
-                    btn.innerHTML = '<span aria-hidden="true">🔗</span>';
+                    const span = document.createElement('span');
+                    span.setAttribute('aria-hidden', 'true');
+                    span.textContent = '🔗';
+                    btn.appendChild(span);
                     btn.setAttribute('aria-label', 'Copy link to section');
                     btn.title = 'Copy link to section';
 
@@ -765,7 +768,11 @@ flowchart TB
                     const originalHTML = btn.innerHTML;
                     const originalAriaLabel = btn.getAttribute('aria-label');
 
-                    btn.innerHTML = '<span aria-hidden="true">✅</span>';
+                    const spanCheck = document.createElement('span');
+                    spanCheck.setAttribute('aria-hidden', 'true');
+                    spanCheck.textContent = '✅';
+                    btn.innerHTML = '';
+                    btn.appendChild(spanCheck);
                     btn.setAttribute('aria-label', 'Copied!');
 
                     setTimeout(() => {
