@@ -48,3 +48,7 @@
 ## 2025-04-04 - Programmatic Focus Management for Scroll-to-Top Actions
 **Learning:** When a user activates a "Back to Top" button, visual focus moves to the top of the page, but keyboard/screen reader focus remains at the bottom on the now-hidden button. This creates a confusing experience when they resume navigation.
 **Action:** Always programmatically manage focus by shifting it to a logical container at the top of the page (like `<header tabindex="-1">`) when scrolling to top, ensuring keyboard users can seamlessly resume reading.
+
+## 2024-05-22 - [Anchor Link Context and Breathing Room]
+**Learning:** When navigating via anchor links (like a Table of Contents) in long HTML documents, the browser scrolls the target element flush against the top of the viewport. This often hides context (like section headers) under fixed headers or progress bars, leading to a cramped and disorienting UX.
+**Action:** Always add `scroll-margin-top` to target sections (`section[id]`) to provide visual breathing room and ensure headings remain clearly visible when linked to.
