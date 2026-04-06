@@ -49,3 +49,7 @@
 ## 2026-03-24 - Avoid transition: all in UI Elements
 **Learning:** Using `transition: all` causes unnecessary style recalculations and layout thrashing during state changes (e.g., hover, focus), degrading performance, particularly when many properties could potentially animate.
 **Action:** Always specify explicit transition properties (e.g., `transition: opacity 0.3s ease, transform 0.3s ease`) to target only the properties that actually need animating.
+
+## 2026-03-25 - Deferring Heavy DOM Renders and Layouts
+**Learning:** Rendering numerous complex SVG diagrams (like Mermaid.js) simultaneously can cause severe main-thread blocking and layout thrashing, even if batched. Additionally, rendering DOM nodes far off-screen negatively impacts initial load time.
+**Action:** Use `content-visibility: auto` (with a suitable `contain-intrinsic-size`) on diagram containers to skip layout calculations until they approach the viewport. Wrap heavy batch rendering calls in `requestIdleCallback` to allow the browser to process critical tasks before executing the render.
