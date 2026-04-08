@@ -52,3 +52,6 @@
 ## 2024-05-22 - [Anchor Link Context and Breathing Room]
 **Learning:** When navigating via anchor links (like a Table of Contents) in long HTML documents, the browser scrolls the target element flush against the top of the viewport. This often hides context (like section headers) under fixed headers or progress bars, leading to a cramped and disorienting UX.
 **Action:** Always add `scroll-margin-top` to target sections (`section[id]`) to provide visual breathing room and ensure headings remain clearly visible when linked to.
+## 2024-04-07 - Ensure Touch Accessibility for Hover-Dependent Elements
+**Learning:** Elements relying purely on `:hover` and `:focus-visible` (like `.anchor-link` for headings) become completely invisible and undiscoverable on touch devices, violating accessibility guidelines for mobile users.
+**Action:** When creating hover-based interactive elements, always implement an `@media (hover: none)` or `@media (max-width: 768px)` fallback to ensure they are visible (e.g., permanent partial opacity) on touch devices where hover interactions are not supported.
