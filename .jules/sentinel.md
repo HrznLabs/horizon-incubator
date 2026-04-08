@@ -67,3 +67,8 @@
 **Vulnerability:** A static HTML specification retained an unused CSP inline script hash from a prior version or removed script. While not directly exploitable, it violates the principle of least privilege by artificially widening the `script-src` attack surface.
 **Learning:** When cleaning up or refactoring HTML, CSP tags must also be audited to remove hashes of scripts that no longer exist, preventing attackers from injecting those exact scripts if a bypass is found.
 **Prevention:** Periodically re-evaluate all CSP `script-src` hashes against the actual inline scripts present in the document. Automating the comparison can quickly identify orphaned hashes that need removal.
+
+## 2026-03-24 - [CSP style-src and Mermaid.js Compatibility]
+**Vulnerability:** Attempting to harden Content Security Policy (CSP) by removing `'unsafe-inline'` from `style-src` in static HTML specifications.
+**Learning:** Mermaid.js dynamically generates SVG diagrams that heavily rely on injecting inline styles. Removing `'unsafe-inline'` from the `style-src` directive without a robust nonce-based architecture breaks the rendering of all diagrams. In a static HTML context without a server to generate nonces, retaining `'unsafe-inline'` for `style-src` is a necessary tradeoff.
+**Prevention:** Do not remove `'unsafe-inline'` from `style-src` in static HTML files that utilize Mermaid.js unless transitioning to a server-rendered or build-step architecture capable of injecting nonces into all dynamically generated SVG elements.
