@@ -342,6 +342,15 @@
                 display: none !important;
             }
         }
+
+        /* 🎨 Palette UX Optimization: Mobile-friendly adjustments */
+        @media (hover: none) and (pointer: coarse) {
+            .anchor-link { opacity: 0.8; }
+        }
+        @media (max-width: 768px) {
+            .toc ul { columns: 1; }
+            .back-to-top { bottom: 20px; right: 20px; width: 44px; height: 44px; }
+        }
     </style>
 </head>
 <body>
