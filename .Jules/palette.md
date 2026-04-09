@@ -55,3 +55,6 @@
 ## 2024-04-07 - Ensure Touch Accessibility for Hover-Dependent Elements
 **Learning:** Elements relying purely on `:hover` and `:focus-visible` (like `.anchor-link` for headings) become completely invisible and undiscoverable on touch devices, violating accessibility guidelines for mobile users.
 **Action:** When creating hover-based interactive elements, always implement an `@media (hover: none)` or `@media (max-width: 768px)` fallback to ensure they are visible (e.g., permanent partial opacity) on touch devices where hover interactions are not supported.
+## 2024-11-20 - Improved color contrast of critical badge for accessibility
+**Learning:** The `.badge.critical` component on a dark background (`#1a1a2e`) combined with a translucent red background (`rgba(231,76,60,0.2)`) and red text (`#e74c3c`) resulted in a contrast ratio of 3.58:1, failing WCAG AA standards. This highlights the need to be cautious with dark themes and translucent backgrounds when calculating final foreground text color contrast.
+**Action:** When working on dark mode UI with translucent background accents, explicitly verify the computed contrast ratio against the absolute background. In this case, adjusting the text color to `#ff6b6b` achieved a compliant 4.93:1 contrast ratio.
