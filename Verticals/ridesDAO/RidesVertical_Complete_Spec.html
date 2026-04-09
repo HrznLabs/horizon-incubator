@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'sha256-jXvm8FgVQFnd1dIvs41rTUKxMkVVA7chm6PGXSfqFMQ=' 'sha256-yNl8No6oJTqpunvtNqmAvYvpxRYCHT7SnwJ3hGKrO1g=' 'sha256-VGDENERPvq+R03ez3ZrwVwfEIIT3jXq+26FnLnC44eo=' 'sha256-ySY1Zj2XrIb7nurx5kfgDmB2eNxAVf8Mn6u4S91tYx4=' https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'sha256-jXvm8FgVQFnd1dIvs41rTUKxMkVVA7chm6PGXSfqFMQ=' 'sha256-yNl8No6oJTqpunvtNqmAvYvpxRYCHT7SnwJ3hGKrO1g=' 'sha256-VGDENERPvq+R03ez3ZrwVwfEIIT3jXq+26FnLnC44eo=' 'sha256-7eWhbM74vB68OJLTb0O8kcZ+zH2HN9/s4STjWBWTw0Q=' https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
@@ -858,7 +858,13 @@ flowchart TB
 
                 // Handle dynamic page heights from lazy-loaded mermaid diagrams
                 if ('ResizeObserver' in window) {
-                    const resizeObserver = new ResizeObserver(updateScrollHeight);
+                    // ⚡ Bolt Optimization: Debounce ResizeObserver callback to prevent main-thread blocking
+                    // Reading scrollHeight synchronously during rapid dynamic content injection (Mermaid) causes layout thrashing
+                    let resizeTimeout;
+                    const resizeObserver = new ResizeObserver(() => {
+                        clearTimeout(resizeTimeout);
+                        resizeTimeout = setTimeout(updateScrollHeight, 150);
+                    });
                     resizeObserver.observe(document.body);
                 }
 
