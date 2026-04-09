@@ -53,3 +53,7 @@
 ## 2026-03-25 - Deferring Heavy DOM Renders and Layouts
 **Learning:** Rendering numerous complex SVG diagrams (like Mermaid.js) simultaneously can cause severe main-thread blocking and layout thrashing, even if batched. Additionally, rendering DOM nodes far off-screen negatively impacts initial load time.
 **Action:** Use `content-visibility: auto` (with a suitable `contain-intrinsic-size`) on diagram containers to skip layout calculations until they approach the viewport. Wrap heavy batch rendering calls in `requestIdleCallback` to allow the browser to process critical tasks before executing the render.
+
+## 2026-03-26 - Debouncing ResizeObserver for Layout Calculations
+**Learning:** In static HTML specifications where heavy elements like Mermaid.js diagrams are lazy-loaded, binding synchronous layout reads (like `document.documentElement.scrollHeight`) directly to `ResizeObserver` callbacks causes severe main-thread layout thrashing. The browser is forced to recalculate layout multiple times as diagrams inject DOM nodes.
+**Action:** Always debounce `ResizeObserver` callbacks that read layout properties (like `scrollHeight` or `clientHeight`) when observing containers that undergo rapid, batched dynamic content injection.
