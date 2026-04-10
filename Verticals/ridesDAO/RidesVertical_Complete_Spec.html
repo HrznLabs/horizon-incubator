@@ -130,7 +130,7 @@
             padding: 30px;
             margin-bottom: 40px;
         }
-        .toc h3 { color: #00d9ff; margin-bottom: 15px; }
+        .toc h2 { color: #00d9ff; margin-bottom: 15px; font-size: 1.17em; }
         .toc ul { list-style: none; columns: 2; }
         .toc li { margin: 10px 0; }
         .toc a { color: #00ff88; text-decoration: none; transition: color 0.2s ease; border-radius: 4px; }
@@ -158,7 +158,7 @@
             padding: 30px;
             margin-bottom: 40px;
         }
-        .decisions h3 { color: #00ff88; margin-bottom: 20px; display: flex; align-items: center; }
+        .decisions h2 { color: #00ff88; margin-bottom: 20px; display: flex; align-items: center; font-size: 1.17em; }
         .decisions table { width: 100%; border-collapse: collapse; }
         .decisions th, .decisions td {
             padding: 12px;
@@ -166,6 +166,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         .decisions th { color: #00d9ff; }
+        .decisions tbody tr:hover { background: rgba(0, 217, 255, 0.1); transition: background 0.2s ease; }
         footer {
             text-align: center;
             margin-top: 60px;
@@ -256,7 +257,7 @@
 
         .section-header:hover .anchor-link,
         .diagram-title:hover .anchor-link,
-        .decisions h3:hover .anchor-link,
+        .decisions h2:hover .anchor-link,
         .anchor-link:focus-visible {
             opacity: 1;
         }
@@ -326,7 +327,7 @@
                 border: 1px solid #ccc !important;
                 color: #000 !important;
             }
-            .decisions h3, .decisions th {
+            .decisions h2, .decisions th {
                 color: #000 !important;
                 border-bottom-color: #ccc !important;
             }
@@ -379,7 +380,7 @@
         </header>
 
         <nav class="toc" aria-labelledby="toc-heading">
-            <h3 id="toc-heading"><span aria-hidden="true">📑 </span> Table of Contents</h3>
+            <h2 id="toc-heading"><span aria-hidden="true">📑 </span> Table of Contents</h2>
             <ul>
                 <li><a href="#decisions"><span aria-hidden="true">✅ </span> Confirmed Decisions</a></li>
                 <li><a href="#d30">D30 — Standard Ride Flow</a></li>
@@ -400,21 +401,25 @@
 
         <main id="main-content" tabindex="-1">
         <section id="decisions" class="decisions" tabindex="-1">
-            <h3><span aria-hidden="true">✅ </span> Confirmed Design Decisions</h3>
-            <table>
-                <tr><th>Area</th><th>Decision</th></tr>
-                <tr><td>Mission Pattern</td><td>Both Rider-as-Poster (primary) AND Driver-as-Poster (occasional rides)</td></tr>
-                <tr><td>Surge Pricing</td><td>Guild-controlled + Market algorithm</td></tr>
-                <tr><td>XP System</td><td>Hybrid (Global XP + Rides-specific XP)</td></tr>
-                <tr><td>Fee Reduction</td><td>Streak-based temporary discounts (up to -10% at 60+ days)</td></tr>
-                <tr><td>Guild Curation</td><td>Bidirectional (drivers AND riders curated)</td></tr>
-                <tr><td>Geographic Guilds</td><td>Drivers can be in multiple; activity requirements per guild</td></tr>
-                <tr><td>Real-time Tracking</td><td>Opt-in but RECOMMENDED; rider always sees driver</td></tr>
-                <tr><td>Route Recording</td><td>Full route, shareable for safety</td></tr>
-                <tr><td>Equipment Funding</td><td>All 5 paths: self-purchase, guild, brand, auto-save, onboarding</td></tr>
-                <tr><td>Compliance Tier 0</td><td>Exists for P2P/friends/family rides</td></tr>
-                <tr><td>Multi-Rider Pricing</td><td>Hybrid: Distance (60%) + Time (40%)</td></tr>
-                <tr><td>Platform Liability</td><td>Infrastructure only — guilds handle compliance</td></tr>
+            <h2 id="decisions-heading"><span aria-hidden="true">✅ </span> Confirmed Design Decisions</h2>
+            <table aria-labelledby="decisions-heading">
+                <thead>
+                    <tr><th scope="col">Area</th><th scope="col">Decision</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td scope="row">Mission Pattern</td><td>Both Rider-as-Poster (primary) AND Driver-as-Poster (occasional rides)</td></tr>
+                    <tr><td scope="row">Surge Pricing</td><td>Guild-controlled + Market algorithm</td></tr>
+                    <tr><td scope="row">XP System</td><td>Hybrid (Global XP + Rides-specific XP)</td></tr>
+                    <tr><td scope="row">Fee Reduction</td><td>Streak-based temporary discounts (up to -10% at 60+ days)</td></tr>
+                    <tr><td scope="row">Guild Curation</td><td>Bidirectional (drivers AND riders curated)</td></tr>
+                    <tr><td scope="row">Geographic Guilds</td><td>Drivers can be in multiple; activity requirements per guild</td></tr>
+                    <tr><td scope="row">Real-time Tracking</td><td>Opt-in but RECOMMENDED; rider always sees driver</td></tr>
+                    <tr><td scope="row">Route Recording</td><td>Full route, shareable for safety</td></tr>
+                    <tr><td scope="row">Equipment Funding</td><td>All 5 paths: self-purchase, guild, brand, auto-save, onboarding</td></tr>
+                    <tr><td scope="row">Compliance Tier 0</td><td>Exists for P2P/friends/family rides</td></tr>
+                    <tr><td scope="row">Multi-Rider Pricing</td><td>Hybrid: Distance (60%) + Time (40%)</td></tr>
+                    <tr><td scope="row">Platform Liability</td><td>Infrastructure only — guilds handle compliance</td></tr>
+                </tbody>
             </table>
         </section>
 
