@@ -165,7 +165,8 @@
             text-align: left;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .decisions th { color: #00d9ff; }
+        .decisions thead th { color: #00d9ff; }
+        .decisions tbody th { color: #00ff88; font-weight: normal; }
         .decisions tbody tr:hover { background: rgba(0, 217, 255, 0.1); transition: background 0.2s ease; }
         footer {
             text-align: center;
@@ -407,18 +408,18 @@
                     <tr><th scope="col">Area</th><th scope="col">Decision</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td scope="row">Mission Pattern</td><td>Both Rider-as-Poster (primary) AND Driver-as-Poster (occasional rides)</td></tr>
-                    <tr><td scope="row">Surge Pricing</td><td>Guild-controlled + Market algorithm</td></tr>
-                    <tr><td scope="row">XP System</td><td>Hybrid (Global XP + Rides-specific XP)</td></tr>
-                    <tr><td scope="row">Fee Reduction</td><td>Streak-based temporary discounts (up to -10% at 60+ days)</td></tr>
-                    <tr><td scope="row">Guild Curation</td><td>Bidirectional (drivers AND riders curated)</td></tr>
-                    <tr><td scope="row">Geographic Guilds</td><td>Drivers can be in multiple; activity requirements per guild</td></tr>
-                    <tr><td scope="row">Real-time Tracking</td><td>Opt-in but RECOMMENDED; rider always sees driver</td></tr>
-                    <tr><td scope="row">Route Recording</td><td>Full route, shareable for safety</td></tr>
-                    <tr><td scope="row">Equipment Funding</td><td>All 5 paths: self-purchase, guild, brand, auto-save, onboarding</td></tr>
-                    <tr><td scope="row">Compliance Tier 0</td><td>Exists for P2P/friends/family rides</td></tr>
-                    <tr><td scope="row">Multi-Rider Pricing</td><td>Hybrid: Distance (60%) + Time (40%)</td></tr>
-                    <tr><td scope="row">Platform Liability</td><td>Infrastructure only — guilds handle compliance</td></tr>
+                    <tr><th scope="row">Mission Pattern</th><td>Both Rider-as-Poster (primary) AND Driver-as-Poster (occasional rides)</td></tr>
+                    <tr><th scope="row">Surge Pricing</th><td>Guild-controlled + Market algorithm</td></tr>
+                    <tr><th scope="row">XP System</th><td>Hybrid (Global XP + Rides-specific XP)</td></tr>
+                    <tr><th scope="row">Fee Reduction</th><td>Streak-based temporary discounts (up to -10% at 60+ days)</td></tr>
+                    <tr><th scope="row">Guild Curation</th><td>Bidirectional (drivers AND riders curated)</td></tr>
+                    <tr><th scope="row">Geographic Guilds</th><td>Drivers can be in multiple; activity requirements per guild</td></tr>
+                    <tr><th scope="row">Real-time Tracking</th><td>Opt-in but RECOMMENDED; rider always sees driver</td></tr>
+                    <tr><th scope="row">Route Recording</th><td>Full route, shareable for safety</td></tr>
+                    <tr><th scope="row">Equipment Funding</th><td>All 5 paths: self-purchase, guild, brand, auto-save, onboarding</td></tr>
+                    <tr><th scope="row">Compliance Tier 0</th><td>Exists for P2P/friends/family rides</td></tr>
+                    <tr><th scope="row">Multi-Rider Pricing</th><td>Hybrid: Distance (60%) + Time (40%)</td></tr>
+                    <tr><th scope="row">Platform Liability</th><td>Infrastructure only — guilds handle compliance</td></tr>
                 </tbody>
             </table>
         </section>
