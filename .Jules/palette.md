@@ -61,3 +61,7 @@
 ## 2025-04-11 - Table Semantics Accessibility Fix
 **Learning:** Incorrectly using `<td scope="row">` instead of `<th scope="row">` creates invalid semantic HTML that screen readers may fail to interpret properly as row headers. When fixing this by replacing `<td>` with `<th>` inside a `<tbody>`, the new `<th>` elements might accidentally inherit global table header styles (often meant only for `<thead>`).
 **Action:** When fixing table semantics by introducing row headers (`<th>` in `<tbody>`), always update the CSS selectors to explicitly differentiate styling between `.decisions thead th` and `.decisions tbody th` to prevent visual regressions while ensuring proper accessibility structure.
+
+## 2025-10-25 - [Skip-to-Content Focus Outline Management]
+**Learning:** When users activate a 'Skip to content' link targeting a `<main>` element with `tabindex="-1"`, browsers often apply a default focus ring around the entire main container. This creates a massive, visually distracting outline around the whole page body that confuses both keyboard and screen reader users.
+**Action:** When managing programmatic focus for skip links or anchor targets, explicitly remove the default focus outline using `main[tabindex="-1"]:focus { outline: none; }` to maintain a clean visual experience while preserving the necessary focus context.
