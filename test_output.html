@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'sha256-jXvm8FgVQFnd1dIvs41rTUKxMkVVA7chm6PGXSfqFMQ=' 'sha256-yNl8No6oJTqpunvtNqmAvYvpxRYCHT7SnwJ3hGKrO1g=' 'sha256-ohElwpO2POzrtIPBBeGEJQffBgS2L3U8Bi97+h0G0Tg=' 'sha256-7eWhbM74vB68OJLTb0O8kcZ+zH2HN9/s4STjWBWTw0Q=' https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta name="referrer" content="no-referrer">
+    <title>Horizon Rides Vertical — Complete Specification</title>
+    <!--
+        ⚡ Bolt Optimization: Deferred Mermaid.js loading to unblock initial render.
+        Moving script to head with 'defer' allows parallel download while HTML parses.
+        Initialization is wrapped in DOMContentLoaded to ensure the library is ready.
+        ⚡ Bolt Optimization: Consolidated resource hints and added crossorigin attribute for faster connection setup.
+        🛡️ Sentinel: Added SRI hash to prevent CDN tampering and ensure script integrity.
+        🛡️ Sentinel: Enforced strict CSP by replacing 'unsafe-inline' with SHA-256 hashes for inline scripts.
+        🛡️ Sentinel: Updated CSP hash for initialization script and restricted CDN path to specific file.
+        🛡️ Sentinel: Upgraded Mermaid.js to v11.13.0 to address security vulnerabilities and updated SRI hash.
+        🛡️ Sentinel: Updated CSP hash for anchor link script after refactoring for performance and security.
+        🛡️ Sentinel: Restricted 'form-action' to 'none' in CSP to prevent form hijacking.
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js" integrity="sha384-1CMXl090wj8Dd6YfnzSQUOgWbE6suWCaenYG7pox5AX7apTpY3PmJMeS2oPql4Gk" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ⚡ Bolt Optimization: Lazy load Mermaid diagrams to improve initial load performance.
+            // Diagrams are rendered only when they approach the viewport using IntersectionObserver.
+            // 🛡️ Sentinel: Enforced strict securityLevel to prevent DOM XSS via Mermaid diagrams.
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: 'dark',
+                securityLevel: 'strict'
+            });
+
+            if ('IntersectionObserver' in window) {
+                let batchTimeout;
+                let globalBatch = [];
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            globalBatch.push(entry.target);
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                    if (globalBatch.length > 0) {
+                        clearTimeout(batchTimeout);
+                        batchTimeout = setTimeout(() => {
+                            // ⚡ Bolt Optimization: Debounced batching of Mermaid renders to minimize layout thrashing
+                            // Reduces main thread blocking when multiple diagrams enter viewport simultaneously
+                            const nodesToRender = [...globalBatch];
+                            globalBatch = [];
+                            if ('requestIdleCallback' in window) {
+                            requestIdleCallback(() => mermaid.run({ nodes: nodesToRender }));
+                        } else {
+                            setTimeout(() => mermaid.run({ nodes: nodesToRender }), 0);
+                        }
+                        }, 50);
+                    }
+                }, { rootMargin: '200px 0px' });
+
+                document.querySelectorAll('.mermaid').forEach(el => observer.observe(el));
+            } else {
+                // Fallback for browsers without IntersectionObserver
+                mermaid.run({ nodes: document.querySelectorAll('.mermaid') });
+            }
+        });
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eee;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 60px; }
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(90deg, #00d9ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .subtitle { color: #888; font-size: 1.2rem; }
+        .section-header {
+            font-size: 2rem;
+            color: #00d9ff;
+            margin: 60px 0 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0,217,255,0.3);
+        }
+        .diagram-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 40px;
+            content-visibility: auto;
+            contain-intrinsic-size: auto 600px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .diagram-title {
+            font-size: 1.5rem;
+            color: #00d9ff;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .diagram-description {
+            color: #aaa;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .mermaid {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            overflow-x: auto;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .mermaid:focus-visible {
+            outline: 2px solid #00d9ff;
+            outline-offset: 2px;
+        }
+        .toc {
+            background: rgba(0,217,255,0.1);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        .toc h2 { color: #00d9ff; margin-bottom: 15px; font-size: 1.17em; }
+        .toc ul { list-style: none; columns: 2; }
+        .toc li { margin: 10px 0; }
+        .toc a { color: #00ff88; text-decoration: none; transition: color 0.2s ease; border-radius: 4px; }
+        .toc a:hover { color: #00d9ff; }
+        .toc a:focus-visible { outline: 2px solid #00d9ff; outline-offset: 2px; }
+        section[id] { scroll-margin-top: 80px; }
+        main[tabindex="-1"]:focus, section[tabindex="-1"]:focus { outline: none; }
+        main[id], section[id] { scroll-margin-top: 40px; }
+        .badge {
+            display: inline-block;
+            background: rgba(0,255,136,0.2);
+            color: #00ff88;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        .badge.critical {
+            background: rgba(231,76,60,0.2);
+            color: #ff6b6b;
+        }
+        .decisions {
+            background: rgba(0,255,136,0.1);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        .decisions h2 { color: #00ff88; margin-bottom: 20px; display: flex; align-items: center; font-size: 1.17em; }
+        .decisions table { width: 100%; border-collapse: collapse; }
+        .decisions th, .decisions td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .decisions thead th { color: #00d9ff; }
+        .decisions tbody th { color: #00ff88; font-weight: normal; }
+        .decisions tbody tr:hover { background: rgba(0, 217, 255, 0.1); transition: background 0.2s ease; }
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            color: #aaa;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #00d9ff;
+            color: #1a1a2e;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            /* ⚡ Bolt Optimization: Replaced transition: all with specific properties to prevent layout thrashing */
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, outline 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 217, 255, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover,
+        .back-to-top:focus-visible {
+            transform: translateY(-5px);
+            background: #00ff88;
+            box-shadow: 0 6px 16px rgba(0, 255, 136, 0.4);
+            outline: none;
+        }
+
+        .back-to-top:focus-visible {
+            outline: 3px solid #00d9ff;
+            outline-offset: 2px;
+        }
+
+        .skip-to-content {
+            position: absolute;
+            top: -100px;
+            left: 20px;
+            background: #00d9ff;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 0 0 8px 8px;
+            font-weight: bold;
+            text-decoration: none;
+            z-index: 9999;
+            transition: top 0.3s ease;
+        }
+
+        .skip-to-content:focus-visible {
+            top: 0;
+            outline: 3px solid #00ff88;
+            outline-offset: 2px;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            html {
+                scroll-behavior: smooth;
+            }
+        }
+
+        .anchor-link {
+            opacity: 0;
+            margin-left: 0.5em;
+            color: #aaa;
+            text-decoration: none;
+            border: none;
+            background: none;
+            cursor: pointer;
+            /* ⚡ Bolt Optimization: Replaced transition: all with specific properties to prevent layout thrashing */
+            transition: opacity 0.2s ease, color 0.2s ease, background-color 0.2s ease, transform 0.2s ease, outline 0.2s ease;
+            font-size: 0.8em;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .section-header:hover .anchor-link,
+        .diagram-title:hover .anchor-link,
+        .decisions h2:hover .anchor-link,
+        .anchor-link:focus-visible {
+            opacity: 1;
+        }
+
+        .anchor-link:hover {
+            color: #00d9ff;
+            background: rgba(0, 217, 255, 0.1);
+            transform: scale(1.1);
+        }
+
+        .anchor-link:focus-visible {
+            outline: 2px solid #00d9ff;
+            outline-offset: 2px;
+        }
+
+        @media print {
+            body {
+                background: #fff !important;
+                color: #000 !important;
+                padding: 0 !important;
+            }
+            .container {
+                max-width: 100% !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 20px !important;
+            }
+            header {
+                margin-bottom: 30px;
+                text-align: left;
+            }
+            h1 {
+                background: none !important;
+                -webkit-text-fill-color: #000 !important;
+                color: #000 !important;
+                font-size: 2.5rem;
+            }
+            .subtitle {
+                color: #444 !important;
+            }
+            .section-header {
+                color: #000 !important;
+                border-bottom: 2px solid #000 !important;
+                margin-top: 40px;
+            }
+            .diagram-section {
+                background: none !important;
+                border: 1px solid #ccc !important;
+                padding: 20px !important;
+                page-break-inside: avoid;
+            }
+            .diagram-title {
+                color: #000 !important;
+            }
+            .diagram-description {
+                color: #333 !important;
+            }
+            .mermaid {
+                background: none !important;
+                border: none !important;
+                padding: 10px 0 !important;
+                /* Invert dark-themed diagrams for print readability */
+                filter: invert(1) hue-rotate(180deg) !important;
+            }
+            .decisions {
+                background: none !important;
+                border: 1px solid #ccc !important;
+                color: #000 !important;
+            }
+            .decisions h2, .decisions th {
+                color: #000 !important;
+                border-bottom-color: #ccc !important;
+            }
+            .decisions td {
+                border-bottom-color: #eee !important;
+            }
+            .badge {
+                border: 1px solid #000;
+                color: #000 !important;
+                background: none !important;
+            }
+            .toc, .back-to-top, .anchor-link {
+                display: none !important;
+            }
+        }
+
+        /* 🎨 Palette UX Optimization: Mobile-friendly adjustments */
+        @media (hover: none) and (pointer: coarse) {
+            .anchor-link { opacity: 0.8; }
+        }
+        @media (max-width: 768px) {
+            .toc ul { columns: 1; }
+            .back-to-top { bottom: 20px; right: 20px; width: 44px; height: 44px; }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-content">Skip to content</a>
+    <div id="progress-container" aria-hidden="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 1000; pointer-events: none;">
+        <!-- ⚡ Bolt Optimization: Removed transition to prevent compositor thrashing since scaleX is continuously updated via requestAnimationFrame. Added will-change to hint the browser to hardware-accelerate. -->
+        <div id="progress-bar" style="height: 100%; background: #00d9ff; transform-origin: 0% 50%; transform: scaleX(0); will-change: transform;"></div>
+        <style>
+            @supports (animation-timeline: scroll()) {
+                #progress-bar {
+                    animation: grow-progress auto linear;
+                    animation-timeline: scroll(root block);
+                    transform: scaleX(0); /* override initial inline style */
+                }
+                @keyframes grow-progress {
+                    from { transform: scaleX(0); }
+                    to { transform: scaleX(1); }
+                }
+            }
+        </style>
+    </div>
+    <div class="container">
+        <header>
+            <h1><span aria-hidden="true">🚗 </span> Horizon Rides Vertical</h1>
+            <p class="subtitle">Complete Technical Specification — v1.0</p>
+        </header>
+
+        <nav class="toc" aria-labelledby="toc-heading">
+            <h2 id="toc-heading"><span aria-hidden="true">📑 </span> Table of Contents</h2>
+            <ul>
+                <li><a href="#decisions"><span aria-hidden="true">✅ </span> Confirmed Decisions</a></li>
+                <li><a href="#d30">D30 — Standard Ride Flow</a></li>
+                <li><a href="#d31">D31 — Guild Hierarchy</a></li>
+                <li><a href="#d32">D32 — Equipment Progression</a></li>
+                <li><a href="#d33">D33 — Bidirectional Reputation</a></li>
+                <li><a href="#d34">D34 — Real-Time Tracking</a></li>
+                <li><a href="#d35">D35 — Hybrid Pricing</a></li>
+                <li><a href="#d36">D36 — Cancellation Logic</a></li>
+                <li><a href="#d37">D37 — Matching Engine Architecture</a></li>
+                <li><a href="#d38">D38 — Match Score Formula</a></li>
+                <li><a href="#d39">D39 — Shared Ride Matching</a></li>
+                <li><a href="#d40">D40 — Driver State Machine</a></li>
+                <li><a href="#d41">D41 — Offer Lifecycle</a></li>
+                <li><a href="#d42">D42 — Surge Pricing Flow</a></li>
+            </ul>
+        </nav>
+
+        <main id="main-content" tabindex="-1">
+        <section id="decisions" class="decisions" tabindex="-1">
+            <h2 id="decisions-heading"><span aria-hidden="true">✅ </span> Confirmed Design Decisions</h2>
+            <table aria-labelledby="decisions-heading">
+                <thead>
+                    <tr><th scope="col">Area</th><th scope="col">Decision</th></tr>
+                </thead>
+                <tbody>
+                    <tr><th scope="row">Mission Pattern</th><td>Both Rider-as-Poster (primary) AND Driver-as-Poster (occasional rides)</td></tr>
+                    <tr><th scope="row">Surge Pricing</th><td>Guild-controlled + Market algorithm</td></tr>
+                    <tr><th scope="row">XP System</th><td>Hybrid (Global XP + Rides-specific XP)</td></tr>
+                    <tr><th scope="row">Fee Reduction</th><td>Streak-based temporary discounts (up to -10% at 60+ days)</td></tr>
+                    <tr><th scope="row">Guild Curation</th><td>Bidirectional (drivers AND riders curated)</td></tr>
+                    <tr><th scope="row">Geographic Guilds</th><td>Drivers can be in multiple; activity requirements per guild</td></tr>
+                    <tr><th scope="row">Real-time Tracking</th><td>Opt-in but RECOMMENDED; rider always sees driver</td></tr>
+                    <tr><th scope="row">Route Recording</th><td>Full route, shareable for safety</td></tr>
+                    <tr><th scope="row">Equipment Funding</th><td>All 5 paths: self-purchase, guild, brand, auto-save, onboarding</td></tr>
+                    <tr><th scope="row">Compliance Tier 0</th><td>Exists for P2P/friends/family rides</td></tr>
+                    <tr><th scope="row">Multi-Rider Pricing</th><td>Hybrid: Distance (60%) + Time (40%)</td></tr>
+                    <tr><th scope="row">Platform Liability</th><td>Infrastructure only — guilds handle compliance</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <h2 class="section-header"><span aria-hidden="true">🚕 </span> Core Ride Flows</h2>
+
+        <section id="d30" class="diagram-section" tabindex="-1">
+            <h2 id="d30-title" class="diagram-title"><span aria-hidden="true">📍 </span> D30 — Standard Ride Mission Flow <span class="badge">Core</span></h2>
+            <p id="d30-desc" class="diagram-description">Complete lifecycle from request to settlement.</p>
+            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d30-title" aria-describedby="d30-desc">
+sequenceDiagram
+    participant R as Rider
+    participant ME as Matching Engine
+    participant D as Driver
+    participant BC as Blockchain
+
+    rect rgba(0, 217, 255, 0.1)
+        Note over R,BC: REQUEST & MATCH
+        R->>ME: Request ride
+        ME->>ME: Filter candidates
+        ME->>ME: Score & select
+        ME->>D: Offer (15s timeout)
+        D->>ME: Accept
+        ME->>BC: Create mission (escrow)
+        ME->>R: Driver matched!
+    end
+
+    rect rgba(255, 136, 0, 0.1)
+        Note over R,BC: RIDE
+        D->>R: En route (live tracking)
+        D->>R: Arrived at pickup
+        R->>ME: Confirm pickup
+        D->>R: Ride in progress
+        D->>ME: Arrive at dropoff
+    end
+
+    rect rgba(0, 255, 136, 0.1)
+        Note over R,BC: SETTLEMENT
+        ME->>BC: Complete mission
+        BC->>D: USDC transferred
+        BC->>R: DDR refunded
+        R->>ME: Rate driver ⭐
+        D->>ME: Rate rider ⭐
+    end
+            </div>
+        </section>
+
+        <h2 class="section-header"><span aria-hidden="true">🏛️</span>  Guild & Reputation</h2>
+
+        <section id="d31" class="diagram-section" tabindex="-1">
+            <h2 id="d31-title" class="diagram-title"><span aria-hidden="true">🏛️</span>  D31 — Rides Guild Hierarchy</h2>
+            <p id="d31-desc" class="diagram-description">MetaGuild umbrella with geographic, specialty, and quality tier sub-guilds.</p>
+            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d31-title" aria-describedby="d31-desc">
+flowchart TB
+    META["🚗 RidesMetaGuild"]
+
+    subgraph Geo["Geographic"]
+        G1["🇵🇹 Lisbon"]
+        G2["🇵🇹 Porto"]
+        G3["🇬🇧 London"]
+    end
+
+    subgraph Spec["Specialty"]
+        S1["🌱 EcoRides"]
+        S2["♿ Access"]
+        S3["🌙 NightOwl"]
+    end
+
+    subgraph Qual["Quality"]
+        Q1["⭐ Premium"]
+        Q2["👑 Luxury"]
+        Q3["💰 Budget"]
+    end
+
+    META --> Geo
+    META --> Spec
+    META --> Qual
+            </div>
+        </section>
+
+        <section id="d33" class="diagram-section" tabindex="-1">
+            <h2 id="d33-title" class="diagram-title"><span aria-hidden="true">⭐ </span> D33 — Bidirectional Reputation Flow</h2>
+            <p id="d33-desc" class="diagram-description">Both drivers AND riders are rated and can be curated by guilds.</p>
+            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d33-title" aria-describedby="d33-desc">
+flowchart LR
+    RIDE["✅ Ride<br/>Complete"] --> DR["Driver rates<br/>Rider ⭐"]
+    RIDE --> RR["Rider rates<br/>Driver ⭐"]
+
+    DR --> RP["Rider Profile<br/>━━━━━━━━━━<br/>Rating given: 4.2<br/>Cancel rate: 3%"]
+    RR --> DP["Driver Profile<br/>━━━━━━━━━━<br/>Rating: 4.87<br/>Rides: 847"]
+
+    RP --> GCR["Guild can<br/>curate RIDERS"]
+    DP --> GCD["Guild can<br/>curate DRIVERS"]
+            </div>
+        </section>
+
+        <h2 class="section-header"><span aria-hidden="true">🎯 </span> Matching Engine <span class="badge critical">CRITICAL</span></h2>
+
+        <section id="d37" class="diagram-section" tabindex="-1">
+            <h2 id="d37-title" class="diagram-title"><span aria-hidden="true">🎯 </span> D37 — Matching Engine Architecture</h2>
+            <p id="d37-desc" class="diagram-description">Real-time matching with 4-phase pipeline: Filter → Score → Select → Offer.</p>
+            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d37-title" aria-describedby="d37-desc">
+flowchart TB
+    REQ["🚕 Ride Request"] --> F["FILTER<br/>━━━━━━━━<br/>Distance<br/>Status<br/>Capacity<br/>Eligibility"]
+
+    F --> S["SCORE<br/>━━━━━━━━<br/>ETA 30%<br/>Rating 25%<br/>Fairness 15%<br/>Guild 10%<br/>Other 20%"]
+
+    S --> SEL["SELECT<br/>━━━━━━━━<br/>Best match<br/>or weighted<br/>random"]
+
+    SEL --> OFF["OFFER<br/>━━━━━━━━<br/>15s timeout"]
+
+    OFF -->|"Accept"| MATCH["🎉 MATCHED"]
+    OFF -->|"Decline/Timeout"| RETRY["🔄 RETRY"]
+    RETRY -->|"< 5"| SEL
+    RETRY -->|">= 5"| FAIL["❌ NO MATCH"]
+            </div>
+        </section>
+
+        <section id="d38" class="diagram-section" tabindex="-1">
+            <h2 id="d38-title" class="diagram-title"><span aria-hidden="true">📊 </span> D38 — Match Score Formula</h2>
+            <p id="d38-desc" class="diagram-description">Weighted scoring across 8 factors including bidirectional ratings.</p>
+            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d38-title" aria-describedby="d38-desc">
+flowchart LR
+    subgraph Factors["Scoring Factors (Total: 100%)"]
+        E["📍 ETA<br/>30%"]
+        D["⭐ Driver<br/>15%"]
+        R["👤 Rider<br/>10%"]
+        F["⚖️ Fair<br/>15%"]
+        G["🏛️ Guild<br/>10%"]
+        P["💰 Price<br/>10%"]
+        PR["🎯 Pref<br/>5%"]
+        ST["🔥 Streak<br/>5%"]
+    end
+
+    Factors --> CALC["Calculate<br/>Weighted Sum"]
+    CALC --> RANK["Rank<br/>Candidates"]
+            </div>
+        </section>
+
+        <section id="d39" class="diagram-section" tabindex="-1">
+            <h2 id="d39-title" class="diagram-title"><span aria-hidden="true">👥 </span> D39 — Shared Ride Matching</h2>
+            <p id="d39-desc" class="diagram-description">Adding riders to active routes with detour checking and fair price splitting.</p>
+            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d39-title" aria-describedby="d39-desc">
+flowchart TB
+    R1["Rider 1<br/>On ride A→B"] --> CHECK["Check New<br/>Request C→D"]
+
+    CHECK --> COMPAT{"Route<br/>Compatible?<br/>Detour<30%?"}
+
+    COMPAT -->|"Yes"| ADD["Add to Ride"]
+    COMPAT -->|"No"| NEW["New Driver"]
+
+    ADD --> PRICE["Hybrid Pricing<br/>━━━━━━━━━━━━<br/>Distance: 60%<br/>Time: 40%"]
+
+    PRICE --> R1D["Rider 1: -25%"]
+    PRICE --> R2D["Rider 2: $12"]
+            </div>
+        </section>
+
+        <section id="d40" class="diagram-section" tabindex="-1">
+            <h2 id="d40-title" class="diagram-title"><span aria-hidden="true">🔄 </span> D40 — Driver State Machine</h2>
+            <p id="d40-desc" class="diagram-description">Driver availability states and transitions.</p>
+            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d40-title" aria-describedby="d40-desc">
+stateDiagram-v2
+    [*] --> OFFLINE
+    OFFLINE --> ONLINE: Go Online
+    ONLINE --> EN_ROUTE: Accept Ride
+    ONLINE --> OFFLINE: Go Offline
+    EN_ROUTE --> WAITING: Arrive
+    WAITING --> ON_RIDE: Pickup
+    ON_RIDE --> COMPLETING: Dropoff
+    ON_RIDE --> ON_RIDE: Add Shared Rider
+    COMPLETING --> ONLINE: Rate & Continue
+    COMPLETING --> OFFLINE: Rate & Stop
+            </div>
+        </section>
+
+        <section id="d41" class="diagram-section" tabindex="-1">
+            <h2 id="d41-title" class="diagram-title"><span aria-hidden="true">📨 </span> D41 — Offer Lifecycle</h2>
+            <p id="d41-desc" class="diagram-description">15-second offer window with retry logic.</p>
+            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d41-title" aria-describedby="d41-desc">
+flowchart LR
+    SEL["Select<br/>Driver"] --> OFF["Send<br/>Offer"]
+    OFF --> WAIT["15s<br/>Timer"]
+
+    WAIT --> ACC["✅ Accept"] --> MATCH["🎉 Match!"]
+    WAIT --> DEC["❌ Decline"] --> NEXT
+    WAIT --> TO["⏰ Timeout"] --> NEXT
+
+    NEXT["Next<br/>Driver"] -->|"<5"| SEL
+    NEXT -->|">=5"| FAIL["❌ Fail"]
+            </div>
+        </section>
+
+        <h2 class="section-header"><span aria-hidden="true">💰 </span> Pricing & Economics</h2>
+
+        <section id="d35" class="diagram-section" tabindex="-1">
+            <h2 id="d35-title" class="diagram-title"><span aria-hidden="true">💰 </span> D35 — Hybrid Pricing Model</h2>
+            <p id="d35-desc" class="diagram-description">5-layer pricing: Distance → Guild → Surge → Rider Choice → Driver Accept.</p>
+            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d35-title" aria-describedby="d35-desc">
+flowchart LR
+    L1["Distance<br/>$19.50"] --> L2["Guild Min<br/>$22"]
+    L2 --> L3["Surge 1.3x<br/>$28.60"]
+    L3 --> L4["Rider<br/>Accepts"]
+    L4 --> L5["Driver<br/>Accepts"]
+    L5 --> FINAL["✅ $28.60"]
+            </div>
+        </section>
+
+        <section id="d42" class="diagram-section" tabindex="-1">
+            <h2 id="d42-title" class="diagram-title"><span aria-hidden="true">📈 </span> D42 — Surge Pricing Flow</h2>
+            <p id="d42-desc" class="diagram-description">Demand-based multipliers with guild-configured limits.</p>
+            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d42-title" aria-describedby="d42-desc">
+flowchart TB
+    DEM["Demand: 12 requests"] --> RATIO
+    SUP["Supply: 3 drivers"] --> RATIO
+    RATIO["Ratio: 0.25"] --> MULT["Surge: 2.2x"]
+    GMAX["Guild Max: 2.5x"] --> MULT
+
+    MULT --> PRICE["$20 → $44"]
+    PRICE --> SPLIT["Driver: +$19<br/>Guild: +$5"]
+            </div>
+        </section>
+
+        <h2 class="section-header"><span aria-hidden="true">📦 </span> Progression & Equipment</h2>
+
+        <section id="d32" class="diagram-section" tabindex="-1">
+            <h2 id="d32-title" class="diagram-title"><span aria-hidden="true">📦 </span> D32 — Equipment Progression</h2>
+            <p id="d32-desc" class="diagram-description">6 tiers with 5 funding paths available.</p>
+            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d32-title" aria-describedby="d32-desc">
+flowchart LR
+    R25["25 rides"] --> E1["📱 Starter<br/>$25-40"]
+    R100["100 rides"] --> E2["💡 Bronze<br/>$15-30"]
+    R300["300 rides"] --> E3["📹 Silver<br/>$150-250"]
+    R750["750 rides"] --> E4["🎁 Gold<br/>$100-150"]
+    R1500["1500 rides"] --> E5["📷 Platinum<br/>$300-400"]
+    R3000["3000 rides"] --> E6["💎 Diamond<br/>+ NFT"]
+
+    subgraph Funding["5 Funding Paths"]
+        F1["💳 Self"]
+        F2["🏛️ Guild"]
+        F3["🏢 Brand"]
+        F4["💰 Auto-save"]
+        F5["🎯 Onboarding"]
+    end
+            </div>
+        </section>
+
+        <h2 class="section-header"><span aria-hidden="true">🛡️</span>  Safety & Compliance</h2>
+
+        <section id="d34" class="diagram-section" tabindex="-1">
+            <h2 id="d34-title" class="diagram-title"><span aria-hidden="true">📡 </span> D34 — Real-Time Tracking</h2>
+            <p id="d34-desc" class="diagram-description">WebSocket-based tracking with privacy controls.</p>
+            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d34-title" aria-describedby="d34-desc">
+flowchart TB
+    D["Driver App"] -->|"location"| WS["WebSocket"]
+    WS --> REDIS["Redis Pub/Sub"]
+    REDIS --> R["Rider App"]
+    REDIS --> S["Shared Link<br/>(Friends)"]
+
+    subgraph Privacy["Privacy Controls"]
+        P1["~1km before accept"]
+        P2["Exact after accept"]
+        P3["30-day retention"]
+        P4["Opt-in tracking"]
+    end
+            </div>
+        </section>
+
+        <section id="d36" class="diagram-section" tabindex="-1">
+            <h2 id="d36-title" class="diagram-title"><span aria-hidden="true">🚫 </span> D36 — Cancellation Logic</h2>
+            <p id="d36-desc" class="diagram-description">Fair policies for both riders and drivers.</p>
+            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d36-title" aria-describedby="d36-desc">
+flowchart TB
+    subgraph Rider["Rider Cancels"]
+        RC1["Before match: $0"]
+        RC2["After accept: $1-2"]
+        RC3["En route: $3-5"]
+        RC4["Arrived: $5-8"]
+    end
+
+    subgraph Driver["Driver Cancels"]
+        DC1["Before pickup: -3 rep"]
+        DC2["After accept: -5 rep"]
+        DC3["No-show: DDR penalty"]
+    end
+
+    subgraph Wait["Wait Time"]
+        W1["Driver waits: $0.25/min"]
+        W2["Rider waits: $0.15/min"]
+    end
+            </div>
+        </section>
+        </main>
+
+        <footer>
+            <p>Horizon Protocol — Rides Vertical Specification v1.0</p>
+            <p>Created December 2025 • 13 Diagrams • Ready for Implementation</p>
+        </footer>
+    </div>
+
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top" title="Back to top"><span aria-hidden="true">↑</span></button>
+
+    <script>
+        const backToTopButton = document.getElementById('back-to-top');
+        const header = document.querySelector('header');
+
+        // ⚡ Bolt Optimization: Replaced scroll event listener with IntersectionObserver.
+        // This eliminates main thread work during scrolling by letting the browser natively
+        // detect when the header leaves the viewport to show the back-to-top button.
+        if (header && 'IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                if (!entries[0].isIntersecting) {
+                    backToTopButton.classList.add('visible');
+                } else {
+                    backToTopButton.classList.remove('visible');
+                }
+            });
+            observer.observe(header);
+        } else {
+            let ticking = false;
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        if (window.scrollY > 300) {
+                            backToTopButton.classList.add('visible');
+                        } else {
+                            backToTopButton.classList.remove('visible');
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }, { passive: true });
+        }
+
+        backToTopButton.addEventListener('click', () => {
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            window.scrollTo({
+                top: 0,
+                behavior: prefersReducedMotion ? 'auto' : 'smooth'
+            });
+
+            if (header) {
+                header.setAttribute('tabindex', '-1');
+                header.focus({ preventScroll: true });
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const addAnchors = () => {
+                const sections = document.querySelectorAll('section[id]');
+                sections.forEach(section => {
+                    const heading = section.querySelector('h1, h2, h3');
+                    if (!heading || heading.querySelector('.anchor-link')) return;
+
+                    const btn = document.createElement('button');
+                    btn.className = 'anchor-link';
+                    const iconSpan = document.createElement('span');
+                    iconSpan.setAttribute('aria-hidden', 'true');
+                    iconSpan.textContent = '🔗';
+                    btn.appendChild(iconSpan);
+                    btn.setAttribute('aria-label', 'Copy link to section');
+                    btn.title = 'Copy link to section';
+
+                    heading.appendChild(btn);
+                });
+            };
+
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(addAnchors);
+            } else {
+                setTimeout(addAnchors, 200);
+            }
+
+            const showToast = (message, isError = false) => {
+                const container = document.getElementById('toast-container');
+                if (!container) return;
+
+                const toast = document.createElement('div');
+                toast.textContent = message;
+                toast.style.cssText = `
+                    background: ${isError ? '#ff6b6b' : '#00ff88'};
+                    color: ${isError ? '#fff' : '#1a1a2e'};
+                    padding: 10px 20px;
+                    border-radius: 8px;
+                    font-weight: bold;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                    opacity: 0;
+                    transform: translateY(20px);
+                    transition: opacity 0.3s ease, transform 0.3s ease;
+                `;
+                container.appendChild(toast);
+
+                toast.offsetHeight; // trigger reflow
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateY(0)';
+
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(20px)';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            };
+
+            document.body.addEventListener('click', async (e) => {
+                const btn = e.target.closest('.anchor-link');
+                if (!btn) return;
+
+                const section = btn.closest('section');
+                if (!section || !section.id) return;
+
+                try {
+                    // 🛡️ Sentinel: Sanitized fragment identifier to prevent injection
+                    const url = window.location.origin + window.location.pathname + '#' + encodeURIComponent(section.id);
+                    await navigator.clipboard.writeText(url);
+
+                    const originalAriaLabel = btn.getAttribute('aria-label');
+
+                    btn.textContent = '';
+                    const successSpan = document.createElement('span');
+                    successSpan.setAttribute('aria-hidden', 'true');
+                    successSpan.textContent = '✅';
+                    btn.appendChild(successSpan);
+                    btn.setAttribute('aria-label', 'Copied!');
+
+                    // 🎨 Palette UX Optimization: Show toast notification for better visual and screen reader feedback
+                    showToast('✅ Link copied to clipboard');
+
+                    setTimeout(() => {
+                        btn.textContent = '';
+                        const linkSpan = document.createElement('span');
+                        linkSpan.setAttribute('aria-hidden', 'true');
+                        linkSpan.textContent = '🔗';
+                        btn.appendChild(linkSpan);
+                        if (originalAriaLabel !== null) {
+                            btn.setAttribute('aria-label', originalAriaLabel);
+                        } else {
+                            btn.removeAttribute('aria-label');
+                        }
+                    }, 2000);
+                } catch (err) {
+                    // 🛡️ Sentinel: Removed raw error object to prevent info leakage
+                    console.error('Failed to copy link to clipboard.');
+                    showToast('❌ Failed to copy link', true);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const progressBar = document.getElementById('progress-bar');
+            if (!progressBar) return;
+
+            // ⚡ Bolt Optimization: Use pure CSS scroll-driven animation if supported, completely eliminating main-thread JS for progress updates
+            if (!CSS.supports('animation-timeline', 'scroll()')) {
+                let tickingProgress = false;
+                // ⚡ Bolt Optimization: Cache scroll height to prevent layout thrashing on every scroll event
+                let cachedScrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+
+                const updateProgress = () => {
+                    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                    const progress = cachedScrollHeight > 0 ? scrollTop / cachedScrollHeight : 0;
+                    // Clamp between 0 and 1 to handle bounce scrolling effects
+                    const clampedProgress = Math.min(1, Math.max(0, progress));
+                    progressBar.style.transform = `scaleX(${clampedProgress})`;
+                    tickingProgress = false;
+                };
+
+                const updateScrollHeight = () => {
+                    cachedScrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                    if (!tickingProgress) {
+                        window.requestAnimationFrame(updateProgress);
+                        tickingProgress = true;
+                    }
+                };
+
+                window.addEventListener('scroll', () => {
+                    if (!tickingProgress) {
+                        window.requestAnimationFrame(updateProgress);
+                        tickingProgress = true;
+                    }
+                }, { passive: true });
+
+                // Handle dynamic page heights from lazy-loaded mermaid diagrams
+                if ('ResizeObserver' in window) {
+                    // ⚡ Bolt Optimization: Debounce ResizeObserver callback to prevent main-thread blocking
+                    // Reading scrollHeight synchronously during rapid dynamic content injection (Mermaid) causes layout thrashing
+                    let resizeTimeout;
+                    const resizeObserver = new ResizeObserver(() => {
+                        clearTimeout(resizeTimeout);
+                        resizeTimeout = setTimeout(updateScrollHeight, 150);
+                    });
+                    resizeObserver.observe(document.body);
+                }
+
+                // Initial call
+                updateProgress();
+            }
+
+            const tocLinks = document.querySelectorAll('.toc a');
+            if (tocLinks.length > 0 && 'IntersectionObserver' in window) {
+                // ⚡ Bolt Optimization: Map TOC links by section ID and track active link
+                // Reduces O(N) DOM writes on every intersection down to O(1) by only updating changed elements
+                const linkMap = new Map();
+                tocLinks.forEach(link => {
+                    const href = link.getAttribute('href');
+                    if (href && href.startsWith('#')) {
+                        linkMap.set(href.substring(1), link);
+                    }
+                });
+                let activeLink = null;
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const newActive = linkMap.get(entry.target.id);
+                            if (newActive && newActive !== activeLink) {
+                                if (activeLink) {
+                                    activeLink.style.color = '';
+                                    activeLink.removeAttribute('aria-current');
+                                }
+                                newActive.style.color = '#00d9ff';
+                                newActive.setAttribute('aria-current', 'true');
+                                activeLink = newActive;
+                            }
+                        }
+                    });
+                }, { rootMargin: '-10% 0px -70% 0px' });
+
+                document.querySelectorAll('section[id]').forEach(section => {
+                    observer.observe(section);
+                });
+            }
+        });
+    </script>
+    <!-- 🎨 Palette UX Optimization: Toast notifications container for screen reader and visual feedback -->
+    <div id="toast-container" aria-live="polite" aria-atomic="true" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none;"></div>
+</body>
+</html>
