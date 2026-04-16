@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'sha256-jXvm8FgVQFnd1dIvs41rTUKxMkVVA7chm6PGXSfqFMQ=' 'sha256-yNl8No6oJTqpunvtNqmAvYvpxRYCHT7SnwJ3hGKrO1g=' 'sha256-GHr4kUViezrb30f7Nyy7+ITWCMMCNy4gGuYMnXQw7xQ=' 'sha256-7eWhbM74vB68OJLTb0O8kcZ+zH2HN9/s4STjWBWTw0Q=' https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-jXvm8FgVQFnd1dIvs41rTUKxMkVVA7chm6PGXSfqFMQ=' 'sha256-yNl8No6oJTqpunvtNqmAvYvpxRYCHT7SnwJ3hGKrO1g=' 'sha256-E32PPffvvjMH/DkGVwvNIbV0rH57XURdi4DL2PGLGAA=' 'sha256-7eWhbM74vB68OJLTb0O8kcZ+zH2HN9/s4STjWBWTw0Q=' https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
@@ -353,11 +353,46 @@
             .toc ul { columns: 1; }
             .back-to-top { bottom: 20px; right: 20px; width: 44px; height: 44px; }
         }
+
+        /* 🎨 Palette UX Optimization: Toast notification container */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            z-index: 10000;
+            pointer-events: none;
+        }
+
+        .toast-message {
+            background: #00ff88;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.4);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .toast-message.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
+
 </head>
 <body>
     <a href="#main-content" class="skip-to-content">Skip to content</a>
-    <div id="progress-container" aria-hidden="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 1000; pointer-events: none;">
+
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+    <div id="progress-container"
+ aria-hidden="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.1); z-index: 1000; pointer-events: none;">
         <!-- ⚡ Bolt Optimization: Removed transition to prevent compositor thrashing since scaleX is continuously updated via requestAnimationFrame. Added will-change to hint the browser to hardware-accelerate. -->
         <div id="progress-bar" style="height: 100%; background: #00d9ff; transform-origin: 0% 50%; transform: scaleX(0); will-change: transform;"></div>
         <style>
@@ -372,7 +407,8 @@
                     to { transform: scaleX(1); }
                 }
             }
-        </style>
+            </style>
+
     </div>
     <div class="container">
         <header>
@@ -807,6 +843,24 @@ flowchart TB
                     // 🛡️ Sentinel: Sanitized fragment identifier to prevent injection
                     const url = window.location.origin + window.location.pathname + '#' + encodeURIComponent(section.id);
                     await navigator.clipboard.writeText(url);
+
+                                        // 🎨 Palette UX Optimization: Global toast notification for robust screen reader support
+                    const toastContainer = document.getElementById('toast-container');
+                    const toast = document.createElement('div');
+                    toast.className = 'toast-message';
+                    toast.textContent = 'Link copied to clipboard!';
+                    toastContainer.appendChild(toast);
+
+                    // Trigger reflow to restart animation
+                    void toast.offsetWidth;
+                    toast.classList.add('visible');
+
+                    setTimeout(() => {
+                        toast.classList.remove('visible');
+                        setTimeout(() => {
+                            if (toast.parentElement) toast.remove();
+                        }, 300); // Wait for fade out
+                    }, 3000);
 
                     const originalAriaLabel = btn.getAttribute('aria-label');
 
