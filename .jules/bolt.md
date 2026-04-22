@@ -57,3 +57,6 @@
 ## 2026-03-26 - Debouncing ResizeObserver for Layout Calculations
 **Learning:** In static HTML specifications where heavy elements like Mermaid.js diagrams are lazy-loaded, binding synchronous layout reads (like `document.documentElement.scrollHeight`) directly to `ResizeObserver` callbacks causes severe main-thread layout thrashing. The browser is forced to recalculate layout multiple times as diagrams inject DOM nodes.
 **Action:** Always debounce `ResizeObserver` callbacks that read layout properties (like `scrollHeight` or `clientHeight`) when observing containers that undergo rapid, batched dynamic content injection.
+## 2026-04-22 - Sequential Mermaid Rendering
+**Learning:** Passing an array of elements to `mermaid.run()` causes them to be rendered synchronously, blocking the main thread even if initiated via `requestIdleCallback`.
+**Action:** When lazy-loading multiple Mermaid diagrams, process the intersection batch sequentially, yielding to the main thread using `requestIdleCallback` after each individual `.then()` promise resolution.
