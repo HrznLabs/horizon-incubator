@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-jXvm8FgVQFnd1dIvs41rTUKxMkVVA7chm6PGXSfqFMQ=' 'sha256-yNl8No6oJTqpunvtNqmAvYvpxRYCHT7SnwJ3hGKrO1g=' 'sha256-uPQcQkRu9IDkj/6O3fb99bzxl2KQ+5MZWRTCCnHBsnw=' 'sha256-7eWhbM74vB68OJLTb0O8kcZ+zH2HN9/s4STjWBWTw0Q=' https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-tjn3esftQ7dXqGuxjpr6I6+Qpa2Lu4RJDT+OApY81qg=' 'sha256-yNl8No6oJTqpunvtNqmAvYvpxRYCHT7SnwJ3hGKrO1g=' 'sha256-uPQcQkRu9IDkj/6O3fb99bzxl2KQ+5MZWRTCCnHBsnw=' 'sha256-7eWhbM74vB68OJLTb0O8kcZ+zH2HN9/s4STjWBWTw0Q=' https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
@@ -49,11 +49,25 @@
                             // Reduces main thread blocking when multiple diagrams enter viewport simultaneously
                             const nodesToRender = [...globalBatch];
                             globalBatch = [];
+                            // ⚡ Bolt Optimization: Render deferred Mermaid diagrams sequentially instead of batching.
+                            // Batching multiple heavy SVGs synchronously blocks the main thread.
+                            // Processing them one at a time via requestIdleCallback yields to the main thread.
+                            const renderNext = () => {
+                                if (nodesToRender.length === 0) return;
+                                const node = nodesToRender.shift();
+                                mermaid.run({ nodes: [node] }).then(() => {
+                                    if (nodesToRender.length > 0) {
+                                        if ('requestIdleCallback' in window) requestIdleCallback(renderNext);
+                                        else setTimeout(renderNext, 0);
+                                    }
+                                }).catch(console.error);
+                            };
+
                             if ('requestIdleCallback' in window) {
-                            requestIdleCallback(() => mermaid.run({ nodes: nodesToRender }));
-                        } else {
-                            setTimeout(() => mermaid.run({ nodes: nodesToRender }), 0);
-                        }
+                                requestIdleCallback(renderNext);
+                            } else {
+                                setTimeout(renderNext, 0);
+                            }
                         }, 50);
                     }
                 }, { rootMargin: '200px 0px' });
@@ -61,7 +75,22 @@
                 document.querySelectorAll('.mermaid').forEach(el => observer.observe(el));
             } else {
                 // Fallback for browsers without IntersectionObserver
-                mermaid.run({ nodes: document.querySelectorAll('.mermaid') });
+                const fallbackNodes = Array.from(document.querySelectorAll('.mermaid'));
+                const renderNextFallback = () => {
+                    if (fallbackNodes.length === 0) return;
+                    const node = fallbackNodes.shift();
+                    mermaid.run({ nodes: [node] }).then(() => {
+                        if (fallbackNodes.length > 0) {
+                            if ('requestIdleCallback' in window) requestIdleCallback(renderNextFallback);
+                            else setTimeout(renderNextFallback, 0);
+                        }
+                    }).catch(console.error);
+                };
+                if ('requestIdleCallback' in window) {
+                    requestIdleCallback(renderNextFallback);
+                } else {
+                    setTimeout(renderNextFallback, 0);
+                }
             }
         });
     </script>
