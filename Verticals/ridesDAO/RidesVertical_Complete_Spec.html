@@ -96,6 +96,11 @@
     </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        ::selection {
+            background: rgba(0, 217, 255, 0.3);
+            color: #fff;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -183,8 +188,21 @@
         .toc h2 { color: #00d9ff; margin-bottom: 15px; font-size: 1.17em; }
         .toc ul { list-style: none; columns: 2; }
         .toc li { margin: 10px 0; }
-        .toc a { color: #00ff88; text-decoration: none; transition: color 0.2s ease; border-radius: 4px; }
-        .toc a:hover { color: #00d9ff; }
+        .toc a {
+            color: #00ff88;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+            padding: 4px 8px;
+            margin-left: -8px;
+            display: inline-block;
+        }
+        .toc a:hover {
+            color: #00d9ff;
+            background: rgba(0, 217, 255, 0.1);
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
         .toc a:focus-visible { outline: 2px solid #00d9ff; outline-offset: 2px; }
         section[id] { scroll-margin-top: 80px; }
         main[tabindex="-1"]:focus, section[tabindex="-1"]:focus, header[tabindex="-1"]:focus { outline: none; }

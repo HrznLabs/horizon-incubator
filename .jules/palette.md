@@ -7,3 +7,6 @@
 ## 2026-04-19 - Visual Fallbacks for Deferred Visualizations
 **Learning:** When complex visualization libraries like Mermaid are deferred or lazy-loaded for performance, the raw syntax text is briefly visible to the user before the library initializes and renders the final graphic. This creates a jarring flash of unstyled content.
 **Action:** Always provide a pure CSS loading state targeting the un-processed container (e.g., `:not([data-processed="true"])`) to hide the raw text and display a clean loading indicator during asynchronous rendering.
+## 2025-02-27 - Enhance TOC Hit Areas and Text Selection Highlighting
+**Learning:** Dense Table of Contents links with default inline boundaries limit the clickable area (Fitts's Law violation), making navigation harder. Also, default OS text selection styles can clash with dark neon themes, leading to poor contrast when users highlight content.
+**Action:** Always pad interactive inline text elements (`display: inline-block; padding: 4px 8px; margin-left: -8px;`) to expand their hit area seamlessly, and provide a custom `::selection` style (`background: rgba(brand-color, 0.3)`) to maintain brand contrast and visual coherence.
