@@ -60,3 +60,7 @@
 ## 2026-04-22 - Sequential Mermaid Rendering
 **Learning:** Passing an array of elements to `mermaid.run()` causes them to be rendered synchronously, blocking the main thread even if initiated via `requestIdleCallback`.
 **Action:** When lazy-loading multiple Mermaid diagrams, process the intersection batch sequentially, yielding to the main thread using `requestIdleCallback` after each individual `.then()` promise resolution.
+
+## 2026-04-23 - Concurrent Rendering in Sequential Batches
+**Learning:** When using `IntersectionObserver` to trigger a batch of lazy-loaded diagrams to render sequentially, subsequent intersections can re-trigger the rendering sequence before the first batch completes. This causes concurrent execution of `mermaid.run()`, defeating the purpose of sequential rendering and blocking the main thread.
+**Action:** Implement a global `renderQueue` and an `isRendering` lock flag. Accumulate newly intersecting targets into the queue, and only start the sequential rendering loop if it is not already actively processing.
