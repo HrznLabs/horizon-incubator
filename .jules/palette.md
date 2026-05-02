@@ -10,3 +10,6 @@
 ## 2025-02-27 - Enhance TOC Hit Areas and Text Selection Highlighting
 **Learning:** Dense Table of Contents links with default inline boundaries limit the clickable area (Fitts's Law violation), making navigation harder. Also, default OS text selection styles can clash with dark neon themes, leading to poor contrast when users highlight content.
 **Action:** Always pad interactive inline text elements (`display: inline-block; padding: 4px 8px; margin-left: -8px;`) to expand their hit area seamlessly, and provide a custom `::selection` style (`background: rgba(brand-color, 0.3)`) to maintain brand contrast and visual coherence.
+## 2025-05-02 - Extract Active State to CSS using `aria-current`
+**Learning:** Relying on JavaScript inline styles (e.g., `element.style.color`) to indicate active states can cause maintainability issues and override hover/focus states unintentionally. It's better to manage visual states via CSS using semantic attributes.
+**Action:** Define active state styling in CSS using the `[aria-current="true"]` selector and remove inline style assignments from JavaScript logic.

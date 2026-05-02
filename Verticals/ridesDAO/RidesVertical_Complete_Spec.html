@@ -234,6 +234,11 @@
             text-underline-offset: 4px;
         }
         .toc a:focus-visible { outline: 2px solid #00d9ff; outline-offset: 2px; }
+        .toc a[aria-current="true"] {
+            color: #1a1a2e;
+            background: #00d9ff;
+            font-weight: 600;
+        }
         section[id] { scroll-margin-top: 80px; }
         main[tabindex="-1"]:focus, section[tabindex="-1"]:focus, header[tabindex="-1"]:focus { outline: none; }
         main[id], section[id] { scroll-margin-top: 40px; }
@@ -1059,10 +1064,8 @@ flowchart TB
                             const newActive = linkMap.get(entry.target.id);
                             if (newActive && newActive !== activeLink) {
                                 if (activeLink) {
-                                    activeLink.style.color = '';
                                     activeLink.removeAttribute('aria-current');
                                 }
-                                newActive.style.color = '#00d9ff';
                                 newActive.setAttribute('aria-current', 'true');
                                 activeLink = newActive;
                             }
