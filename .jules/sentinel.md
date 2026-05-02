@@ -82,3 +82,8 @@
 **Vulnerability:** Inline scripts, particularly those configuring critical security settings like Mermaid's `securityLevel: 'strict'`, were silently blocked by the browser. This occurred because a previous edit to the HTML specification caused a mismatch (hash drift) between the actual script content and the SHA-256 hashes defined in the `Content-Security-Policy` header.
 **Learning:** Any modification to an inline `<script>` block—or any structural change in a static HTML file that accidentally alters whitespace within a script—invalidates its CSP hash. If the hashes are not kept synchronized, the browser blocks the script. This is especially dangerous when the blocked script is responsible for enforcing security boundaries (like disabling `unsafe-eval` or sanitizing XSS sinks in diagramming libraries).
 **Prevention:** Establish a rigorous process (ideally automated) to recalculate and update all base64-encoded SHA-256 hashes in the CSP `script-src` directive whenever inline scripts are added, removed, or modified in static HTML files.
+
+## 2024-05-02 - Removed raw error logging
+**Vulnerability:** Raw error objects (`err`) were being logged directly to the browser console during Mermaid diagram rendering failures (`console.error(err);`).
+**Learning:** Logging raw error objects in client-side scripts can inadvertently expose sensitive internal state, stack traces, or configuration details to potential attackers observing the console.
+**Prevention:** Always replace raw error logging with safe, generic, user-facing error messages (e.g., `console.error('Failed to render diagram.')`) to enforce defense in depth and prevent information leakage.
