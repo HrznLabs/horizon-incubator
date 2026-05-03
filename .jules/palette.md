@@ -13,3 +13,6 @@
 ## 2025-05-02 - Extract Active State to CSS using `aria-current`
 **Learning:** Relying on JavaScript inline styles (e.g., `element.style.color`) to indicate active states can cause maintainability issues and override hover/focus states unintentionally. It's better to manage visual states via CSS using semantic attributes.
 **Action:** Define active state styling in CSS using the `[aria-current="true"]` selector and remove inline style assignments from JavaScript logic.
+## 2026-06-15 - Prevent Rapid State Flipping in TOC Links
+**Learning:** When an IntersectionObserver callback receives multiple intersecting entries simultaneously (e.g., during fast scrolling), iterating and updating the DOM for every intersecting entry causes rapid state flipping and redundant layout thrashing.
+**Action:** Always filter the entries and only apply the DOM update for the last intersecting entry (`intersecting[intersecting.length - 1]`) to prevent rapid state flipping.
