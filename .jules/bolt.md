@@ -64,3 +64,7 @@
 ## 2026-04-23 - Concurrent Rendering in Sequential Batches
 **Learning:** When using `IntersectionObserver` to trigger a batch of lazy-loaded diagrams to render sequentially, subsequent intersections can re-trigger the rendering sequence before the first batch completes. This causes concurrent execution of `mermaid.run()`, defeating the purpose of sequential rendering and blocking the main thread.
 **Action:** Implement a global `renderQueue` and an `isRendering` lock flag. Accumulate newly intersecting targets into the queue, and only start the sequential rendering loop if it is not already actively processing.
+
+## 2024-05-03 - [IntersectionObserver Batch Processing Thrashing]
+**Learning:** When using `IntersectionObserver` to track active states (like TOC links) and multiple sections enter the viewport simultaneously (e.g. during fast scrolling), processing every intersecting entry in the loop sequentially causes redundant, rapid DOM writes and layout thrashing as the active state flips through all visible sections in a single frame.
+**Action:** Always filter the `entries` array to find `isIntersecting` items and only process the last one (`intersecting[intersecting.length - 1]`) in the batch to avoid unnecessary DOM manipulations and state updates.

@@ -1059,18 +1059,21 @@ flowchart TB
                 let activeLink = null;
 
                 const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            const newActive = linkMap.get(entry.target.id);
-                            if (newActive && newActive !== activeLink) {
-                                if (activeLink) {
-                                    activeLink.removeAttribute('aria-current');
-                                }
-                                newActive.setAttribute('aria-current', 'true');
-                                activeLink = newActive;
+                    // ⚡ Bolt Optimization: Only process the most recent intersecting entry in the batch
+                    // Prevents rapid state flipping and unnecessary DOM updates when multiple sections are in view
+                    const intersecting = entries.filter(e => e.isIntersecting);
+                    if (intersecting.length > 0) {
+                        // Get the last one as it's typically the most prominent going down
+                        const entry = intersecting[intersecting.length - 1];
+                        const newActive = linkMap.get(entry.target.id);
+                        if (newActive && newActive !== activeLink) {
+                            if (activeLink) {
+                                activeLink.removeAttribute('aria-current');
                             }
+                            newActive.setAttribute('aria-current', 'true');
+                            activeLink = newActive;
                         }
-                    });
+                    }
                 }, { rootMargin: '-10% 0px -70% 0px' });
 
                 document.querySelectorAll('section[id]').forEach(section => {
