@@ -487,6 +487,16 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* 🎨 Palette UX Optimization: Visual feedback for internal navigation */
+        @keyframes target-pulse {
+            0% { outline: 3px solid rgba(0, 217, 255, 0.8); outline-offset: 4px; }
+            100% { outline: 3px solid rgba(0, 217, 255, 0); outline-offset: 4px; }
+        }
+        section:target {
+            animation: target-pulse 2s ease-out;
+            border-radius: inherit;
+        }
     </style>
 
 </head>
