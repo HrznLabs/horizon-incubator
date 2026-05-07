@@ -68,3 +68,7 @@
 ## 2024-05-03 - [IntersectionObserver Batch Processing Thrashing]
 **Learning:** When using `IntersectionObserver` to track active states (like TOC links) and multiple sections enter the viewport simultaneously (e.g. during fast scrolling), processing every intersecting entry in the loop sequentially causes redundant, rapid DOM writes and layout thrashing as the active state flips through all visible sections in a single frame.
 **Action:** Always filter the `entries` array to find `isIntersecting` items and only process the last one (`intersecting[intersecting.length - 1]`) in the batch to avoid unnecessary DOM manipulations and state updates.
+
+## 2026-06-15 - CSS Animation Reflow Optimization
+**Learning:** Animating layout properties like `top`, `bottom`, `left`, or `right` (e.g., in skip-to-content links) forces the browser to recalculate layout (reflow) on every frame, which is an expensive operation and degrades performance, particularly on lower-end devices.
+**Action:** Always use `transform: translateY()` or `transform: translateX()` instead of positional properties for CSS animations and transitions, as transforms are handled by the compositor thread and do not trigger layout recalculations.
