@@ -13,3 +13,7 @@
 ## 2025-05-02 - Extract Active State to CSS using `aria-current`
 **Learning:** Relying on JavaScript inline styles (e.g., `element.style.color`) to indicate active states can cause maintainability issues and override hover/focus states unintentionally. It's better to manage visual states via CSS using semantic attributes.
 **Action:** Define active state styling in CSS using the `[aria-current="true"]` selector and remove inline style assignments from JavaScript logic.
+
+## 2024-05-24 - Visual Cue for Internal Anchor Links
+**Learning:** When navigating long documents via Table of Contents links, users can lose track of the exact target section, especially if the scroll position isn't perfect.
+**Action:** Implemented a pure CSS keyframe animation paired with the `:target` pseudo-class to create a temporary visual pulse effect on the navigated section. This provides clear feedback without requiring any JavaScript.
