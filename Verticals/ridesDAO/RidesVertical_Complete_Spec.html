@@ -238,6 +238,15 @@
             color: #1a1a2e;
             background: #00d9ff;
             font-weight: 600;
+            position: relative;
+            padding-left: 20px;
+        }
+        .toc a[aria-current="true"]::before {
+            content: "→";
+            position: absolute;
+            left: 4px;
+            color: #1a1a2e;
+            font-weight: bold;
         }
         section[id] { scroll-margin-top: 80px; }
         main[tabindex="-1"]:focus, section[tabindex="-1"]:focus, header[tabindex="-1"]:focus { outline: none; }
