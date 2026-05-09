@@ -322,6 +322,11 @@
             outline: none;
         }
 
+        .back-to-top:active {
+            transform: translateY(-2px) scale(0.95);
+            box-shadow: 0 2px 8px rgba(0, 255, 136, 0.4);
+        }
+
         .back-to-top:focus-visible {
             outline: 3px solid #00d9ff;
             outline-offset: 2px;
@@ -381,6 +386,11 @@
             color: #00d9ff;
             background: rgba(0, 217, 255, 0.1);
             transform: scale(1.1);
+        }
+
+        .anchor-link:active {
+            transform: scale(0.95);
+            background: rgba(0, 217, 255, 0.2);
         }
 
         .anchor-link:focus-visible {
