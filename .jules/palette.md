@@ -16,3 +16,6 @@
 ## 2024-05-24 - Visual Orientation for Internal Links
 **Learning:** When using smooth scrolling for internal navigation in long specification documents, users can sometimes lose track of exactly which section was the intended target, especially since hash URLs aren't visually distinguished.
 **Action:** Use the CSS `:target` pseudo-class paired with a keyframe animation (e.g., an `outline` pulse) to provide a clear, temporary visual cue that highlights the navigated section without requiring JavaScript.
+## 2023-10-26 - Tactile Feedback for Navigation Links
+**Learning:** In the Horizon Rides Spec, inline navigation links like `.toc a` and `.skip-to-content` lacked tactile feedback when tapped on touch devices, making them feel unresponsive compared to icon buttons.
+**Action:** To provide immediate, tactile feedback for interactive text elements and improve the experience for touch device users who lack hover states, always implement explicit CSS `:active` states (e.g., `transform: scale(0.95)`).
