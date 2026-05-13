@@ -87,3 +87,8 @@
 **Vulnerability:** The application was catching and logging raw error objects (`console.error(err)`) to the browser console when Mermaid.js diagram rendering failed.
 **Learning:** Logging raw, unhandled error objects in production can expose sensitive stack traces, internal implementation details, and potentially sensitive data variables to end-users or attackers inspecting the console. This violates the principle of failing securely and avoiding information leakage.
 **Prevention:** Always replace raw error object logging with generic, safe error messages (e.g., `console.error('Failed to render diagram.')`) on the client side, especially for third-party library errors that might include unpredictable internal state.
+
+## 2026-05-13 - [CSP Testing via HTTP Server]
+**Vulnerability:** Not a direct vulnerability, but a testing flaw. Relying on the `file://` protocol to verify Content-Security-Policy (CSP) headers in static HTML files often results in false negatives because browsers may bypass or relax CSP enforcement for local files.
+**Learning:** Testing CSP restrictions using headless browsers (like Playwright) on local files can provide a false sense of security, as the browser might not block scripts that would otherwise be blocked when served over HTTP/HTTPS.
+**Prevention:** When using Playwright to test Content-Security-Policy (CSP) violations on static HTML files, always serve the files via a temporary local HTTP server (e.g., using Python's `http.server` module) rather than using the `file://` scheme to ensure strict CSP enforcement is accurately tested.
