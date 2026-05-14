@@ -92,3 +92,8 @@
 **Vulnerability:** Not a direct vulnerability, but a testing flaw. Relying on the `file://` protocol to verify Content-Security-Policy (CSP) headers in static HTML files often results in false negatives because browsers may bypass or relax CSP enforcement for local files.
 **Learning:** Testing CSP restrictions using headless browsers (like Playwright) on local files can provide a false sense of security, as the browser might not block scripts that would otherwise be blocked when served over HTTP/HTTPS.
 **Prevention:** When using Playwright to test Content-Security-Policy (CSP) violations on static HTML files, always serve the files via a temporary local HTTP server (e.g., using Python's `http.server` module) rather than using the `file://` scheme to ensure strict CSP enforcement is accurately tested.
+
+## 2026-05-14 - [Dependency Updates and SRI Hashes]
+**Vulnerability:** External third-party libraries (like Mermaid.js) were outdated. Upgrading dependencies mitigates vulnerabilities, but if the Subresource Integrity (SRI) hash is not upgraded simultaneously, the browser will block the script from loading.
+**Learning:** When updating the version of an external dependency pulled from a CDN, its SRI hash (in the `integrity` attribute of the `<script>` tag) must also be recalculated and updated. Furthermore, you must verify exactly where these hashes reside. While inline script hashes are located in the CSP header's `script-src`, external script SRI hashes are typically only in the `<script>` tag itself, with the CSP header merely allowing the external URL.
+**Prevention:** Establish a routine dependency upgrade process that explicitly includes recalculating and verifying SRI hashes for any upgraded external scripts.
