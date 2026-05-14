@@ -19,3 +19,6 @@
 ## 2023-10-26 - Tactile Feedback for Navigation Links
 **Learning:** In the Horizon Rides Spec, inline navigation links like `.toc a` and `.skip-to-content` lacked tactile feedback when tapped on touch devices, making them feel unresponsive compared to icon buttons.
 **Action:** To provide immediate, tactile feedback for interactive text elements and improve the experience for touch device users who lack hover states, always implement explicit CSS `:active` states (e.g., `transform: scale(0.95)`).
+## 2026-05-14 - Accessible Loading States for Lazy-Rendered Elements
+**Learning:** To make visual CSS loading states (e.g., `::after { content: "Loading..." }`) accessible to screen readers for elements dynamically processed by JavaScript (like Mermaid diagrams), relying purely on visual cues is insufficient. The content might be announced prematurely or omitted.
+**Action:** Apply `aria-busy="true"` to the container in the static HTML and explicitly remove it (`removeAttribute("aria-busy")`) in both the resolution and rejection handlers of the processing promise.

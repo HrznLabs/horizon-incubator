@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-Sw3S+Cwuo+F0u84iAx6V3xF52a/xPg7bG2zFAusDsgg=' 'sha256-yNl8No6oJTqpunvtNqmAvYvpxRYCHT7SnwJ3hGKrO1g=' 'sha256-uPQcQkRu9IDkj/6O3fb99bzxl2KQ+5MZWRTCCnHBsnw=' 'sha256-GDX6kFatWuMclwQwPs4VMArZi5gT4C7fdexf2DL+Xm8=' https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-ZBU81cCzfh9FYXs9x38z80N6ib4M+a/5coBkgx0Mato=' 'sha256-yNl8No6oJTqpunvtNqmAvYvpxRYCHT7SnwJ3hGKrO1g=' 'sha256-uPQcQkRu9IDkj/6O3fb99bzxl2KQ+5MZWRTCCnHBsnw=' 'sha256-GDX6kFatWuMclwQwPs4VMArZi5gT4C7fdexf2DL+Xm8=' https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
@@ -46,12 +46,14 @@
                     isRendering = true;
                     const node = renderQueue.shift();
                     mermaid.run({ nodes: [node] }).then(() => {
+                        node.removeAttribute('aria-busy');
                         if ('requestIdleCallback' in window) {
                             requestIdleCallback(renderNext);
                         } else {
                             setTimeout(renderNext, 0);
                         }
                     }).catch(err => {
+                        node.removeAttribute('aria-busy');
                         // 🛡️ Sentinel: Removed raw error object to prevent info leakage
                         console.error('Failed to render diagram.');
                         if ('requestIdleCallback' in window) {
@@ -104,9 +106,11 @@
                     isRenderingFallback = true;
                     const node = fallbackNodes.shift();
                     mermaid.run({ nodes: [node] }).then(() => {
+                        node.removeAttribute('aria-busy');
                         if ('requestIdleCallback' in window) requestIdleCallback(renderNextFallback);
                         else setTimeout(renderNextFallback, 0);
                     }).catch(err => {
+                        node.removeAttribute('aria-busy');
                         // 🛡️ Sentinel: Removed raw error object to prevent info leakage
                         console.error('Failed to render diagram.');
                         if ('requestIdleCallback' in window) requestIdleCallback(renderNextFallback);
@@ -607,7 +611,7 @@
         <section id="d30" class="diagram-section" tabindex="-1">
             <h2 id="d30-title" class="diagram-title"><span aria-hidden="true">📍 </span> D30 — Standard Ride Mission Flow <span class="badge">Core</span></h2>
             <p id="d30-desc" class="diagram-description">Complete lifecycle from request to settlement.</p>
-            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d30-title" aria-describedby="d30-desc">
+            <div class="mermaid" aria-busy="true" role="region" tabindex="0" aria-labelledby="d30-title" aria-describedby="d30-desc">
 sequenceDiagram
     participant R as Rider
     participant ME as Matching Engine
@@ -650,7 +654,7 @@ sequenceDiagram
         <section id="d31" class="diagram-section" tabindex="-1">
             <h2 id="d31-title" class="diagram-title"><span aria-hidden="true">🏛️</span>  D31 — Rides Guild Hierarchy</h2>
             <p id="d31-desc" class="diagram-description">MetaGuild umbrella with geographic, specialty, and quality tier sub-guilds.</p>
-            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d31-title" aria-describedby="d31-desc">
+            <div class="mermaid" aria-busy="true" role="region" tabindex="0" aria-labelledby="d31-title" aria-describedby="d31-desc">
 flowchart TB
     META["🚗 RidesMetaGuild"]
     
@@ -681,7 +685,7 @@ flowchart TB
         <section id="d33" class="diagram-section" tabindex="-1">
             <h2 id="d33-title" class="diagram-title"><span aria-hidden="true">⭐ </span> D33 — Bidirectional Reputation Flow</h2>
             <p id="d33-desc" class="diagram-description">Both drivers AND riders are rated and can be curated by guilds.</p>
-            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d33-title" aria-describedby="d33-desc">
+            <div class="mermaid" aria-busy="true" role="region" tabindex="0" aria-labelledby="d33-title" aria-describedby="d33-desc">
 flowchart LR
     RIDE["✅ Ride<br/>Complete"] --> DR["Driver rates<br/>Rider ⭐"]
     RIDE --> RR["Rider rates<br/>Driver ⭐"]
@@ -699,7 +703,7 @@ flowchart LR
         <section id="d37" class="diagram-section" tabindex="-1">
             <h2 id="d37-title" class="diagram-title"><span aria-hidden="true">🎯 </span> D37 — Matching Engine Architecture</h2>
             <p id="d37-desc" class="diagram-description">Real-time matching with 4-phase pipeline: Filter → Score → Select → Offer.</p>
-            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d37-title" aria-describedby="d37-desc">
+            <div class="mermaid" aria-busy="true" role="region" tabindex="0" aria-labelledby="d37-title" aria-describedby="d37-desc">
 flowchart TB
     REQ["🚕 Ride Request"] --> F["FILTER<br/>━━━━━━━━<br/>Distance<br/>Status<br/>Capacity<br/>Eligibility"]
     
@@ -719,7 +723,7 @@ flowchart TB
         <section id="d38" class="diagram-section" tabindex="-1">
             <h2 id="d38-title" class="diagram-title"><span aria-hidden="true">📊 </span> D38 — Match Score Formula</h2>
             <p id="d38-desc" class="diagram-description">Weighted scoring across 8 factors including bidirectional ratings.</p>
-            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d38-title" aria-describedby="d38-desc">
+            <div class="mermaid" aria-busy="true" role="region" tabindex="0" aria-labelledby="d38-title" aria-describedby="d38-desc">
 flowchart LR
     subgraph Factors["Scoring Factors (Total: 100%)"]
         E["📍 ETA<br/>30%"]
@@ -740,7 +744,7 @@ flowchart LR
         <section id="d39" class="diagram-section" tabindex="-1">
             <h2 id="d39-title" class="diagram-title"><span aria-hidden="true">👥 </span> D39 — Shared Ride Matching</h2>
             <p id="d39-desc" class="diagram-description">Adding riders to active routes with detour checking and fair price splitting.</p>
-            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d39-title" aria-describedby="d39-desc">
+            <div class="mermaid" aria-busy="true" role="region" tabindex="0" aria-labelledby="d39-title" aria-describedby="d39-desc">
 flowchart TB
     R1["Rider 1<br/>On ride A→B"] --> CHECK["Check New<br/>Request C→D"]
     
@@ -759,7 +763,7 @@ flowchart TB
         <section id="d40" class="diagram-section" tabindex="-1">
             <h2 id="d40-title" class="diagram-title"><span aria-hidden="true">🔄 </span> D40 — Driver State Machine</h2>
             <p id="d40-desc" class="diagram-description">Driver availability states and transitions.</p>
-            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d40-title" aria-describedby="d40-desc">
+            <div class="mermaid" aria-busy="true" role="region" tabindex="0" aria-labelledby="d40-title" aria-describedby="d40-desc">
 stateDiagram-v2
     [*] --> OFFLINE
     OFFLINE --> ONLINE: Go Online
@@ -777,7 +781,7 @@ stateDiagram-v2
         <section id="d41" class="diagram-section" tabindex="-1">
             <h2 id="d41-title" class="diagram-title"><span aria-hidden="true">📨 </span> D41 — Offer Lifecycle</h2>
             <p id="d41-desc" class="diagram-description">15-second offer window with retry logic.</p>
-            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d41-title" aria-describedby="d41-desc">
+            <div class="mermaid" aria-busy="true" role="region" tabindex="0" aria-labelledby="d41-title" aria-describedby="d41-desc">
 flowchart LR
     SEL["Select<br/>Driver"] --> OFF["Send<br/>Offer"]
     OFF --> WAIT["15s<br/>Timer"]
@@ -796,7 +800,7 @@ flowchart LR
         <section id="d35" class="diagram-section" tabindex="-1">
             <h2 id="d35-title" class="diagram-title"><span aria-hidden="true">💰 </span> D35 — Hybrid Pricing Model</h2>
             <p id="d35-desc" class="diagram-description">5-layer pricing: Distance → Guild → Surge → Rider Choice → Driver Accept.</p>
-            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d35-title" aria-describedby="d35-desc">
+            <div class="mermaid" aria-busy="true" role="region" tabindex="0" aria-labelledby="d35-title" aria-describedby="d35-desc">
 flowchart LR
     L1["Distance<br/>$19.50"] --> L2["Guild Min<br/>$22"]
     L2 --> L3["Surge 1.3x<br/>$28.60"]
@@ -809,7 +813,7 @@ flowchart LR
         <section id="d42" class="diagram-section" tabindex="-1">
             <h2 id="d42-title" class="diagram-title"><span aria-hidden="true">📈 </span> D42 — Surge Pricing Flow</h2>
             <p id="d42-desc" class="diagram-description">Demand-based multipliers with guild-configured limits.</p>
-            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d42-title" aria-describedby="d42-desc">
+            <div class="mermaid" aria-busy="true" role="region" tabindex="0" aria-labelledby="d42-title" aria-describedby="d42-desc">
 flowchart TB
     DEM["Demand: 12 requests"] --> RATIO
     SUP["Supply: 3 drivers"] --> RATIO
@@ -826,7 +830,7 @@ flowchart TB
         <section id="d32" class="diagram-section" tabindex="-1">
             <h2 id="d32-title" class="diagram-title"><span aria-hidden="true">📦 </span> D32 — Equipment Progression</h2>
             <p id="d32-desc" class="diagram-description">6 tiers with 5 funding paths available.</p>
-            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d32-title" aria-describedby="d32-desc">
+            <div class="mermaid" aria-busy="true" role="region" tabindex="0" aria-labelledby="d32-title" aria-describedby="d32-desc">
 flowchart LR
     R25["25 rides"] --> E1["📱 Starter<br/>$25-40"]
     R100["100 rides"] --> E2["💡 Bronze<br/>$15-30"]
@@ -850,7 +854,7 @@ flowchart LR
         <section id="d34" class="diagram-section" tabindex="-1">
             <h2 id="d34-title" class="diagram-title"><span aria-hidden="true">📡 </span> D34 — Real-Time Tracking</h2>
             <p id="d34-desc" class="diagram-description">WebSocket-based tracking with privacy controls.</p>
-            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d34-title" aria-describedby="d34-desc">
+            <div class="mermaid" aria-busy="true" role="region" tabindex="0" aria-labelledby="d34-title" aria-describedby="d34-desc">
 flowchart TB
     D["Driver App"] -->|"location"| WS["WebSocket"]
     WS --> REDIS["Redis Pub/Sub"]
@@ -869,7 +873,7 @@ flowchart TB
         <section id="d36" class="diagram-section" tabindex="-1">
             <h2 id="d36-title" class="diagram-title"><span aria-hidden="true">🚫 </span> D36 — Cancellation Logic</h2>
             <p id="d36-desc" class="diagram-description">Fair policies for both riders and drivers.</p>
-            <div class="mermaid" role="region" tabindex="0" aria-labelledby="d36-title" aria-describedby="d36-desc">
+            <div class="mermaid" aria-busy="true" role="region" tabindex="0" aria-labelledby="d36-title" aria-describedby="d36-desc">
 flowchart TB
     subgraph Rider["Rider Cancels"]
         RC1["Before match: $0"]
