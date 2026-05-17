@@ -68,3 +68,7 @@
 ## 2025-01-20 - Dynamic ARIA labels for nested heading structures
 **Learning:** When extracting text content from DOM elements (like headings) to generate dynamic ARIA labels via JavaScript, using `element.textContent` will extract the text of all nested elements, including those explicitly marked as `aria-hidden="true"` (like emojis or decorative badges). However, it might miss text if you only filter for direct `Node.TEXT_NODE` children if there are formatting tags like `<strong>`. A balanced approach is needed depending on the HTML structure.
 **Action:** Before generating ARIA labels dynamically from DOM content, carefully inspect the target element's HTML structure. If it contains `aria-hidden` nodes, filtering logic is required to prevent screen readers from announcing decorative text.
+
+## 2025-01-20 - Ensure Playwright tests account for async DOM injection via requestIdleCallback
+**Learning:** When writing Playwright tests to verify the presence of DOM elements (like dynamically injected anchor links) that are added via asynchronous callbacks like `requestIdleCallback`, the script must include an explicit delay (e.g., `time.sleep(1)`) to allow the browser's idle period to execute the callback before the elements can be queried.
+**Action:** Always include a brief `time.sleep()` or equivalent wait condition in Playwright test scripts when verifying elements injected by `requestIdleCallback` or `setTimeout` to ensure the DOM is fully populated before assertions are made.
