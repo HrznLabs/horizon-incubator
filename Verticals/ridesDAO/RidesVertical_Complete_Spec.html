@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-UJdgoVizl1mmsB6+iKBthjmmvMozQbsUJ+jHeOvLtKo=' 'sha256-ZBU81cCzfh9FYXs9x38z80N6ib4M+a/5coBkgx0Mato=' 'sha256-yNl8No6oJTqpunvtNqmAvYvpxRYCHT7SnwJ3hGKrO1g=' 'sha256-D/ITKDYbKZN4WlegPMvAmDmjrGMPgvBkW+2zx2KO/v0=' 'sha256-GDX6kFatWuMclwQwPs4VMArZi5gT4C7fdexf2DL+Xm8=' https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' 'sha256-UJdgoVizl1mmsB6+iKBthjmmvMozQbsUJ+jHeOvLtKo=' 'sha256-ZBU81cCzfh9FYXs9x38z80N6ib4M+a/5coBkgx0Mato=' 'sha256-yNl8No6oJTqpunvtNqmAvYvpxRYCHT7SnwJ3hGKrO1g=' 'sha256-iIPjd9N+LAOQWqr6SbFtNtNejHRQ2mUWx6lWn7MIWmk=' 'sha256-GDX6kFatWuMclwQwPs4VMArZi5gT4C7fdexf2DL+Xm8=' https://cdn.jsdelivr.net/npm/mermaid@11.14.0/dist/mermaid.min.js; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
@@ -963,8 +963,17 @@ flowchart TB
                     const btn = document.createElement('button');
                     btn.className = 'anchor-link';
                     // 🎨 Palette UX Optimization: Add specific context to anchor link aria-labels
-                    // Get text content *before* appending the button to capture nested elements correctly
-                    const headingText = heading.textContent.trim();
+                    // Get text content *before* appending the button to capture nested elements correctly,
+                    // filtering out visually hidden child nodes.
+                    let headingText = '';
+                    heading.childNodes.forEach(node => {
+                        if (node.nodeType === Node.TEXT_NODE) {
+                            headingText += node.textContent;
+                        } else if (node.nodeType === Node.ELEMENT_NODE && node.getAttribute('aria-hidden') !== 'true') {
+                            headingText += node.textContent;
+                        }
+                    });
+                    headingText = headingText.trim();
 
                     const iconSpan = document.createElement('span');
                     iconSpan.setAttribute('aria-hidden', 'true');
