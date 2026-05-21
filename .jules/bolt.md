@@ -72,3 +72,7 @@
 ## 2026-06-15 - CSS Animation Reflow Optimization
 **Learning:** Animating layout properties like `top`, `bottom`, `left`, or `right` (e.g., in skip-to-content links) forces the browser to recalculate layout (reflow) on every frame, which is an expensive operation and degrades performance, particularly on lower-end devices.
 **Action:** Always use `transform: translateY()` or `transform: translateX()` instead of positional properties for CSS animations and transitions, as transforms are handled by the compositor thread and do not trigger layout recalculations.
+
+## 2026-06-25 - Deferring Layout for Off-screen SVGs
+**Learning:** Rendering numerous complex SVG diagrams (like Mermaid.js) simultaneously can cause severe main-thread blocking and layout thrashing.
+**Action:** Use `content-visibility: auto` (with a suitable `contain-intrinsic-size`) on diagram containers to skip layout calculations until they approach the viewport.
