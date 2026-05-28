@@ -394,6 +394,67 @@
         .anchor-link:focus-visible {
             opacity: 1;
         }
+        /* 🎨 Palette UX Optimization: Custom tooltips for icon buttons */
+        .back-to-top::before,
+        .anchor-link::before {
+            content: attr(aria-label);
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: rgba(26, 26, 46, 0.95);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            z-index: 10000;
+        }
+
+        .back-to-top::after,
+        .anchor-link::after {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: rgba(26, 26, 46, 0.95) transparent transparent transparent;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            z-index: 10000;
+            margin-bottom: -12px; /* Pull arrow down into gap */
+        }
+
+        .anchor-link { position: relative; } /* Ensure anchor links act as containing block */
+
+        .back-to-top:hover::before,
+        .back-to-top:focus-visible::before,
+        .anchor-link:hover::before,
+        .anchor-link:focus-visible::before {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .back-to-top:hover::after,
+        .back-to-top:focus-visible::after,
+        .anchor-link:hover::after,
+        .anchor-link:focus-visible::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
 
         .anchor-link:hover {
             color: #00d9ff;
@@ -903,7 +964,7 @@ flowchart TB
         </footer>
     </div>
 
-    <button id="back-to-top" class="back-to-top" aria-label="Back to top" title="Back to top"><span aria-hidden="true">↑</span></button>
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top" ><span aria-hidden="true">↑</span></button>
 
     <script>
         const backToTopButton = document.getElementById('back-to-top');
@@ -982,7 +1043,7 @@ flowchart TB
 
                     const label = `Copy link to section: ${headingText}`;
                     btn.setAttribute('aria-label', label);
-                    btn.title = 'Copy link to section';
+
 
                     heading.appendChild(btn);
                 });

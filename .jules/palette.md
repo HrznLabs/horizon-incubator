@@ -22,3 +22,6 @@
 ## 2026-05-14 - Accessible Loading States for Lazy-Rendered Elements
 **Learning:** To make visual CSS loading states (e.g., `::after { content: "Loading..." }`) accessible to screen readers for elements dynamically processed by JavaScript (like Mermaid diagrams), relying purely on visual cues is insufficient. The content might be announced prematurely or omitted.
 **Action:** Apply `aria-busy="true"` to the container in the static HTML and explicitly remove it (`removeAttribute("aria-busy")`) in both the resolution and rejection handlers of the processing promise.
+## 2026-05-28 - Custom Tooltips for Keyboard-Accessible Context
+**Learning:** The native `title` attribute on icon-only buttons has several UX and accessibility drawbacks: it's not visible during keyboard navigation (focus), it has an unpredictable delay before showing, and its appearance conflicts with custom UI themes (like dark mode).
+**Action:** When implementing icon-only buttons with `aria-label`, inject a custom tooltip using pseudo-elements (`::before`/`::after`) powered by `content: attr(aria-label)`. Show the tooltip on both `:hover` and `:focus-visible` to ensure equal access for mouse and keyboard users, and remove the native `title` attribute.
