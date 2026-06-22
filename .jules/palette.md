@@ -33,3 +33,7 @@
 ## 2026-06-22 - Hide Decorative Pseudo-Elements Accessibly
 **Learning:** When using CSS pseudo-elements (`::before`, `::after`) to display decorative characters or symbols via the `content` property, screen readers may erroneously read them aloud (e.g., "rightwards arrow").
 **Action:** To hide them accessibly while maintaining the visual element, use the modern CSS alternative text syntax with an empty string (`content: "\2192" / "";`). Always provide a standard fallback (`content: "\2192";`) immediately before it to ensure backward compatibility with older browsers.
+
+## 2024-05-30 - Hide Decorative Pseudo-Elements from Screen Readers
+**Learning:** When using CSS pseudo-elements (`::before`, `::after`) to display decorative characters or symbols via the `content` property, screen readers may erroneously read them aloud (e.g., 'rightwards arrow').
+**Action:** To hide them accessibly while maintaining the visual element, use the modern CSS alternative text syntax with an empty string (`content: "\2192" / "";`). Always provide a standard fallback (`content: "\2192";`) immediately before it to ensure backward compatibility with older browsers.
