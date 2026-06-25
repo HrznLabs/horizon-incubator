@@ -36,34 +36,6 @@
             if ('IntersectionObserver' in window) {
                 let batchTimeout;
                 let globalBatch = [];
-                let renderQueue = [];
-                let isRendering = false;
-
-                const renderNext = () => {
-                    if (renderQueue.length === 0) {
-                        isRendering = false;
-                        return;
-                    }
-                    isRendering = true;
-                    const node = renderQueue.shift();
-                    mermaid.run({ nodes: [node] }).then(() => {
-                        node.removeAttribute('aria-busy');
-                        if ('requestIdleCallback' in window) {
-                            requestIdleCallback(renderNext);
-                        } else {
-                            setTimeout(renderNext, 0);
-                        }
-                    }).catch(err => {
-                        node.removeAttribute('aria-busy');
-                        // 🛡️ Sentinel: Removed raw error object to prevent info leakage
-                        console.error('Failed to render diagram.');
-                        if ('requestIdleCallback' in window) {
-                            requestIdleCallback(renderNext);
-                        } else {
-                            setTimeout(renderNext, 0);
-                        }
-                    });
-                };
 
                 const observer = new IntersectionObserver((entries, observer) => {
                     entries.forEach(entry => {
@@ -72,22 +44,30 @@
                             observer.unobserve(entry.target);
                         }
                     });
+
                     if (globalBatch.length > 0) {
                         clearTimeout(batchTimeout);
                         batchTimeout = setTimeout(() => {
-                            // ⚡ Bolt Optimization: Debounced batching of Mermaid renders to minimize layout thrashing
-                            // Reduces main thread blocking when multiple diagrams enter viewport simultaneously
-                            // ⚡ Bolt Optimization: Render deferred Mermaid diagrams sequentially using a global queue.
-                            // Prevents concurrent rendering cycles when multiple batches intersect in quick succession.
-                            renderQueue.push(...globalBatch);
+                            // ⚡ Bolt Optimization: Batching Heavy Rendering in IntersectionObserver
+                            // Reduces main thread work by accumulating targets and passing a shallow copy
+                            // to avoid race conditions.
+                            const batch = [...globalBatch];
                             globalBatch = [];
 
-                            if (!isRendering) {
-                                if ('requestIdleCallback' in window) {
-                                    requestIdleCallback(renderNext);
-                                } else {
-                                    setTimeout(renderNext, 0);
-                                }
+                            const render = () => {
+                                mermaid.run({ nodes: batch }).then(() => {
+                                    batch.forEach(node => node.removeAttribute('aria-busy'));
+                                }).catch(err => {
+                                    batch.forEach(node => node.removeAttribute('aria-busy'));
+                                    // 🛡️ Sentinel: Removed raw error object to prevent info leakage
+                                    console.error('Failed to render diagram batch.');
+                                });
+                            };
+
+                            if ('requestIdleCallback' in window) {
+                                requestIdleCallback(render);
+                            } else {
+                                setTimeout(render, 0);
                             }
                         }, 50);
                     }
