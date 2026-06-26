@@ -190,6 +190,9 @@
             overflow-x: auto;
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: opacity 0.3s ease;
+            /* ⚡ Bolt Optimization: Defer layout of off-screen Mermaid diagrams */
+            content-visibility: auto;
+            contain-intrinsic-size: 0 400px;
         }
 
         /* 🎨 Palette UX Optimization: Loading state for deferred Mermaid diagrams */
