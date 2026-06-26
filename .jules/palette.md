@@ -29,3 +29,7 @@
 ## 2025-06-21 - [Accessible CSS Pseudo-Element Content]
 **Learning:** When using CSS pseudo-elements (`::before`, `::after`) to display decorative characters or symbols via the `content` property, screen readers may erroneously read them aloud (e.g., 'rightwards arrow').
 **Action:** To hide them accessibly while maintaining the visual element, use the modern CSS alternative text syntax with an empty string (`content: "→" / "";`). Always provide a standard fallback (`content: "→";`) immediately before it to ensure backward compatibility with older browsers.
+
+## 2026-06-22 - Hide Decorative Pseudo-Elements Accessibly
+**Learning:** When using CSS pseudo-elements (`::before`, `::after`) to display decorative characters or symbols via the `content` property, screen readers may erroneously read them aloud (e.g., "rightwards arrow").
+**Action:** To hide them accessibly while maintaining the visual element, use the modern CSS alternative text syntax with an empty string (`content: "\2192" / "";`). Always provide a standard fallback (`content: "\2192";`) immediately before it to ensure backward compatibility with older browsers.
