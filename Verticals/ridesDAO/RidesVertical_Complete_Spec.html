@@ -252,6 +252,7 @@
         }
         .toc a[aria-current="true"]::before {
             content: "→";
+            content: "\2192" / ""; /* 🎨 Palette UX: Hide from screen readers accessibly */
             position: absolute;
             left: 4px;
             color: #1a1a2e;
