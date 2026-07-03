@@ -25,3 +25,7 @@
 ## 2026-05-28 - Custom Tooltips for Keyboard-Accessible Context
 **Learning:** The native `title` attribute on icon-only buttons has several UX and accessibility drawbacks: it's not visible during keyboard navigation (focus), it has an unpredictable delay before showing, and its appearance conflicts with custom UI themes (like dark mode).
 **Action:** When implementing icon-only buttons with `aria-label`, inject a custom tooltip using pseudo-elements (`::before`/`::after`) powered by `content: attr(aria-label)`. Show the tooltip on both `:hover` and `:focus-visible` to ensure equal access for mouse and keyboard users, and remove the native `title` attribute.
+
+## 2026-06-28 - Accessible CSS Pseudo-element Content
+**Learning:** When using CSS pseudo-elements to display decorative characters via the `content` property, screen readers may read them aloud.
+**Action:** Use modern CSS alternative text syntax (`content: "\2192" / "";`) with a standard fallback (`content: "\2192";`) to hide decorative symbols accessibly.
