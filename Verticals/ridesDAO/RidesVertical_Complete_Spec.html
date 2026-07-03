@@ -180,6 +180,7 @@
 
         .mermaid:not([data-processed="true"])::after {
             content: "⏳ Loading diagram...";
+            content: "⏳ Loading diagram..." / "";
             color: #00d9ff;
             position: absolute;
             font-size: 1rem;
@@ -376,6 +377,7 @@
         .back-to-top::before,
         .anchor-link::before {
             content: attr(aria-label);
+            content: attr(aria-label) / "";
             position: absolute;
             bottom: 120%;
             left: 50%;
