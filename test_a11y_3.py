@@ -7,11 +7,8 @@ def test_a11y_3():
         page = context.new_page()
         page.goto("file:///app/Verticals/ridesDAO/RidesVertical_Complete_Spec.html")
 
-        # Test theme toggle
-        buttons = page.locator("button").all()
-        for button in buttons:
-            label = button.get_attribute("aria-label")
-            print(f"Button text: '{button.inner_text()}', aria-label: '{label}', class: '{button.get_attribute('class')}'")
+        page.wait_for_timeout(1000)
+        page.screenshot(path="full_page.png", full_page=True)
 
         browser.close()
 
