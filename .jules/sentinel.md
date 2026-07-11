@@ -105,3 +105,7 @@
 **Vulnerability:** Weak JavaScript-based clickjacking defense in a static HTML file that can be bypassed using iframe sandboxing.
 **Learning:** For static HTML files served without a backend, X-Frame-Options and frame-ancestors in meta tags are ineffective. The OWASP CSS/JS anti-clickjacking pattern must be used instead, and its inline script must have its SHA-256 hash added to the CSP meta tag.
 **Prevention:** Always use the robust OWASP CSS/JS anti-clickjacking pattern (hiding the body via CSS until JS verifies it is not framed) rather than a simple top.location check.
+## 2026-07-11 - [CSP Hash Drift for Mermaid Initialization Script]
+**Vulnerability:** The inline script responsible for initializing Mermaid.js was silently blocked because its SHA-256 hash in the `Content-Security-Policy` header was incorrect due to drift. This broken initialization prevented the diagrams from rendering and enforcing the strict security level, leaving potential gaps if alternative render paths were taken.
+**Learning:** Any modification to an inline `<script>` block or its structural context can invalidate its CSP hash, causing silent failures in critical security or initialization scripts.
+**Prevention:** Establish a rigorous process to recalculate and update all base64-encoded SHA-256 hashes in the CSP `script-src` directive whenever inline scripts are modified in static HTML files.
