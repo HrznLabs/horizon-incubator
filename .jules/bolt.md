@@ -79,3 +79,6 @@
 ## $(date +%Y-%m-%d) - Batching Mermaid.js Diagram Rendering
 **Learning:** Rendering deferred Mermaid diagrams individually using an asynchronous queue blocks the main thread and causes layout thrashing when multiple diagrams intersect the viewport simultaneously. Accumulating targets into a batch array and processing them in a single `mermaid.run({ nodes: batch })` call significantly reduces rendering overhead.
 **Action:** When using `IntersectionObserver` to lazy-load Mermaid diagrams, accumulate targets into a batch array and process them in a single `mermaid.run({ nodes: [...batch] })` call rather than rendering them individually to reduce main thread blocking.
+## 2026-07-17 - Avoid Redundant Array Spread Allocations
+**Learning:** Avoid redundant inline spreading (e.g., `nodes: [...batch]`) if the array was already explicitly cloned beforehand, as this introduces an O(N) performance micro-inefficiency by allocating unneeded objects.
+**Action:** Remove the spread operator from array assignments when the underlying array reference is already distinct and will not be unexpectedly modified elsewhere.
