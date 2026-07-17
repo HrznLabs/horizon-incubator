@@ -29,3 +29,6 @@
 ## 2026-06-28 - Accessible CSS Pseudo-element Content
 **Learning:** When using CSS pseudo-elements to display decorative characters via the `content` property, screen readers may read them aloud.
 **Action:** Use modern CSS alternative text syntax (`content: "\2192" / "";`) with a standard fallback (`content: "\2192";`) to hide decorative symbols accessibly.
+## 2026-07-17 - Prevent Redundant Screen Reader Announcements for Tooltips
+**Learning:** When implementing custom tooltips via CSS pseudo-elements using `content: attr(aria-label);`, screen readers may redundantly announce the tooltip text in addition to the element's actual `aria-label`.
+**Action:** Always append `content: attr(aria-label) / "";` after the standard `content: attr(aria-label);` fallback to hide the pseudo-element's text from assistive technologies, ensuring only the native `aria-label` is announced.
