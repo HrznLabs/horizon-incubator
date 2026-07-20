@@ -376,6 +376,7 @@
         .back-to-top::before,
         .anchor-link::before {
             content: attr(aria-label);
+            content: attr(aria-label) / ""; /* ♿ Accessibility: Prevent redundant screen reader announcement */
             position: absolute;
             bottom: 120%;
             left: 50%;
