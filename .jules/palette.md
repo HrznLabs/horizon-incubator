@@ -29,3 +29,6 @@
 ## 2026-06-28 - Accessible CSS Pseudo-element Content
 **Learning:** When using CSS pseudo-elements to display decorative characters via the `content` property, screen readers may read them aloud.
 **Action:** Use modern CSS alternative text syntax (`content: "\2192" / "";`) with a standard fallback (`content: "\2192";`) to hide decorative symbols accessibly.
+## 2025-06-12 - Dark Theme Scrollbars for Overflowing Containers
+**Learning:** When using `overflow-x: auto` on elements like code blocks or diagrams within a dark-themed UI, the browser's default native scrollbars (especially on Windows/Linux) render as chunky, light-colored bars. This breaks the visual immersion and creates a jarring contrast against the dark background.
+**Action:** Always apply custom scrollbar styling (`scrollbar-width`, `scrollbar-color` for Firefox, and `::-webkit-scrollbar` pseudo-elements for Webkit/Blink) to horizontally-scrolling dark containers to ensure the scrollbars match the theme's aesthetics and maintain visual polish.
