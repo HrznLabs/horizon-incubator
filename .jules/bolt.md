@@ -79,3 +79,7 @@
 ## $(date +%Y-%m-%d) - Batching Mermaid.js Diagram Rendering
 **Learning:** Rendering deferred Mermaid diagrams individually using an asynchronous queue blocks the main thread and causes layout thrashing when multiple diagrams intersect the viewport simultaneously. Accumulating targets into a batch array and processing them in a single `mermaid.run({ nodes: batch })` call significantly reduces rendering overhead.
 **Action:** When using `IntersectionObserver` to lazy-load Mermaid diagrams, accumulate targets into a batch array and process them in a single `mermaid.run({ nodes: [...batch] })` call rather than rendering them individually to reduce main thread blocking.
+
+## 2026-07-30 - Sequential Mermaid Rendering
+**Learning:** Passing an array of elements to `mermaid.run()` causes them to be rendered synchronously, blocking the main thread even if initiated via `requestIdleCallback`. Furthermore, when using `IntersectionObserver` to trigger a batch of lazy-loaded diagrams to render sequentially, subsequent intersections can re-trigger the rendering sequence before the first batch completes, causing concurrent execution.
+**Action:** When lazy-loading multiple Mermaid diagrams, process the intersection batch sequentially, yielding to the main thread using `requestIdleCallback` after each individual `.then()` promise resolution. Implement a global `renderQueue` and an `isRendering` lock flag. Accumulate newly intersecting targets into the queue, and only start the sequential rendering loop if it is not already actively processing.
