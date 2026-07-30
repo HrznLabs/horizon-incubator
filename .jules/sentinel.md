@@ -105,3 +105,8 @@
 **Vulnerability:** Weak JavaScript-based clickjacking defense in a static HTML file that can be bypassed using iframe sandboxing.
 **Learning:** For static HTML files served without a backend, X-Frame-Options and frame-ancestors in meta tags are ineffective. The OWASP CSS/JS anti-clickjacking pattern must be used instead, and its inline script must have its SHA-256 hash added to the CSP meta tag.
 **Prevention:** Always use the robust OWASP CSS/JS anti-clickjacking pattern (hiding the body via CSS until JS verifies it is not framed) rather than a simple top.location check.
+
+## 2025-01-20 - Upgraded Anti-Clickjacking Frame-Busting Script
+**Vulnerability:** The existing frame-busting script used `top.location = self.location;`, which is vulnerable to being bypassed by attackers trapping the navigation (e.g., using `onbeforeunload` events or HTTP 204 No Content responses).
+**Learning:** In static HTML files where `X-Frame-Options` and `frame-ancestors` in `<meta>` tags are ignored, the OWASP anti-clickjacking pattern must use `window.top.location.replace(window.self.location.href)` to prevent navigation trapping and history pollution.
+**Prevention:** Always use `location.replace()` for frame-busting in static HTML environments, and ensure the updated script's hash is reflected in the Content-Security-Policy (CSP) header.
