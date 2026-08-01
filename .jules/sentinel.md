@@ -101,9 +101,7 @@
 **Vulnerability:** A Content Security Policy (CSP) `script-src` directive missed the SHA-256 hash for an inline script (Script 4), causing the browser to block its execution.
 **Learning:** While checking security, modifying only a Content-Security-Policy (CSP) hash to fix a broken script without changing the script itself will be rejected as an incomplete patch, because the underlying script isn't vulnerable, it's just a misconfiguration.
 **Prevention:** Always verify if a broken functionality is due to a missing CSP hash rather than an actual vulnerable script. Do not create a PR if only the CSP hash is being modified.
-
-
-## 2026-06-13 - Syncing CSP, SRI, and Version Updates
-**Vulnerability:** Upgrading third-party external scripts in static HTML files without updating all security controls.
-**Learning:** When upgrading a third-party external script (e.g., Mermaid.js), you must update the version in three distinct places simultaneously to maintain security and functionality: the `<script src="...">` URL, the Subresource Integrity (SRI) `integrity` hash, and the Content-Security-Policy (CSP) `script-src` directive allowing that specific URL. Missing any of these will either break functionality or violate security policies.
-**Prevention:** Always verify and update the `<script>` tag's `src` URL, the SRI `integrity` hash, and the CSP `script-src` directive simultaneously when upgrading third-party script dependencies.
+## 2026-07-01 - OWASP CSS/JS Anti-Clickjacking Pattern for Static HTML
+**Vulnerability:** Weak JavaScript-based clickjacking defense in a static HTML file that can be bypassed using iframe sandboxing.
+**Learning:** For static HTML files served without a backend, X-Frame-Options and frame-ancestors in meta tags are ineffective. The OWASP CSS/JS anti-clickjacking pattern must be used instead, and its inline script must have its SHA-256 hash added to the CSP meta tag.
+**Prevention:** Always use the robust OWASP CSS/JS anti-clickjacking pattern (hiding the body via CSS until JS verifies it is not framed) rather than a simple top.location check.

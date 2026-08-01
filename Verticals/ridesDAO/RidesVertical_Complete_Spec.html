@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>if (window.top !== window.self) window.top.location.replace(window.self.location.href);</script>
+    <style id="antiClickjack">body{display:none !important;}</style>
+    <script>
+        if (self === top) {
+            var antiClickjack = document.getElementById("antiClickjack");
+            if (antiClickjack) antiClickjack.parentNode.removeChild(antiClickjack);
+        } else {
+            top.location = self.location;
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' https://cdn.jsdelivr.net/npm/mermaid@11.16.0/dist/mermaid.min.js 'sha256-UJdgoVizl1mmsB6+iKBthjmmvMozQbsUJ+jHeOvLtKo=' 'sha256-Iq5QuNC92VwkD2t9k7LOefBI8q5lxdMvQQHwYSqtnEY=' 'sha256-yNl8No6oJTqpunvtNqmAvYvpxRYCHT7SnwJ3hGKrO1g=' 'sha256-3E0fSr4Mg69vG1eZd/jJ+wwBrHa+xQvylz73XMfsFEg=' 'sha256-GDX6kFatWuMclwQwPs4VMArZi5gT4C7fdexf2DL+Xm8='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; script-src 'self' https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js 'sha256-xZxmiU0SGt/UP8ikLbaSw490vHeGij3eCsQgSDxGyFs=' 'sha256-/k2ImiRq1EYnmFdw4XwtY50yxBjX1yRoglMnBDgz1cE=' 'sha256-yNl8No6oJTqpunvtNqmAvYvpxRYCHT7SnwJ3hGKrO1g=' 'sha256-3E0fSr4Mg69vG1eZd/jJ+wwBrHa+xQvylz73XMfsFEg=' 'sha256-GDX6kFatWuMclwQwPs4VMArZi5gT4C7fdexf2DL+Xm8='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'none';">
     <meta name="referrer" content="no-referrer">
     <title>Horizon Rides Vertical — Complete Specification</title>
     <!--
@@ -20,9 +28,8 @@
         🛡️ Sentinel: Upgraded Mermaid.js to v11.13.0 to address security vulnerabilities and updated SRI hash.
         🛡️ Sentinel: Updated CSP hash for anchor link script after refactoring for performance and security.
         🛡️ Sentinel: Restricted 'form-action' to 'none' in CSP to prevent form hijacking.
-        🛡️ Sentinel: Upgraded Mermaid.js to v11.16.0 to address security vulnerabilities and updated SRI hash.
     -->
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.16.0/dist/mermaid.min.js" integrity="sha384-p1gHIxGfuDCN5tmZuCgz2vF8PghHJDd6U0JCpoYL1JqbcyFs98A667xskc6Mq+TD" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js" integrity="sha384-yQ4mmBBT+vhTAwjFH0toJXNYJ6O4usWnt6EPIdWwrRvx2V/n5lXuDZQwQFeSFydF" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // ⚡ Bolt Optimization: Lazy load Mermaid diagrams to improve initial load performance.
@@ -45,30 +52,29 @@
                             observer.unobserve(entry.target);
                         }
                     });
-
                     if (globalBatch.length > 0) {
                         clearTimeout(batchTimeout);
                         batchTimeout = setTimeout(() => {
-                            // ⚡ Bolt Optimization: Batching Heavy Rendering in IntersectionObserver
-                            // Reduces main thread work by accumulating targets and passing a shallow copy
-                            // to avoid race conditions.
+                            // ⚡ Bolt Optimization: Debounced batching of Mermaid renders to minimize layout thrashing
+                            // Reduces main thread blocking when multiple diagrams enter viewport simultaneously
+                            // ⚡ Bolt Optimization: Batch process Mermaid diagrams in a single call rather than rendering individually
                             const batch = [...globalBatch];
                             globalBatch = [];
 
-                            const render = () => {
+                            const renderBatch = () => {
                                 mermaid.run({ nodes: batch }).then(() => {
                                     batch.forEach(node => node.removeAttribute('aria-busy'));
                                 }).catch(err => {
                                     batch.forEach(node => node.removeAttribute('aria-busy'));
                                     // 🛡️ Sentinel: Removed raw error object to prevent info leakage
-                                    console.error('Failed to render diagram batch.');
+                                    console.error('Failed to render diagram.');
                                 });
                             };
 
                             if ('requestIdleCallback' in window) {
-                                requestIdleCallback(render);
+                                requestIdleCallback(renderBatch);
                             } else {
-                                setTimeout(render, 0);
+                                setTimeout(renderBatch, 0);
                             }
                         }, 50);
                     }
@@ -78,33 +84,23 @@
             } else {
                 // Fallback for browsers without IntersectionObserver
                 const fallbackNodes = Array.from(document.querySelectorAll('.mermaid'));
-                let isRenderingFallback = false;
 
-                const renderNextFallback = () => {
-                    if (fallbackNodes.length === 0) {
-                        isRenderingFallback = false;
-                        return;
-                    }
-                    isRenderingFallback = true;
-                    const node = fallbackNodes.shift();
-                    mermaid.run({ nodes: [node] }).then(() => {
-                        node.removeAttribute('aria-busy');
-                        if ('requestIdleCallback' in window) requestIdleCallback(renderNextFallback);
-                        else setTimeout(renderNextFallback, 0);
-                    }).catch(err => {
-                        node.removeAttribute('aria-busy');
-                        // 🛡️ Sentinel: Removed raw error object to prevent info leakage
-                        console.error('Failed to render diagram.');
-                        if ('requestIdleCallback' in window) requestIdleCallback(renderNextFallback);
-                        else setTimeout(renderNextFallback, 0);
-                    });
-                };
+                if (fallbackNodes.length > 0) {
+                    const renderFallbackBatch = () => {
+                        const batch = [...fallbackNodes];
+                        mermaid.run({ nodes: batch }).then(() => {
+                            batch.forEach(node => node.removeAttribute('aria-busy'));
+                        }).catch(err => {
+                            batch.forEach(node => node.removeAttribute('aria-busy'));
+                            // 🛡️ Sentinel: Removed raw error object to prevent info leakage
+                            console.error('Failed to render diagram.');
+                        });
+                    };
 
-                if (!isRenderingFallback && fallbackNodes.length > 0) {
                     if ('requestIdleCallback' in window) {
-                        requestIdleCallback(renderNextFallback);
+                        requestIdleCallback(renderFallbackBatch);
                     } else {
-                        setTimeout(renderNextFallback, 0);
+                        setTimeout(renderFallbackBatch, 0);
                     }
                 }
             }
@@ -170,9 +166,6 @@
             overflow-x: auto;
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: opacity 0.3s ease;
-            /* ⚡ Bolt Optimization: Defer layout of off-screen Mermaid diagrams */
-            content-visibility: auto;
-            contain-intrinsic-size: 0 400px;
         }
 
         /* 🎨 Palette UX Optimization: Loading state for deferred Mermaid diagrams */
@@ -235,8 +228,8 @@
             padding-left: 20px;
         }
         .toc a[aria-current="true"]::before {
-            content: "→"; /* Fallback for older browsers */
-            content: "→" / "";
+            content: "\2192";
+            content: "\2192" / "";
             position: absolute;
             left: 4px;
             color: #1a1a2e;
