@@ -159,6 +159,7 @@
             margin-bottom: 30px;
             line-height: 1.6;
         }
+        /* 🎨 Palette UX Optimization: Custom scrollbar for horizontal overflow in diagram blocks */
         .mermaid {
             background: rgba(0, 0, 0, 0.2);
             border-radius: 12px;
@@ -166,6 +167,22 @@
             overflow-x: auto;
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: opacity 0.3s ease;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 217, 255, 0.3) rgba(0, 0, 0, 0.2);
+        }
+        .mermaid::-webkit-scrollbar {
+            height: 8px;
+        }
+        .mermaid::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+        .mermaid::-webkit-scrollbar-thumb {
+            background: rgba(0, 217, 255, 0.3);
+            border-radius: 4px;
+        }
+        .mermaid::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 217, 255, 0.6);
         }
 
         /* 🎨 Palette UX Optimization: Loading state for deferred Mermaid diagrams */
