@@ -29,3 +29,7 @@
 ## 2026-06-28 - Accessible CSS Pseudo-element Content
 **Learning:** When using CSS pseudo-elements to display decorative characters via the `content` property, screen readers may read them aloud.
 **Action:** Use modern CSS alternative text syntax (`content: "\2192" / "";`) with a standard fallback (`content: "\2192";`) to hide decorative symbols accessibly.
+
+## 2025-10-24 - Custom scrollbars for dark-themed UI components
+**Learning:** Default browser scrollbars appear jarring and break the visual immersion of dark-themed UI components like horizontal mermaid diagrams.
+**Action:** Implement custom scrollbar styles (using both scrollbar-color and ::-webkit-scrollbar properties) that match the application's accent colors for horizontally scrollable containers to maintain visual polish.
