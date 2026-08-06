@@ -109,3 +109,8 @@
 **Vulnerability:** The existing anti-clickjacking code (`top.location = self.location;`) was vulnerable to bypass attacks where a malicious site uses navigation traps (like `onbeforeunload` events) to block the framing window from navigating away, rendering the frame-busting protection ineffective.
 **Learning:** Using `location.replace()` replaces the current history state and prevents the framing page from trapping the navigation or polluting the user's browser history. Any modification to inline scripts requires recalculating and updating its corresponding SHA-256 hash in the `Content-Security-Policy` meta tag, otherwise the browser will block the script and disable the security control entirely.
 **Prevention:** When implementing frame-busting scripts in HTML files, always use `window.top.location.replace(window.self.location.href)` instead of simple location assignment, and always verify CSP hashes remain synchronized with inline script contents.
+
+## 2025-02-18 - Clickjacking on Static Docs
+**Vulnerability:** Identified a clickjacking vulnerability on a static specification document and proposed a fix using location.replace() and updating the CSP hash.
+**Learning:** The proposed fix was rejected because the target is a static specification document with no auth, no state-changing actions, and no user data, making the clickjacking impact nil. Additionally, updating inline-script CSP hashes carries a high regression risk (silent failure) that outweighs theoretical framing issues on non-sensitive pages.
+**Prevention:** Avoid applying complex frame-busting security controls and CSP hash updates to purely static, public documentation pages where the risk is negligible and the chance of regression is high.
