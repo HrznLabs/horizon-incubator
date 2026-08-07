@@ -166,6 +166,22 @@
             overflow-x: auto;
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: opacity 0.3s ease;
+            scrollbar-color: #00d9ff rgba(0, 0, 0, 0.2);
+            scrollbar-width: thin;
+        }
+
+        .mermaid::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .mermaid::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        .mermaid::-webkit-scrollbar-thumb {
+            background-color: #00d9ff;
+            border-radius: 4px;
         }
 
         /* 🎨 Palette UX Optimization: Loading state for deferred Mermaid diagrams */
